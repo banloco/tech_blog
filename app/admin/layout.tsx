@@ -2,6 +2,7 @@ import { createSupabaseServerClient } from "@/lib/supabase-server";
 import { redirect } from "next/navigation";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 
+
 export const metadata = {
   title: "Dashboard Admin | IA & Capital",
   robots: { index: false, follow: false },

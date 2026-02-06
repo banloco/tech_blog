@@ -12,7 +12,7 @@ export default function Hero() {
       <div className="mx-auto max-w-2xl text-center">
         <div className="mb-8 flex justify-center">
           <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-zinc-400 ring-1 ring-white/10 hover:ring-white/20">
-            Dernière analyse : <Link href="/analyses" className="font-semibold text-emerald-400"><span className="absolute inset-0" aria-hidden="true"></span> L'impact de GPT-5 sur la DeFi <span aria-hidden="true">&rarr;</span></Link>
+            Dernière analyse : <Link href="#articles" className="font-semibold text-emerald-400"><span className="absolute inset-0" aria-hidden="true"></span> L'impact de GPT-5 sur la DeFi <span aria-hidden="true">&rarr;</span></Link>
           </div>
         </div>
         
@@ -25,12 +25,12 @@ export default function Hero() {
         </p>
 
         <div className="mt-10 flex items-center justify-center gap-x-6">
-          <Link href="/analyses" className="group rounded-full bg-emerald-500 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-emerald-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400 flex items-center gap-2 transition-all">
+          <Link href="#articles" className="group rounded-full bg-emerald-500 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-emerald-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400 flex items-center gap-2 transition-all">
             <TrendingUp className="w-4 h-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
             Commencer à lire
           </Link>
-          <Link href="/about" className="text-sm font-semibold leading-6 text-white flex items-center gap-2 hover:text-emerald-400 transition-colors">
-            En savoir plus <ArrowRight className="w-4 h-4" />
+          <Link href="/contact" className="text-sm font-semibold leading-6 text-white flex items-center gap-2 hover:text-emerald-400 transition-colors">
+            Nous contacter <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
 

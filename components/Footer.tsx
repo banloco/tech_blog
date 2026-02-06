@@ -32,7 +32,7 @@ export default function Footer() {
           </div>
 
           {/* Newsletter */}
-          <div className="space-y-4">
+          <div id="newsletter" className="space-y-4 scroll-mt-20">
             <h3 className="text-sm font-semibold text-white">Newsletter</h3>
             <p className="text-sm text-zinc-400">
               Recevez nos analyses directement dans votre boîte mail.
