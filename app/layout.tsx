@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ScrollToTop from "@/components/ScrollToTop";
 import "./globals.css";
-// import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const metadata: Metadata = {
   title: {
@@ -32,6 +33,17 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr" className="dark scroll-smooth">
+      <head>
+        {/* Google AdSense — replace ca-pub-XXXXXXXX with your real publisher ID */}
+        {process.env.NEXT_PUBLIC_ADSENSE_ID && (
+          <Script
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_ID}`}
+            crossOrigin="anonymous"
+            strategy="afterInteractive"
+          />
+        )}
+      </head>
       <body className="bg-black text-zinc-50 antialiased relative min-h-screen selection:bg-emerald-500/30 flex flex-col">
         {/* Modern Background Effects */}
         <div className="fixed inset-0 z-[-1] h-full w-full bg-zinc-950 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px]"></div>
@@ -40,6 +52,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Header />
         <div className="flex-1">{children}</div>
         <Footer />
+        <ScrollToTop />
       </body>
     </html>
   );

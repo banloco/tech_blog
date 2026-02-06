@@ -1,10 +1,17 @@
 import supabase from "@/lib/supabase";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import Image from "next/image";
 import { formatDate, estimateReadTime } from "@/lib/utils";
-import { Calendar, Clock, ArrowLeft, Tag } from "lucide-react";
+import { Calendar, Clock, ArrowLeft, Tag, ChevronRight, Eye, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import CommentForm from "@/components/CommentForm";
+import ShareButtons from "@/components/ShareButtons";
+import ViewCounter from "@/components/ViewCounter";
+
+// ISR: revalidate article pages every 2 minutes
+export const revalidate = 120;
+
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -84,7 +91,18 @@ export default async function PostPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <main className="container mx-auto px-6 py-12 max-w-3xl">
+      <main className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 max-w-3xl">
+        {/* Breadcrumb */}
+        <nav aria-label="Fil d'Ariane" className="mb-6">
+          <ol className="flex items-center gap-1.5 text-xs sm:text-sm text-zinc-500 flex-wrap">
+            <li><Link href="/" className="hover:text-white transition-colors">Accueil</Link></li>
+            <li><ChevronRight className="w-3 h-3" /></li>
+            <li><Link href="/#articles" className="hover:text-white transition-colors">Articles</Link></li>
+            <li><ChevronRight className="w-3 h-3" /></li>
+            <li className="text-zinc-300 truncate max-w-[200px] sm:max-w-none">{post.title}</li>
+          </ol>
+        </nav>
+
         {/* Back Navigation */}
         <Link
           href="/"
@@ -106,7 +124,23 @@ export default async function PostPage({ params }: Props) {
               <Clock className="w-3.5 h-3.5" />
               {readTime} de lecture
             </span>
+            {post.views_count !== undefined && (
+              <>
+                <span className="w-1 h-1 rounded-full bg-zinc-700" />
+                <span className="flex items-center gap-1">
+                  <Eye className="w-3.5 h-3.5" />
+                  {post.views_count} {post.views_count > 1 ? "vues" : "vue"}
+                </span>
+              </>
+            )}
+            <span className="w-1 h-1 rounded-full bg-zinc-700" />
+            <span className="flex items-center gap-1">
+              <MessageCircle className="w-3.5 h-3.5" />
+              {comments.length} {comments.length > 1 ? "commentaires" : "commentaire"}
+            </span>
           </div>
+
+          <ViewCounter postId={post.id} />
 
           <h1 className="text-3xl font-bold text-white tracking-tight sm:text-4xl lg:text-5xl leading-tight">
             {post.title}
@@ -131,16 +165,26 @@ export default async function PostPage({ params }: Props) {
               ))}
             </div>
           )}
+
+          {/* Share Buttons */}
+          <div className="mt-6 pt-4 border-t border-zinc-800/50">
+            <ShareButtons
+              title={post.title}
+              url={`${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/posts/${post.id}`}
+            />
+          </div>
         </header>
 
         {/* Cover Image */}
         {post.cover_image && (
-          <div className="mb-10 rounded-2xl overflow-hidden border border-zinc-800">
-            <img
+          <div className="mb-10 rounded-xl sm:rounded-2xl overflow-hidden border border-zinc-800 relative aspect-video">
+            <Image
               src={post.cover_image}
               alt={post.title}
-              className="w-full h-auto object-cover"
-              loading="lazy"
+              fill
+              className="object-cover"
+              priority
+              sizes="(max-width: 768px) 100vw, 768px"
             />
           </div>
         )}

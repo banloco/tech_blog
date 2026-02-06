@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase-browser";
 import { slugify } from "@/lib/utils";
-import { Save, Loader2, ArrowLeft, Eye } from "lucide-react";
+import { Save, Loader2, ArrowLeft, Eye, Upload, X, ImageIcon } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import type { Post } from "@/lib/types";
 
 interface ArticleFormProps {
@@ -16,6 +17,7 @@ export default function ArticleForm({ article }: ArticleFormProps) {
   const isEditing = !!article;
   const router = useRouter();
   const supabase = createSupabaseBrowserClient();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [title, setTitle] = useState(article?.title || "");
   const [slug, setSlug] = useState(article?.slug || "");
@@ -33,12 +35,41 @@ export default function ArticleForm({ article }: ArticleFormProps) {
     article?.meta_description || ""
   );
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
 
   function handleTitleChange(value: string) {
     setTitle(value);
     if (!isEditing || slug === slugify(article?.title || "")) {
       setSlug(slugify(value));
+    }
+  }
+
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    if (!e.target.files || e.target.files.length === 0) return;
+    
+    setUploading(true);
+    setError("");
+    const file = e.target.files[0];
+    const fileExt = file.name.split(".").pop();
+    const fileName = `${Math.random().toString(36).substring(2, 15)}_${Date.now()}.${fileExt}`;
+    const filePath = `${fileName}`;
+
+    try {
+      const { error: uploadError } = await supabase.storage
+        .from("articles")
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data } = supabase.storage.from("articles").getPublicUrl(filePath);
+      setCoverImage(data.publicUrl);
+    } catch (err) {
+      console.error("Error uploading image:", err);
+      setError("Erreur lors de l'upload de l'image.");
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
     }
   }
 
@@ -284,16 +315,61 @@ export default function ArticleForm({ article }: ArticleFormProps) {
                 htmlFor="coverImage"
                 className="block text-sm font-medium text-zinc-400 mb-1.5"
               >
-                Image de couverture (URL)
+                Image de couverture
               </label>
-              <input
-                id="coverImage"
-                type="url"
-                value={coverImage}
-                onChange={(e) => setCoverImage(e.target.value)}
-                className="w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-white placeholder-zinc-500 focus:border-emerald-500 focus:outline-none"
-                placeholder="https://..."
-              />
+              
+              <div className="space-y-3">
+                <input
+                  id="coverImage"
+                  type="url"
+                  value={coverImage}
+                  onChange={(e) => setCoverImage(e.target.value)}
+                  className="w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-white placeholder-zinc-500 focus:border-emerald-500 focus:outline-none"
+                  placeholder="URL directe (https://...)"
+                />
+
+                <div className="relative">
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleImageUpload}
+                    accept="image/*"
+                    className="hidden"
+                    id="mobile-image-upload"
+                    disabled={uploading}
+                  />
+                  
+                  <label
+                    htmlFor="mobile-image-upload"
+                    className={`flex items-center justify-center gap-2 w-full px-3 py-2 rounded-lg border border-dashed border-zinc-700 bg-zinc-800/50 hover:bg-zinc-800 hover:text-white text-zinc-400 cursor-pointer transition-colors text-sm ${
+                      uploading ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
+                  >
+                    {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+                    <span>{uploading ? "Upload en cours..." : "Uploader depuis l'ordinateur"}</span>
+                  </label>
+                </div>
+
+                {coverImage && (
+                  <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-zinc-900 border border-zinc-800">
+                    <Image
+                      src={coverImage}
+                      alt="Aperçu"
+                      fill
+                      className="object-cover"
+                      unoptimized
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setCoverImage("")}
+                      className="absolute top-2 right-2 p-1.5 rounded-full bg-black/60 text-white hover:bg-red-500 transition-colors"
+                      title="Supprimer"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
 
             <div>

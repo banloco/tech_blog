@@ -9,6 +9,7 @@ export interface Post {
   status: "draft" | "published";
   meta_title?: string;
   meta_description?: string;
+  views_count?: number;
   created_at: string;
   updated_at: string;
 }

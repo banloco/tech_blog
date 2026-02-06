@@ -21,28 +21,30 @@ export async function POST(request: NextRequest) {
 
     const supabase = await createSupabaseServerClient();
 
-    const { error } = await supabase.from("comments").insert({
+    const { data, error } = await supabase.from("comments").insert({
       post_id,
       author_name: author_name.trim(),
       author_email: author_email.toLowerCase().trim(),
       content: content.trim(),
       is_approved: false,
-      created_at: new Date().toISOString(),
-    });
+    }).select().single();
 
     if (error) {
+      console.error("Comment insert error:", error);
       return NextResponse.json(
-        { error: "Erreur lors de l'envoi du commentaire." },
+        { error: `Erreur lors de l'envoi du commentaire: ${error.message}` },
         { status: 500 }
       );
     }
 
     return NextResponse.json({
       message: "Commentaire envoyé ! Il sera visible après modération.",
+      comment: data,
     });
-  } catch {
+  } catch (err: any) {
+    console.error("Unexpected error:", err);
     return NextResponse.json(
-      { error: "Erreur serveur." },
+      { error: `Erreur serveur: ${err.message}` },
       { status: 500 }
     );
   }
