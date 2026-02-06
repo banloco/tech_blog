@@ -1,0 +1,52 @@
+import Link from "next/link";
+import { Calendar, Clock, ArrowUpRight } from "lucide-react";
+import { estimateReadTime } from "@/lib/utils";
+import type { Post } from "@/lib/types";
+
+export default function PostCard({ post }: { post: Post }) {
+  const tags = post.tags && post.tags.length > 0 ? post.tags : ["Article"];
+  const readTime = estimateReadTime(post.content || "");
+
+  return (
+    <Link href={`/posts/${post.id}`} className="group relative flex flex-col overflow-hidden rounded-2xl bg-zinc-900 border border-zinc-800 hover:border-emerald-500/50 transition-all hover:shadow-lg hover:shadow-emerald-500/10">
+      
+      {/* Optional: Place for an image */}
+      {/* <div className="h-48 bg-zinc-800 w-full object-cover"></div> */}
+      
+      <div className="flex flex-1 flex-col p-6">
+        <div className="flex items-center gap-3 text-xs text-zinc-500 mb-4">
+          <span className="flex items-center gap-1">
+            <Calendar className="w-3 h-3" />
+            {new Date(post.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })}
+          </span>
+          <span className="w-1 h-1 rounded-full bg-zinc-700"></span>
+          <span className="flex items-center gap-1">
+            <Clock className="w-3 h-3" />
+            {readTime}
+          </span>
+        </div>
+
+        <h3 className="text-xl font-bold text-zinc-100 group-hover:text-emerald-400 transition-colors line-clamp-2 mb-2">
+          {post.title}
+        </h3>
+        
+        <p className="text-sm text-zinc-400 line-clamp-3 mb-6 flex-1">
+          {post.excerpt || post.content}
+        </p>
+
+        <div className="flex items-center justify-between mt-auto pt-4 border-t border-zinc-800/50">
+          <div className="flex gap-2">
+            {tags.map(tag => (
+              <span key={tag} className="text-xs font-medium px-2 py-1 rounded-md bg-zinc-800 text-zinc-300 border border-zinc-700">
+                {tag}
+              </span>
+            ))}
+          </div>
+          <div className="p-2 rounded-full bg-zinc-800 text-zinc-400 group-hover:bg-emerald-500 group-hover:text-white transition-all">
+            <ArrowUpRight className="w-4 h-4" />
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
+}
