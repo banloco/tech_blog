@@ -10,6 +10,7 @@ export interface Post {
   meta_title?: string;
   meta_description?: string;
   views_count?: number;
+  likes_count?: number;
   created_at: string;
   updated_at: string;
 }
@@ -17,12 +18,16 @@ export interface Post {
 export interface Comment {
   id: string;
   post_id: string;
+  parent_id?: string;
   author_name: string;
   author_email: string;
   content: string;
+  likes_count?: number;
   is_approved: boolean;
+  is_reported?: boolean;
   created_at: string;
   post?: { title: string; slug: string };
+  replies?: Comment[];
 }
 
 export interface NewsletterSubscriber {

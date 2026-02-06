@@ -1,10 +1,7 @@
--- ============================================
--- SUPABASE SQL MIGRATION (idempotent policies)
--- Run this in Supabase SQL Editor
--- ============================================
+-- Full corrected migration (idempotent-safe)
+BEGIN;
 
 -- 1. POSTS TABLE (upgrade existing)
--- Add new columns if they don't already exist
 ALTER TABLE posts ADD COLUMN IF NOT EXISTS slug TEXT UNIQUE;
 ALTER TABLE posts ADD COLUMN IF NOT EXISTS excerpt TEXT;
 ALTER TABLE posts ADD COLUMN IF NOT EXISTS cover_image TEXT;
@@ -13,40 +10,36 @@ ALTER TABLE posts ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'draft' CHECK (st
 ALTER TABLE posts ADD COLUMN IF NOT EXISTS meta_title TEXT;
 ALTER TABLE posts ADD COLUMN IF NOT EXISTS meta_description TEXT;
 ALTER TABLE posts ADD COLUMN IF NOT EXISTS views_count INTEGER DEFAULT 0;
+ALTER TABLE posts ADD COLUMN IF NOT EXISTS likes_count INTEGER DEFAULT 0;
 ALTER TABLE posts ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW();
 
--- 1.1 POST_STATS TABLE (for detailed tracking if needed, but simple counter in posts first)
--- We will use views_count in posts for now, which is simpler for the frontend.
-
--- 1.2 STORAGE BUCKET FOR IMAGES
--- Note: Creating buckets usually requires admin API or dashboard. 
--- However, we can try to insert into storage.buckets if the extension is enabled and permissions allow.
--- This block attempts to create the bucket 'articles' if it doesn't exist.
+-- 1.2 STORAGE BUCKET FOR IMAGES (insert if missing)
 INSERT INTO storage.buckets (id, name, public)
 VALUES ('articles', 'articles', true)
 ON CONFLICT (id) DO NOTHING;
 
--- Storage Policies
--- Allow public read access to 'articles' bucket
+-- Storage Policies: safer drop-and-create (storage.objects may already have policies)
+DROP POLICY IF EXISTS "Public Access" ON storage.objects;
 CREATE POLICY "Public Access"
-ON storage.objects FOR SELECT
-USING ( bucket_id = 'articles' );
+  ON storage.objects FOR SELECT
+  USING ( bucket_id = 'articles' );
 
--- Allow authenticated (admin) users to upload/update/delete
+DROP POLICY IF EXISTS "Admin Upload" ON storage.objects;
 CREATE POLICY "Admin Upload"
-ON storage.objects FOR INSERT
-WITH CHECK ( bucket_id = 'articles' AND auth.role() = 'authenticated' );
+  ON storage.objects FOR INSERT
+  WITH CHECK ( bucket_id = 'articles' AND auth.role() = 'authenticated' );
 
+DROP POLICY IF EXISTS "Admin Update" ON storage.objects;
 CREATE POLICY "Admin Update"
-ON storage.objects FOR UPDATE
-USING ( bucket_id = 'articles' AND auth.role() = 'authenticated' );
+  ON storage.objects FOR UPDATE
+  USING ( bucket_id = 'articles' AND auth.role() = 'authenticated' );
 
+DROP POLICY IF EXISTS "Admin Delete" ON storage.objects;
 CREATE POLICY "Admin Delete"
-ON storage.objects FOR DELETE
-USING ( bucket_id = 'articles' AND auth.role() = 'authenticated' );
+  ON storage.objects FOR DELETE
+  USING ( bucket_id = 'articles' AND auth.role() = 'authenticated' );
 
 -- 1.3 FUNCTIONS
--- Function to safely increment view count (bypassing RLS for update)
 CREATE OR REPLACE FUNCTION increment_view_count(post_id UUID)
 RETURNS VOID
 LANGUAGE plpgsql
@@ -59,8 +52,7 @@ BEGIN
 END;
 $$;
 
-
--- Set existing posts to published
+-- Set existing posts to published where status is NULL
 UPDATE posts SET status = 'published' WHERE status IS NULL;
 
 -- Generate slugs for existing posts that don't have one
@@ -71,17 +63,37 @@ WHERE slug IS NULL;
 CREATE TABLE IF NOT EXISTS comments (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   post_id UUID REFERENCES posts(id) ON DELETE CASCADE NOT NULL,
+  parent_id UUID REFERENCES comments(id) ON DELETE CASCADE,
   author_name TEXT NOT NULL,
   author_email TEXT NOT NULL,
   content TEXT NOT NULL,
+  likes_count INTEGER DEFAULT 0,
   is_approved BOOLEAN DEFAULT FALSE,
+  is_reported BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Index for faster lookups
 CREATE INDEX IF NOT EXISTS idx_comments_post_id ON comments(post_id);
 CREATE INDEX IF NOT EXISTS idx_comments_approved ON comments(is_approved);
 CREATE INDEX IF NOT EXISTS idx_posts_status_created ON posts(status, created_at DESC);
+
+CREATE OR REPLACE FUNCTION increment_comment_likes(comment_id UUID)
+RETURNS VOID AS $$
+BEGIN
+  UPDATE comments
+  SET likes_count = likes_count + 1
+  WHERE id = comment_id;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE OR REPLACE FUNCTION increment_post_likes(post_id UUID)
+RETURNS VOID AS $$
+BEGIN
+  UPDATE posts
+  SET likes_count = likes_count + 1
+  WHERE id = post_id;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- 3. NEWSLETTER SUBSCRIBERS TABLE
 CREATE TABLE IF NOT EXISTS newsletter_subscribers (
@@ -107,7 +119,7 @@ CREATE INDEX IF NOT EXISTS idx_contacts_read ON contacts(is_read);
 
 -- 5. ROW LEVEL SECURITY (RLS)
 
--- Posts: public read for published, admin write
+-- Posts RLS: create-only-if-missing
 ALTER TABLE posts ENABLE ROW LEVEL SECURITY;
 
 DO $$
@@ -138,22 +150,14 @@ BEGIN
 END
 $$;
 
--- Comments
+-- Comments RLS
 ALTER TABLE comments ENABLE ROW LEVEL SECURITY;
 
-DO $$
-BEGIN
-  IF NOT EXISTS (
-    SELECT 1 FROM pg_catalog.pg_policies
-    WHERE policyname = 'Anyone can insert comments'
-      AND schemaname = current_schema()
-      AND tablename = 'comments'
-  ) THEN
-    CREATE POLICY "Anyone can insert comments" ON comments
-      FOR INSERT WITH CHECK (TRUE);
-  END IF;
-END
-$$;
+-- Keep explicit drop/create for the "Anyone can insert comments" policy to ensure it matches expected definition
+DROP POLICY IF EXISTS "Anyone can insert comments" ON comments;
+CREATE POLICY "Anyone can insert comments" ON comments
+  FOR INSERT 
+  WITH CHECK (true);
 
 DO $$
 BEGIN
@@ -183,7 +187,7 @@ BEGIN
 END
 $$;
 
--- Newsletter
+-- Newsletter RLS
 ALTER TABLE newsletter_subscribers ENABLE ROW LEVEL SECURITY;
 
 DO $$
@@ -214,7 +218,7 @@ BEGIN
 END
 $$;
 
--- Contacts
+-- Contacts RLS
 ALTER TABLE contacts ENABLE ROW LEVEL SECURITY;
 
 DO $$
@@ -244,3 +248,5 @@ BEGIN
   END IF;
 END
 $$;
+
+COMMIT;

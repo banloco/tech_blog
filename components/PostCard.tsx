@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Calendar, Clock, ArrowUpRight } from "lucide-react";
 import { estimateReadTime } from "@/lib/utils";
 import type { Post } from "@/lib/types";
@@ -10,6 +11,19 @@ export default function PostCard({ post }: { post: Post }) {
   return (
     <Link href={`/posts/${post.id}`} className="group relative flex flex-col overflow-hidden rounded-xl sm:rounded-2xl bg-zinc-900 border border-zinc-800 hover:border-emerald-500/50 transition-all hover:shadow-lg hover:shadow-emerald-500/10">
       
+      {/* Cover Image */}
+      {post.cover_image && (
+        <div className="relative aspect-video w-full overflow-hidden bg-zinc-800">
+          <Image
+            src={post.cover_image}
+            alt={post.title}
+            fill
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          />
+        </div>
+      )}
+
       <div className="flex flex-1 flex-col p-4 sm:p-6">
         <div className="flex items-center gap-3 text-xs text-zinc-500 mb-4">
           <span className="flex items-center gap-1">

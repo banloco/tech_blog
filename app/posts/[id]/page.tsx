@@ -8,6 +8,9 @@ import Link from "next/link";
 import CommentForm from "@/components/CommentForm";
 import ShareButtons from "@/components/ShareButtons";
 import ViewCounter from "@/components/ViewCounter";
+import ArticleLikeButton from "@/components/ArticleLikeButton";
+import CommentItem from "@/components/CommentItem";
+import type { Comment } from "@/lib/types";
 
 // ISR: revalidate article pages every 2 minutes
 export const revalidate = 120;
@@ -57,6 +60,7 @@ export default async function PostPage({ params }: Props) {
       .select("*")
       .eq("post_id", id)
       .eq("is_approved", true)
+      .is("parent_id", null)
       .order("created_at", { ascending: true }),
   ]);
 
@@ -66,6 +70,23 @@ export default async function PostPage({ params }: Props) {
   if (!post) {
     notFound();
   }
+
+  // Fetch replies for each comment
+  const commentsWithReplies = await Promise.all(
+    comments.map(async (comment) => {
+      const { data: replies } = await supabase
+        .from("comments")
+        .select("*")
+        .eq("parent_id", comment.id)
+        .eq("is_approved", true)
+        .order("created_at", { ascending: true });
+      
+      return {
+        ...comment,
+        replies: replies || [],
+      };
+    })
+  );
 
   const readTime = estimateReadTime(post.content || "");
 
@@ -167,11 +188,12 @@ export default async function PostPage({ params }: Props) {
           )}
 
           {/* Share Buttons */}
-          <div className="mt-6 pt-4 border-t border-zinc-800/50">
+          <div className="mt-6 pt-4 border-t border-zinc-800/50 flex items-center justify-between gap-4 flex-wrap">
             <ShareButtons
               title={post.title}
               url={`${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/posts/${post.id}`}
             />
+            <ArticleLikeButton postId={post.id} initialLikes={post.likes_count || 0} />
           </div>
         </header>
 
@@ -199,34 +221,14 @@ export default async function PostPage({ params }: Props) {
 
         {/* Comments Section */}
         <section className="space-y-8" id="commentaires">
-          <h2 className="text-xl font-bold text-white">
-            Commentaires ({comments.length})
+          <h2 className="text-xl sm:text-2xl font-bold text-white">
+            Commentaires ({commentsWithReplies.length})
           </h2>
 
-          {comments.length > 0 ? (
-            <div className="space-y-4">
-              {comments.map((comment: { id: string; author_name: string; created_at: string; content: string }) => (
-                <div
-                  key={comment.id}
-                  className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-4"
-                >
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-emerald-400 flex items-center justify-center text-white text-xs font-bold">
-                      {comment.author_name.charAt(0).toUpperCase()}
-                    </div>
-                    <div>
-                      <span className="text-sm font-medium text-white">
-                        {comment.author_name}
-                      </span>
-                      <p className="text-xs text-zinc-500">
-                        {formatDate(comment.created_at)}
-                      </p>
-                    </div>
-                  </div>
-                  <p className="text-sm text-zinc-300 leading-relaxed pl-10">
-                    {comment.content}
-                  </p>
-                </div>
+          {commentsWithReplies.length > 0 ? (
+            <div className="space-y-6">
+              {commentsWithReplies.map((comment: Comment) => (
+                <CommentItem key={comment.id} comment={comment} />
               ))}
             </div>
           ) : (
@@ -236,7 +238,8 @@ export default async function PostPage({ params }: Props) {
           )}
 
           {/* Comment Form */}
-          <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-6">
+          <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-4 sm:p-6">
+            <h3 className="text-lg font-semibold text-white mb-4">Laisser un commentaire</h3>
             <CommentForm postId={post.id} />
           </div>
         </section>
