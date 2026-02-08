@@ -1,5 +1,6 @@
 import { createSupabaseServerClient } from "@/lib/supabase-server";
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
 export async function POST(request: NextRequest) {
   try {
@@ -37,6 +38,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Revalidate admin comments page so new comment appears immediately
+    revalidatePath("/admin/commentaires");
+
     return NextResponse.json({
       message: "Commentaire envoyé ! Il sera visible après modération.",
       comment: data,
@@ -48,4 +52,5 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
+}
 }

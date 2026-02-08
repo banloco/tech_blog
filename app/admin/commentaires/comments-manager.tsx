@@ -23,25 +23,60 @@ export default function CommentsManager({
   });
 
   async function handleApprove(id: string) {
-    await supabase
-      .from("comments")
-      .update({ is_approved: true })
-      .eq("id", id);
-    router.refresh();
+    try {
+      const response = await fetch(`/api/comments/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ is_approved: true }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Erreur lors de l'approbation");
+      }
+
+      router.refresh();
+    } catch (error) {
+      console.error("Erreur:", error);
+      alert("Erreur lors de l'approbation du commentaire");
+    }
   }
 
   async function handleReject(id: string) {
-    await supabase
-      .from("comments")
-      .update({ is_approved: false })
-      .eq("id", id);
-    router.refresh();
+    try {
+      const response = await fetch(`/api/comments/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ is_approved: false }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Erreur lors du rejet");
+      }
+
+      router.refresh();
+    } catch (error) {
+      console.error("Erreur:", error);
+      alert("Erreur lors du rejet du commentaire");
+    }
   }
 
   async function handleDelete(id: string) {
     if (!confirm("Supprimer ce commentaire ?")) return;
-    await supabase.from("comments").delete().eq("id", id);
-    router.refresh();
+    
+    try {
+      const response = await fetch(`/api/comments/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Erreur lors de la suppression");
+      }
+
+      router.refresh();
+    } catch (error) {
+      console.error("Erreur:", error);
+      alert("Erreur lors de la suppression du commentaire");
+    }
   }
 
   if (comments.length === 0) {

@@ -12,8 +12,8 @@ import ArticleLikeButton from "@/components/ArticleLikeButton";
 import CommentItem from "@/components/CommentItem";
 import type { Comment } from "@/lib/types";
 
-// ISR: revalidate article pages every 2 minutes
-export const revalidate = 120;
+// ISR: revalidate article pages every 30 seconds for faster comment updates
+export const revalidate = 30;
 
 
 type Props = {

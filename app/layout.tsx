@@ -1,11 +1,20 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Script from "next/script";
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
+import { LanguageProvider } from "@/lib/i18n";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
 import "./globals.css";
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  themeColor: '#000000',
+};
 
 export const metadata: Metadata = {
   title: {
@@ -51,10 +60,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div className="fixed inset-0 z-[-1] h-full w-full bg-zinc-950 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px]"></div>
         <div className="fixed inset-0 z-[-1] bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(16,185,129,0.15),rgba(255,255,255,0))]"></div>
 
-        <Header />
-        <div className="flex-1">{children}</div>
-        <Footer />
-        <ScrollToTop />
+        <LanguageProvider>
+          <Header />
+          <div className="flex-1">{children}</div>
+          <Footer />
+          <ScrollToTop />
+        </LanguageProvider>
         <SpeedInsights />
         <Analytics />
       </body>

@@ -6,9 +6,11 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight, Clock, Calendar } from "lucide-react";
 import { estimateReadTime, formatDate } from "@/lib/utils";
 import type { Post } from "@/lib/types";
+import { useLanguage } from "@/lib/i18n";
 
 export default function FeaturedCarousel({ posts }: { posts: Post[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const { t } = useLanguage();
   const featuredPosts = posts.slice(0, 5); // Limit to top 5 recent posts
 
   // Auto-advance carousel
@@ -25,7 +27,7 @@ export default function FeaturedCarousel({ posts }: { posts: Post[] }) {
   if (featuredPosts.length === 0) return null;
 
   return (
-    <section className="relative w-full h-[500px] sm:h-[600px] overflow-hidden group">
+    <section className="relative w-full h-[400px] sm:h-[500px] lg:h-[600px] overflow-hidden group">
       {/* Slides */}
       <div className="relative w-full h-full">
         {featuredPosts.map((post, index) => (
@@ -44,44 +46,45 @@ export default function FeaturedCarousel({ posts }: { posts: Post[] }) {
                   fill
                   className="object-cover opacity-60"
                   priority={index === 0}
+                  sizes="100vw"
                 />
               )}
-              <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/60 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/70 to-transparent" />
             </div>
 
             {/* Content */}
-            <div className="absolute inset-x-0 bottom-0 z-20 container mx-auto px-4 sm:px-6 pb-12 sm:pb-20">
-              <div className="max-w-3xl space-y-4">
-                <div className="flex items-center gap-3 text-xs sm:text-sm text-emerald-400 font-medium">
+            <div className="absolute inset-x-0 bottom-0 z-20 container mx-auto px-4 sm:px-6 pb-8 sm:pb-12 lg:pb-20">
+              <div className="max-w-2xl lg:max-w-3xl space-y-2 sm:space-y-3 lg:space-y-4">
+                <div className="flex items-center gap-2 sm:gap-3 text-[10px] sm:text-xs lg:text-sm text-emerald-400 font-medium flex-wrap">
                   <span className="bg-emerald-500/10 px-2 py-1 rounded border border-emerald-500/20">
-                    À la une
+                    {t('featured')}
                   </span>
                   <span className="flex items-center gap-1 text-zinc-300">
-                    <Calendar className="w-3.5 h-3.5" />
+                    <Calendar className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                     {formatDate(post.created_at)}
                   </span>
                   <span className="flex items-center gap-1 text-zinc-300">
-                    <Clock className="w-3.5 h-3.5" />
+                    <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                     {estimateReadTime(post.content || "")}
                   </span>
                 </div>
 
                 <Link href={`/posts/${post.id}`}>
-                  <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight hover:text-emerald-400 transition-colors">
+                  <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-white leading-tight hover:text-emerald-400 transition-colors line-clamp-3">
                     {post.title}
                   </h1>
                 </Link>
 
-                <p className="text-lg text-zinc-300 line-clamp-2 max-w-2xl hidden sm:block">
+                <p className="text-sm sm:text-base lg:text-lg text-zinc-300 line-clamp-2 max-w-2xl hidden sm:block">
                   {post.excerpt}
                 </p>
 
-                <div className="pt-4">
+                <div className="pt-2 sm:pt-4">
                   <Link
                     href={`/posts/${post.id}`}
-                    className="inline-flex h-10 items-center justify-center rounded-full bg-emerald-500 px-6 font-medium text-white transition-colors hover:bg-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 focus:ring-offset-zinc-950"
+                    className="inline-flex h-9 sm:h-10 items-center justify-center rounded-full bg-emerald-500 px-4 sm:px-6 text-sm font-medium text-white transition-colors hover:bg-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 focus:ring-offset-zinc-950"
                   >
-                    Lire l'article
+                    {t('readArticle')}
                   </Link>
                 </div>
               </div>
@@ -93,29 +96,29 @@ export default function FeaturedCarousel({ posts }: { posts: Post[] }) {
       {/* Navigation Buttons */}
       <button
         onClick={prevSlide}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-30 p-2 rounded-full bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-emerald-500"
-        aria-label="Article précédent"
+        className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-30 p-1.5 sm:p-2 rounded-full bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-emerald-500"
+        aria-label={t('previousArticle')}
       >
-        <ChevronLeft className="w-6 h-6" />
+        <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
       </button>
       <button
         onClick={nextSlide}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-30 p-2 rounded-full bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-emerald-500"
-        aria-label="Article suivant"
+        className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-30 p-1.5 sm:p-2 rounded-full bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-emerald-500"
+        aria-label={t('nextArticle')}
       >
-        <ChevronRight className="w-6 h-6" />
+        <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
       </button>
 
       {/* Dots Indicators */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 flex gap-2">
+      <div className="absolute bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2 z-30 flex gap-1.5 sm:gap-2">
         {featuredPosts.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentIndex(index)}
-            className={`w-2 h-2 rounded-full transition-all ${
-              index === currentIndex ? "w-8 bg-emerald-500" : "bg-white/50 hover:bg-white"
+            className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full transition-all ${
+              index === currentIndex ? "w-6 sm:w-8 bg-emerald-500" : "bg-white/50 hover:bg-white"
             }`}
-            aria-label={`Aller à la diapositive ${index + 1}`}
+            aria-label={`${t('goToSlide')} ${index + 1}`}
           />
         ))}
       </div>

@@ -56,7 +56,6 @@ export default function CommentForm({ postId }: { postId: string }) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <h3 className="text-lg font-semibold text-white">Laisser un commentaire</h3>
       <p className="text-xs text-zinc-500">
         Les commentaires sont modérés avant publication.
       </p>
