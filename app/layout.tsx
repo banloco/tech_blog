@@ -54,6 +54,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             strategy="afterInteractive"
           />
         )}
+        <meta name="google-adsense-account" content="ca-pub-6021784377387721"></meta>
       </head>
       <body className="bg-black text-zinc-50 antialiased relative min-h-screen selection:bg-emerald-500/30 flex flex-col">
         {/* Modern Background Effects */}
