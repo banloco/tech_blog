@@ -21,7 +21,7 @@ export default function Footer() {
                 IA<span className="text-emerald-400">&</span>Capital
               </span>
             </Link>
-            <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
+            <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed">
               {t('brandDescription')}
             </p>
           </div>
@@ -29,7 +29,7 @@ export default function Footer() {
           {/* Navigation */}
           <div className="space-y-3 sm:space-y-4">
             <h3 className="text-xs sm:text-sm font-semibold text-white">{t('navigation')}</h3>
-            <nav className="flex flex-col gap-2 text-xs sm:text-sm text-zinc-400">
+            <nav className="flex flex-col gap-2 text-xs sm:text-sm text-zinc-300">
               <Link href="/" className="hover:text-white transition-colors">{t('home')}</Link>
               <Link href="/about" className="hover:text-white transition-colors">{t('about')}</Link>
               <Link href="/contact" className="hover:text-white transition-colors">{t('contact')}</Link>
@@ -39,7 +39,7 @@ export default function Footer() {
           {/* Legal */}
           <div className="space-y-3 sm:space-y-4">
             <h3 className="text-xs sm:text-sm font-semibold text-white">{t('information')}</h3>
-            <nav className="flex flex-col gap-2 text-xs sm:text-sm text-zinc-400">
+            <nav className="flex flex-col gap-2 text-xs sm:text-sm text-zinc-300">
               <Link href="/privacy" className="hover:text-white transition-colors">{t('privacyPolicy')}</Link>
               <Link href="/mentions-legales" className="hover:text-white transition-colors">{t('legalNotice')}</Link>
             </nav>
@@ -48,7 +48,7 @@ export default function Footer() {
           {/* Newsletter */}
           <div id="newsletter" className="space-y-3 sm:space-y-4 scroll-mt-20 sm:col-span-2 lg:col-span-1">
             <h3 className="text-xs sm:text-sm font-semibold text-white">{t('newsletterFooter')}</h3>
-            <p className="text-xs sm:text-sm text-zinc-400">
+            <p className="text-xs sm:text-sm text-zinc-300">
               {t('newsletterDescription')}
             </p>
             <div className="relative max-w-sm">
@@ -57,11 +57,11 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-6 sm:mt-8 lg:mt-10 pt-6 sm:pt-8 border-t border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 text-[10px] sm:text-xs text-zinc-500">
+        <div className="mt-6 sm:mt-8 lg:mt-10 pt-6 sm:pt-8 border-t border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 text-[10px] sm:text-xs text-zinc-400">
           <p>© {new Date().getFullYear()} IA & Capital. {t('allRightsReserved')}</p>
           <div className="flex items-center gap-3 sm:gap-4">
-            <Link href="/privacy" className="hover:text-zinc-300 transition-colors">{t('privacy')}</Link>
-            <Link href="/mentions-legales" className="hover:text-zinc-300 transition-colors">{t('legalNotice')}</Link>
+            <Link href="/privacy" className="hover:text-zinc-200 transition-colors">{t('privacy')}</Link>
+            <Link href="/mentions-legales" className="hover:text-zinc-200 transition-colors">{t('legalNotice')}</Link>
           </div>
         </div>
       </div>

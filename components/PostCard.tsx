@@ -25,14 +25,14 @@ export default function PostCard({ post }: { post: Post }) {
       )}
 
       <div className="flex flex-1 flex-col p-4 sm:p-5 lg:p-6">
-        <div className="flex items-center gap-2 sm:gap-3 text-[10px] sm:text-xs text-zinc-500 mb-3 sm:mb-4 flex-wrap">
+        <div className="flex items-center gap-2 sm:gap-3 text-[10px] sm:text-xs text-zinc-400 mb-3 sm:mb-4 flex-wrap">
           <span className="flex items-center gap-1">
-            <Calendar className="w-3 h-3 flex-shrink-0" />
+            <Calendar className="w-3 h-3 flex-shrink-0" aria-hidden="true" />
             <span className="truncate">{new Date(post.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
           </span>
-          <span className="w-1 h-1 rounded-full bg-zinc-700 flex-shrink-0"></span>
+          <span className="w-1 h-1 rounded-full bg-zinc-700 flex-shrink-0" aria-hidden="true"></span>
           <span className="flex items-center gap-1">
-            <Clock className="w-3 h-3 flex-shrink-0" />
+            <Clock className="w-3 h-3 flex-shrink-0" aria-hidden="true" />
             {readTime}
           </span>
         </div>
@@ -41,7 +41,7 @@ export default function PostCard({ post }: { post: Post }) {
           {post.title}
         </h3>
         
-        <p className="text-xs sm:text-sm text-zinc-400 line-clamp-2 sm:line-clamp-3 mb-4 sm:mb-6 flex-1">
+        <p className="text-xs sm:text-sm text-zinc-300 line-clamp-2 sm:line-clamp-3 mb-4 sm:mb-6 flex-1">
           {post.excerpt || post.content}
         </p>
 

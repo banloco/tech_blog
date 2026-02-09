@@ -47,8 +47,12 @@ export default function CommentForm({ postId }: { postId: string }) {
 
   if (status === "success") {
     return (
-      <div className="flex items-center gap-2 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm">
-        <CheckCircle className="w-5 h-5 shrink-0" />
+      <div
+        role="status"
+        aria-live="polite"
+        className="flex items-center gap-2 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm"
+      >
+        <CheckCircle className="w-5 h-5 shrink-0" aria-hidden="true" />
         <span>{message}</span>
       </div>
     );
@@ -62,13 +66,14 @@ export default function CommentForm({ postId }: { postId: string }) {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label htmlFor="author_name" className="block text-sm font-medium text-zinc-400 mb-1">
-            Nom
+          <label htmlFor="author_name" className="block text-sm font-medium text-zinc-300 mb-1">
+            Nom <span className="text-red-400" aria-label="requis">*</span>
           </label>
           <input
             id="author_name"
             type="text"
             required
+            aria-required="true"
             value={authorName}
             onChange={(e) => setAuthorName(e.target.value)}
             className="w-full rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-emerald-500 focus:outline-none transition-colors"
@@ -76,29 +81,33 @@ export default function CommentForm({ postId }: { postId: string }) {
           />
         </div>
         <div>
-          <label htmlFor="author_email" className="block text-sm font-medium text-zinc-400 mb-1">
-            Email
+          <label htmlFor="author_email" className="block text-sm font-medium text-zinc-300 mb-1">
+            Email <span className="text-red-400" aria-label="requis">*</span>
           </label>
           <input
             id="author_email"
             type="email"
             required
+            aria-required="true"
+            aria-describedby="email-hint"
             value={authorEmail}
             onChange={(e) => setAuthorEmail(e.target.value)}
             className="w-full rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-emerald-500 focus:outline-none transition-colors"
             placeholder="votre@email.com"
           />
+          <p id="email-hint" className="sr-only">Format attendu: nom@exemple.com</p>
         </div>
       </div>
 
       <div>
-        <label htmlFor="comment_content" className="block text-sm font-medium text-zinc-400 mb-1">
-          Commentaire
+        <label htmlFor="comment_content" className="block text-sm font-medium text-zinc-300 mb-1">
+          Commentaire <span className="text-red-400" aria-label="requis">*</span>
         </label>
         <textarea
           id="comment_content"
           rows={4}
           required
+          aria-required="true"
           value={content}
           onChange={(e) => setContent(e.target.value)}
           className="w-full rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-emerald-500 focus:outline-none transition-colors resize-none"
@@ -107,22 +116,35 @@ export default function CommentForm({ postId }: { postId: string }) {
       </div>
 
       {status === "error" && (
-        <p className="text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-4 py-2">
-          {message}
-        </p>
+        <div
+          role="alert"
+          aria-live="assertive"
+          className="text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-4 py-2"
+        >
+          <strong>Erreur:</strong> {message}
+        </div>
       )}
 
       <button
         type="submit"
         disabled={status === "loading"}
+        aria-busy={status === "loading"}
         className="flex items-center gap-2 rounded-lg bg-emerald-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-emerald-400 disabled:opacity-50 transition-all"
       >
         {status === "loading" ? (
-          <Loader2 className="w-4 h-4 animate-spin" />
+          <>
+            <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
+            <span>Envoi...</span>
+            <span className="sr-only" role="status" aria-live="polite">
+              Envoi en cours, veuillez patienter
+            </span>
+          </>
         ) : (
-          <Send className="w-4 h-4" />
+          <>
+            <Send className="w-4 h-4" aria-hidden="true" />
+            <span>Envoyer</span>
+          </>
         )}
-        {status === "loading" ? "Envoi..." : "Envoyer"}
       </button>
     </form>
   );

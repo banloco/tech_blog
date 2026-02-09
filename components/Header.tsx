@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Wallet, Menu, X } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import logo from "../public/ia_&_capital.png";
 import LanguageSwitcher from "./LanguageSwitcher";
@@ -13,6 +13,8 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
   const { t, language, setLanguage } = useLanguage();
+  const menuRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
   const navLinks = [
     { href: "/", label: t("home") },
@@ -29,6 +31,41 @@ export default function Header() {
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
+  }, [mobileOpen]);
+
+  // Focus trap for mobile menu
+  useEffect(() => {
+    if (mobileOpen && menuRef.current) {
+      const focusableElements = menuRef.current.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      // Focus first element when menu opens
+      firstElement?.focus();
+
+      const handleTab = (e: KeyboardEvent) => {
+        if (e.key === 'Tab') {
+          if (e.shiftKey && document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement?.focus();
+          } else if (!e.shiftKey && document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement?.focus();
+          }
+        }
+        if (e.key === 'Escape') {
+          setMobileOpen(false);
+        }
+      };
+
+      document.addEventListener('keydown', handleTab);
+      return () => document.removeEventListener('keydown', handleTab);
+    } else if (!mobileOpen && triggerRef.current) {
+      // Restore focus to trigger button when menu closes
+      triggerRef.current.focus();
+    }
   }, [mobileOpen]);
 
   return (
@@ -51,7 +88,7 @@ export default function Header() {
               className={`transition-colors ${
                 pathname === href
                   ? "text-white"
-                  : "text-zinc-400 hover:text-white"
+                  : "text-zinc-300 hover:text-white"
               }`}
             >
               {label}
@@ -76,12 +113,14 @@ export default function Header() {
 
           {/* Mobile menu toggle */}
           <button
+            ref={triggerRef}
             onClick={() => setMobileOpen(!mobileOpen)}
             className="md:hidden p-2 rounded-lg hover:bg-zinc-800 text-white transition-colors"
             aria-label={mobileOpen ? t("closeMenu") : t("openMenu")}
             aria-expanded={mobileOpen}
+            aria-controls="mobile-menu"
           >
-            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {mobileOpen ? <X className="w-5 h-5" aria-hidden="true" /> : <Menu className="w-5 h-5" aria-hidden="true" />}
           </button>
         </div>
       </div>
@@ -93,10 +132,18 @@ export default function Header() {
           <div 
             className="fixed inset-0 bg-black/60 backdrop-blur-sm md:hidden z-40"
             onClick={() => setMobileOpen(false)}
+            aria-hidden="true"
           />
           
           {/* Sidebar */}
-          <div className="fixed right-0 top-0 bottom-0 w-72 bg-zinc-950 border-l border-zinc-800 md:hidden z-50 shadow-2xl">
+          <div
+            ref={menuRef}
+            id="mobile-menu"
+            className="fixed right-0 top-0 bottom-0 w-72 bg-zinc-950 border-l border-zinc-800 md:hidden z-50 shadow-2xl"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Menu de navigation mobile"
+          >
             <div className="flex flex-col h-full">
               {/* Header */}
               <div className="flex items-center justify-between p-4 border-b border-zinc-800">
@@ -106,7 +153,7 @@ export default function Header() {
                   className="p-2 rounded-lg hover:bg-zinc-800 text-zinc-400 hover:text-white transition-colors"
                   aria-label={t("closeMenu")}
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-5 h-5" aria-hidden="true" />
                 </button>
               </div>
 

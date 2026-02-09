@@ -3,23 +3,26 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight, Clock, Calendar } from "lucide-react";
+import { ChevronLeft, ChevronRight, Clock, Calendar, Pause, Play } from "lucide-react";
 import { estimateReadTime, formatDate } from "@/lib/utils";
 import type { Post } from "@/lib/types";
 import { useLanguage } from "@/lib/i18n";
 
 export default function FeaturedCarousel({ posts }: { posts: Post[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
   const { t } = useLanguage();
   const featuredPosts = posts.slice(0, 5); // Limit to top 5 recent posts
 
   // Auto-advance carousel
   useEffect(() => {
+    if (isPaused) return;
+    
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % featuredPosts.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, [featuredPosts.length]);
+  }, [featuredPosts.length, isPaused]);
 
   const nextSlide = () => setCurrentIndex((prev) => (prev + 1) % featuredPosts.length);
   const prevSlide = () => setCurrentIndex((prev) => (prev - 1 + featuredPosts.length) % featuredPosts.length);
@@ -27,7 +30,7 @@ export default function FeaturedCarousel({ posts }: { posts: Post[] }) {
   if (featuredPosts.length === 0) return null;
 
   return (
-    <section className="relative w-full h-[400px] sm:h-[500px] lg:h-[600px] overflow-hidden group">
+    <section className="relative w-full h-[400px] sm:h-[500px] lg:h-[600px] overflow-hidden group" aria-roledescription="carousel" aria-label="Articles à la une">
       {/* Slides */}
       <div className="relative w-full h-full">
         {featuredPosts.map((post, index) => (
@@ -36,13 +39,17 @@ export default function FeaturedCarousel({ posts }: { posts: Post[] }) {
             className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
               index === currentIndex ? "opacity-100 z-10" : "opacity-0 z-0"
             }`}
+            role="group"
+            aria-roledescription="slide"
+            aria-label={`${index + 1} sur ${featuredPosts.length}`}
+            aria-hidden={index !== currentIndex}
           >
             {/* Background Image with Gradient Overlay */}
             <div className="absolute inset-0 bg-zinc-900">
               {post.cover_image && (
                 <Image
                   src={post.cover_image}
-                  alt={post.title}
+                  alt={`Illustration pour: ${post.title}`}
                   fill
                   className="object-cover opacity-60"
                   priority={index === 0}
@@ -59,12 +66,12 @@ export default function FeaturedCarousel({ posts }: { posts: Post[] }) {
                   <span className="bg-emerald-500/10 px-2 py-1 rounded border border-emerald-500/20">
                     {t('featured')}
                   </span>
-                  <span className="flex items-center gap-1 text-zinc-300">
-                    <Calendar className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                  <span className="flex items-center gap-1 text-zinc-200">
+                    <Calendar className="w-3 h-3 sm:w-3.5 sm:h-3.5" aria-hidden="true" />
                     {formatDate(post.created_at)}
                   </span>
-                  <span className="flex items-center gap-1 text-zinc-300">
-                    <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                  <span className="flex items-center gap-1 text-zinc-200">
+                    <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5" aria-hidden="true" />
                     {estimateReadTime(post.content || "")}
                   </span>
                 </div>
@@ -75,7 +82,7 @@ export default function FeaturedCarousel({ posts }: { posts: Post[] }) {
                   </h1>
                 </Link>
 
-                <p className="text-sm sm:text-base lg:text-lg text-zinc-300 line-clamp-2 max-w-2xl hidden sm:block">
+                <p className="text-sm sm:text-base lg:text-lg text-zinc-200 line-clamp-2 max-w-2xl hidden sm:block">
                   {post.excerpt}
                 </p>
 
@@ -93,20 +100,33 @@ export default function FeaturedCarousel({ posts }: { posts: Post[] }) {
         ))}
       </div>
 
+      {/* Pause/Play Control */}
+      <button
+        onClick={() => setIsPaused(!isPaused)}
+        className="absolute top-4 right-4 z-30 p-2 sm:p-2.5 rounded-full bg-black/70 text-white hover:bg-emerald-500 transition-all"
+        aria-label={isPaused ? "Reprendre le diaporama automatique" : "Mettre en pause le diaporama automatique"}
+      >
+        {isPaused ? (
+          <Play className="w-4 h-4 sm:w-5 sm:h-5" aria-hidden="true" />
+        ) : (
+          <Pause className="w-4 h-4 sm:w-5 sm:h-5" aria-hidden="true" />
+        )}
+      </button>
+
       {/* Navigation Buttons */}
       <button
         onClick={prevSlide}
         className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-30 p-1.5 sm:p-2 rounded-full bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-emerald-500"
         aria-label={t('previousArticle')}
       >
-        <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+        <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true" />
       </button>
       <button
         onClick={nextSlide}
         className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-30 p-1.5 sm:p-2 rounded-full bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-emerald-500"
         aria-label={t('nextArticle')}
       >
-        <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+        <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true" />
       </button>
 
       {/* Dots Indicators */}
@@ -119,6 +139,7 @@ export default function FeaturedCarousel({ posts }: { posts: Post[] }) {
               index === currentIndex ? "w-6 sm:w-8 bg-emerald-500" : "bg-white/50 hover:bg-white"
             }`}
             aria-label={`${t('goToSlide')} ${index + 1}`}
+            aria-current={index === currentIndex ? "true" : undefined}
           />
         ))}
       </div>
