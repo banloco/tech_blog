@@ -7,6 +7,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
 import "./globals.css";
+import "./tiptap.css";
 
 export const viewport: Viewport = {
   width: 'device-width',

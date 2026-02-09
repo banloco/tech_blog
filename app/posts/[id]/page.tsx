@@ -212,9 +212,10 @@ export default async function PostPage({ params }: Props) {
         )}
 
         {/* Article Content */}
-        <article className="prose prose-invert prose-zinc max-w-none prose-headings:text-white prose-a:text-emerald-400 prose-strong:text-white text-lg leading-relaxed whitespace-pre-wrap">
-          {post.content}
-        </article>
+        <article 
+          className="prose prose-invert prose-zinc max-w-none prose-headings:text-white prose-a:text-emerald-400 prose-strong:text-white text-lg leading-relaxed ProseMirror"
+          dangerouslySetInnerHTML={{ __html: post.content }}
+        />
 
         {/* Divider */}
         <hr className="my-12 border-zinc-800" />

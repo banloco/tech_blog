@@ -8,6 +8,7 @@ import { Save, Loader2, ArrowLeft, Eye, Upload, X, ImageIcon } from "lucide-reac
 import Link from "next/link";
 import Image from "next/image";
 import type { Post } from "@/lib/types";
+import RichTextEditor from "./RichTextEditor";
 
 interface ArticleFormProps {
   article?: Post;
@@ -244,14 +245,10 @@ export default function ArticleForm({ article }: ArticleFormProps) {
             >
               Contenu <span className="text-red-400">*</span>
             </label>
-            <textarea
-              id="content"
-              rows={20}
-              required
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              className="w-full rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2.5 text-white placeholder-zinc-500 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 transition-colors resize-y font-mono text-sm leading-relaxed"
-              placeholder="Rédigez votre article ici..."
+            <RichTextEditor
+              content={content}
+              onChange={setContent}
+              placeholder="Commencez à rédiger votre article... Utilisez la barre d'outils pour formater votre texte."
             />
           </div>
         </div>
