@@ -6,7 +6,16 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:check": "node scripts/check-db.mjs",
+    "db:diagnose": "node scripts/diagnose-deep.mjs",
+    "migrate": "node scripts/show-fix.mjs",
+    "migrate:granular": "node scripts/migrate-granular.mjs",
+    "migrate:pg": "node scripts/migrate-pg.mjs",
+    "migrate:check": "node scripts/check-and-migrate.mjs",
+    "migrate:manual": "node scripts/help-migrate.mjs",
+    "migrate:copy": "./scripts/copy-migration.sh",
+    "migrate:show": "node scripts/show-migration.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.8.0",
@@ -25,6 +34,7 @@
     "lowlight": "^3.3.0",
     "lucide-react": "^0.563.0",
     "next": "16.1.6",
+    "pg": "^8.18.0",
     "react": "19.2.3",
     "react-dom": "19.2.3"
   },

@@ -5,11 +5,10 @@ import Image from "next/image";
 import { formatDate, estimateReadTime } from "@/lib/utils";
 import { Calendar, Clock, ArrowLeft, Tag, ChevronRight, Eye, MessageCircle } from "lucide-react";
 import Link from "next/link";
-import CommentForm from "@/components/CommentForm";
+import CommentSection from "@/components/CommentSection";
 import ShareButtons from "@/components/ShareButtons";
 import ViewCounter from "@/components/ViewCounter";
 import ArticleLikeButton from "@/components/ArticleLikeButton";
-import CommentItem from "@/components/CommentItem";
 import type { Comment } from "@/lib/types";
 
 // ISR: revalidate article pages every 30 seconds for faster comment updates
@@ -60,33 +59,15 @@ export default async function PostPage({ params }: Props) {
       .select("*")
       .eq("post_id", id)
       .eq("is_approved", true)
-      .is("parent_id", null)
       .order("created_at", { ascending: true }),
   ]);
 
   const post = postResult.data;
-  const comments = commentsResult.data || [];
+  const allComments = commentsResult.data || [];
 
   if (!post) {
     notFound();
   }
-
-  // Fetch replies for each comment
-  const commentsWithReplies = await Promise.all(
-    comments.map(async (comment) => {
-      const { data: replies } = await supabase
-        .from("comments")
-        .select("*")
-        .eq("parent_id", comment.id)
-        .eq("is_approved", true)
-        .order("created_at", { ascending: true });
-      
-      return {
-        ...comment,
-        replies: replies || [],
-      };
-    })
-  );
 
   const readTime = estimateReadTime(post.content || "");
 
@@ -157,7 +138,7 @@ export default async function PostPage({ params }: Props) {
             <span className="w-1 h-1 rounded-full bg-zinc-700" />
             <span className="flex items-center gap-1">
               <MessageCircle className="w-3.5 h-3.5" />
-              {comments.length} {comments.length > 1 ? "commentaires" : "commentaire"}
+              {allComments.length} {allComments.length > 1 ? "commentaires" : "commentaire"}
             </span>
           </div>
 
@@ -221,29 +202,7 @@ export default async function PostPage({ params }: Props) {
         <hr className="my-12 border-zinc-800" />
 
         {/* Comments Section */}
-        <section className="space-y-8" id="commentaires">
-          <h2 className="text-xl sm:text-2xl font-bold text-white">
-            Commentaires ({commentsWithReplies.length})
-          </h2>
-
-          {commentsWithReplies.length > 0 ? (
-            <div className="space-y-6">
-              {commentsWithReplies.map((comment: Comment) => (
-                <CommentItem key={comment.id} comment={comment} />
-              ))}
-            </div>
-          ) : (
-            <p className="text-sm text-zinc-500">
-              Aucun commentaire pour le moment. Soyez le premier !
-            </p>
-          )}
-
-          {/* Comment Form */}
-          <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-4 sm:p-6">
-            <h3 className="text-lg font-semibold text-white mb-4">Laisser un commentaire</h3>
-            <CommentForm postId={post.id} />
-          </div>
-        </section>
+        <CommentSection postId={post.id} initialComments={allComments} />
       </main>
     </>
   );

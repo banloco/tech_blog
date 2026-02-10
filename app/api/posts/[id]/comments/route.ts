@@ -1,44 +1,41 @@
 import { createSupabaseServerClient } from "@/lib/supabase-server";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(
+export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
-    
+
     if (!id) {
       return NextResponse.json(
-        { error: "ID du commentaire requis" },
+        { error: "ID du post requis" },
         { status: 400 }
       );
     }
 
     const supabase = await createSupabaseServerClient();
 
-    // Vérifier que le commentaire existe
-    const { data: comment, error: fetchError } = await supabase
+    // Récupérer tous les commentaires approuvés pour cet article
+    const { data: comments, error } = await supabase
       .from("comments")
-      .select("id")
-      .eq("id", id)
-      .single();
+      .select("*")
+      .eq("post_id", id)
+      .eq("is_approved", true)
+      .order("created_at", { ascending: true });
 
-    if (fetchError || !comment) {
+    if (error) {
+      console.error("Comments fetch error:", error);
       return NextResponse.json(
-        { error: "Commentaire introuvable" },
-        { status: 404 }
+        { error: "Erreur lors de la récupération des commentaires" },
+        { status: 500 }
       );
     }
 
-    // Note: Le signalement est géré côté client (localStorage)
-    // Après la migration, utilisez:
-    // await supabase.from("comments").update({ is_reported: true }).eq("id", id)
-    console.log(`Commentaire ${id} signalé par un utilisateur`);
-
     return NextResponse.json({
-      success: true,
-      message: "Commentaire signalé avec succès",
+      comments: comments || [],
+      count: comments?.length || 0,
     });
   } catch (error: any) {
     console.error("Unexpected error:", error);
@@ -48,4 +45,3 @@ export async function POST(
     );
   }
 }
-
