@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
     // Vérifier que le post existe
     const { data: post, error: postError } = await supabase
       .from("posts")
-      .select("id")
+      .select("id, slug")
       .eq("id", post_id)
       .single();
 
@@ -98,7 +98,11 @@ export async function POST(request: NextRequest) {
 
     // Revalidate pages
     revalidatePath("/admin/commentaires");
-    revalidatePath(`/posts/${post_id}`);
+    if (post.slug) {
+      revalidatePath(`/posts/${post.slug}`);
+    } else {
+      revalidatePath(`/posts/${post_id}`);
+    }
 
     return NextResponse.json({
       message: parent_id

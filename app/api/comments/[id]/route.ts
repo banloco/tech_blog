@@ -28,9 +28,16 @@ export async function PATCH(
       );
     }
 
-    // Revalidate the post page to show updated comments immediately
+    // Get post slug for revalidation
     if (comment?.post_id) {
-      revalidatePath(`/posts/${comment.post_id}`);
+      const { data: post } = await supabase
+        .from("posts")
+        .select("slug")
+        .eq("id", comment.post_id)
+        .single();
+
+      const postUrl = post?.slug || comment.post_id;
+      revalidatePath(`/posts/${postUrl}`);
       revalidatePath("/"); // Also revalidate homepage for comment count
     }
 
@@ -77,9 +84,16 @@ export async function DELETE(
       );
     }
 
-    // Revalidate the post page
+    // Get post slug for revalidation
     if (comment?.post_id) {
-      revalidatePath(`/posts/${comment.post_id}`);
+      const { data: post } = await supabase
+        .from("posts")
+        .select("slug")
+        .eq("id", comment.post_id)
+        .single();
+
+      const postUrl = post?.slug || comment.post_id;
+      revalidatePath(`/posts/${postUrl}`);
       revalidatePath("/");
     }
 

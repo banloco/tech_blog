@@ -7,9 +7,10 @@ import type { Post } from "@/lib/types";
 export default function PostCard({ post }: { post: Post }) {
   const tags = post.tags && post.tags.length > 0 ? post.tags : ["Article"];
   const readTime = estimateReadTime(post.content || "");
+  const postUrl = post.slug || post.id;
 
   return (
-    <Link href={`/posts/${post.id}`} className="group relative flex flex-col overflow-hidden rounded-xl sm:rounded-2xl bg-zinc-900 border border-zinc-800 hover:border-emerald-500/50 transition-all hover:shadow-lg hover:shadow-emerald-500/10 h-full">
+    <Link href={`/posts/${postUrl}`} className="group relative flex flex-col overflow-hidden rounded-xl sm:rounded-2xl bg-zinc-900 border border-zinc-800 hover:border-emerald-500/50 transition-all hover:shadow-lg hover:shadow-emerald-500/10 h-full">
       
       {/* Cover Image */}
       {post.cover_image && (

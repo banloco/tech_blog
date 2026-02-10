@@ -16,16 +16,27 @@ export const revalidate = 30;
 
 
 type Props = {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { id } = await params;
-  const { data: post } = await supabase
+  const { slug } = await params;
+  
+  // Try to find by slug first, then by id
+  let { data: post } = await supabase
     .from("posts")
     .select("title, excerpt, content, meta_title, meta_description, cover_image, slug")
-    .eq("id", id)
+    .eq("slug", slug)
     .single();
+
+  if (!post) {
+    const { data: postById } = await supabase
+      .from("posts")
+      .select("title, excerpt, content, meta_title, meta_description, cover_image, slug")
+      .eq("id", slug)
+      .single();
+    post = postById;
+  }
 
   if (!post) return { title: "Article introuvable" };
 
@@ -50,25 +61,38 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function PostPage({ params }: Props) {
-  const { id } = await params;
+  const { slug } = await params;
 
-  const [postResult, commentsResult] = await Promise.all([
-    supabase.from("posts").select("*").eq("id", id).single(),
-    supabase
-      .from("comments")
+  // Try to get the post by slug first, then by id if slug doesn't work
+  let { data: post } = await supabase
+    .from("posts")
+    .select("*")
+    .eq("slug", slug)
+    .single();
+
+  // If not found by slug and the param looks like a number (uuid), try by id
+  if (!post && slug) {
+    const { data: postById } = await supabase
+      .from("posts")
       .select("*")
-      .eq("post_id", id)
-      .eq("is_approved", true)
-      .order("created_at", { ascending: true }),
-  ]);
-
-  const post = postResult.data;
-  const allComments = commentsResult.data || [];
+      .eq("id", slug)
+      .single();
+    post = postById;
+  }
 
   if (!post) {
     notFound();
   }
 
+  // Then get comments using the post id
+  const { data: commentsData } = await supabase
+    .from("comments")
+    .select("*")
+    .eq("post_id", post.id)
+    .eq("is_approved", true)
+    .order("created_at", { ascending: true });
+
+  const allComments = commentsData || [];
   const readTime = estimateReadTime(post.content || "");
 
   // JSON-LD structured data for SEO
@@ -172,7 +196,7 @@ export default async function PostPage({ params }: Props) {
           <div className="mt-6 pt-4 border-t border-zinc-800/50 flex items-center justify-between gap-4 flex-wrap">
             <ShareButtons
               title={post.title}
-              url={`${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/posts/${post.id}`}
+              url={`${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/posts/${post.slug || post.id}`}
             />
             <ArticleLikeButton postId={post.id} initialLikes={post.likes_count || 0} />
           </div>

@@ -25,7 +25,7 @@ export default function PopularArticles({ posts }: { posts: Post[] }) {
         {popularPosts.map((post, index) => (
           <Link
             key={post.id}
-            href={`/posts/${post.id}`}
+            href={`/posts/${post.slug || post.id}`}
             className="group flex gap-3 sm:gap-4 items-start"
           >
             <div className="flex-shrink-0 w-6 sm:w-8 text-xl sm:text-2xl font-bold text-zinc-700 group-hover:text-emerald-500/50 transition-colors">

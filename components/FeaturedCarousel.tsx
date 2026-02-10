@@ -76,7 +76,7 @@ export default function FeaturedCarousel({ posts }: { posts: Post[] }) {
                   </span>
                 </div>
 
-                <Link href={`/posts/${post.id}`}>
+                <Link href={`/posts/${post.slug || post.id}`}>
                   <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-white leading-tight hover:text-emerald-400 transition-colors line-clamp-3">
                     {post.title}
                   </h1>
@@ -88,7 +88,7 @@ export default function FeaturedCarousel({ posts }: { posts: Post[] }) {
 
                 <div className="pt-2 sm:pt-4">
                   <Link
-                    href={`/posts/${post.id}`}
+                    href={`/posts/${post.slug || post.id}`}
                     className="inline-flex h-9 sm:h-10 items-center justify-center rounded-full bg-emerald-500 px-4 sm:px-6 text-sm font-medium text-white transition-colors hover:bg-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 focus:ring-offset-zinc-950"
                   >
                     {t('readArticle')}
