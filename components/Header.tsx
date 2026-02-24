@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Wallet, Menu, X } from "lucide-react";
+import { Bell, Menu, X, Home, Info, Mail, Rss } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import logo from "../public/ia_&_capital.png";
@@ -17,206 +17,209 @@ export default function Header() {
   const triggerRef = useRef<HTMLButtonElement>(null);
 
   const navLinks = [
-    { href: "/", label: t("home") },
-    { href: "/about", label: t("about") },
-    { href: "/contact", label: t("contact") },
+    { href: "/", label: t("home"), icon: Home },
+    { href: "/about", label: t("about"), icon: Info },
+    { href: "/contact", label: t("contact"), icon: Mail },
   ];
 
-  // Close mobile menu on route change
-  useEffect(() => {
-    setMobileOpen(false);
-  }, [pathname]);
+  // Close on route change
+  useEffect(() => { setMobileOpen(false); }, [pathname]);
 
-  // Prevent scroll when mobile menu open
+  // Lock scroll when menu open
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [mobileOpen]);
 
-  // Focus trap for mobile menu
+  // Esc key + focus trap
   useEffect(() => {
-    if (mobileOpen && menuRef.current) {
-      const focusableElements = menuRef.current.querySelectorAll<HTMLElement>(
-        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
-      );
-      const firstElement = focusableElements[0];
-      const lastElement = focusableElements[focusableElements.length - 1];
-
-      // Focus first element when menu opens
-      firstElement?.focus();
-
-      const handleTab = (e: KeyboardEvent) => {
-        if (e.key === 'Tab') {
-          if (e.shiftKey && document.activeElement === firstElement) {
-            e.preventDefault();
-            lastElement?.focus();
-          } else if (!e.shiftKey && document.activeElement === lastElement) {
-            e.preventDefault();
-            firstElement?.focus();
-          }
-        }
-        if (e.key === 'Escape') {
-          setMobileOpen(false);
-        }
-      };
-
-      document.addEventListener('keydown', handleTab);
-      return () => document.removeEventListener('keydown', handleTab);
-    } else if (!mobileOpen && triggerRef.current) {
-      // Restore focus to trigger button when menu closes
-      triggerRef.current.focus();
+    if (!mobileOpen) {
+      triggerRef.current?.focus();
+      return;
     }
+    const focusable = menuRef.current?.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    );
+    const first = focusable?.[0];
+    const last = focusable?.[focusable.length - 1];
+    first?.focus();
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") { setMobileOpen(false); return; }
+      if (e.key !== "Tab") return;
+      if (e.shiftKey ? document.activeElement === first : document.activeElement === last) {
+        e.preventDefault();
+        (e.shiftKey ? last : first)?.focus();
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
   }, [mobileOpen]);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-zinc-800 bg-black/90 backdrop-blur-md">
-      <div className="container mx-auto flex h-14 sm:h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-50 w-full border-b border-zinc-800/60 bg-black/95 backdrop-blur-md">
+      <div className="container mx-auto flex h-14 items-center justify-between px-4 sm:px-6 lg:px-8 max-w-6xl">
+
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 group" aria-label="Accueil IA & Capital">
-          <Image src={logo} alt="IA & Capital" className="w-8 h-8 sm:w-10 sm:h-10 object-contain" />
-          <span className="text-base sm:text-lg lg:text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-zinc-400">
-            IA<span className="text-emerald-400">&</span>Capital
+        <Link
+          href="/"
+          className="flex items-center gap-2 shrink-0 group"
+          aria-label="Accueil IA & Capital"
+        >
+          <Image
+            src={logo}
+            alt="IA & Capital"
+            className="w-8 h-8 object-contain"
+          />
+          <span className="text-base font-bold leading-none">
+            <span className="text-white">IA</span>
+            <span className="text-emerald-400">&</span>
+            <span className="text-white">Capital</span>
           </span>
         </Link>
 
-        {/* Navigation Desktop */}
-        <nav className="hidden md:flex items-center gap-4 lg:gap-6 text-sm font-medium">
+        {/* Desktop nav */}
+        <nav
+          className="hidden md:flex items-center gap-1 text-sm font-medium"
+          aria-label="Navigation principale"
+        >
           {navLinks.map(({ href, label }) => (
             <Link
               key={href}
               href={href}
-              className={`transition-colors ${
+              className={`relative px-3 py-1.5 rounded-lg transition-colors ${
                 pathname === href
-                  ? "text-white"
-                  : "text-zinc-300 hover:text-white"
+                  ? "text-white bg-zinc-800"
+                  : "text-zinc-400 hover:text-white hover:bg-zinc-800/50"
               }`}
             >
               {label}
+              {pathname === href && (
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-emerald-400" />
+              )}
             </Link>
           ))}
         </nav>
 
-        {/* Actions */}
-        <div className="flex items-center gap-2 sm:gap-3">
-          {/* Language Switcher - Desktop */}
-          <div className="hidden md:block">
-            <LanguageSwitcher />
-          </div>
-
+        {/* Desktop actions */}
+        <div className="hidden md:flex items-center gap-3">
+          <LanguageSwitcher />
           <a
             href="#newsletter"
-            className="hidden sm:flex items-center gap-2 bg-zinc-900 text-white px-3 lg:px-4 py-2 rounded-full border border-zinc-700 hover:bg-zinc-800 transition-all text-xs lg:text-sm"
+            className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-white px-4 py-2 rounded-full text-sm font-semibold transition-all shadow-sm shadow-emerald-500/20"
           >
-            <Wallet className="w-4 h-4" />
-            <span className="hidden lg:inline">{t("newsletter")}</span>
+            <Bell className="w-3.5 h-3.5" />
+            Newsletter
           </a>
+        </div>
 
-          {/* Mobile menu toggle */}
+        {/* Mobile: newsletter icon + burger */}
+        <div className="flex md:hidden items-center gap-1">
+          <a
+            href="#newsletter"
+            aria-label="S'inscrire à la newsletter"
+            className="p-2 rounded-lg text-zinc-400 hover:text-emerald-400 hover:bg-zinc-800 transition-colors"
+          >
+            <Rss className="w-5 h-5" />
+          </a>
           <button
             ref={triggerRef}
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-zinc-800 text-white transition-colors"
+            onClick={() => setMobileOpen((o) => !o)}
+            className="p-2 rounded-lg text-white hover:bg-zinc-800 transition-colors"
             aria-label={mobileOpen ? t("closeMenu") : t("openMenu")}
             aria-expanded={mobileOpen}
             aria-controls="mobile-menu"
           >
-            {mobileOpen ? <X className="w-5 h-5" aria-hidden="true" /> : <Menu className="w-5 h-5" aria-hidden="true" />}
+            <span className="sr-only">{mobileOpen ? t("closeMenu") : t("openMenu")}</span>
+            {mobileOpen
+              ? <X className="w-5 h-5" aria-hidden="true" />
+              : <Menu className="w-5 h-5" aria-hidden="true" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu Sidebar */}
-      {mobileOpen && (
-        <>
-          {/* Backdrop */}
-          <div 
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm md:hidden z-40"
-            onClick={() => setMobileOpen(false)}
-            aria-hidden="true"
-          />
-          
-          {/* Sidebar */}
-          <div
-            ref={menuRef}
-            id="mobile-menu"
-            className="fixed right-0 top-0 bottom-0 w-72 bg-zinc-950 border-l border-zinc-800 md:hidden z-50 shadow-2xl"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Menu de navigation mobile"
-          >
-            <div className="flex flex-col h-full">
-              {/* Header */}
-              <div className="flex items-center justify-between p-4 border-b border-zinc-800">
-                <span className="text-lg font-bold text-white">Menu</span>
+      {/* ── Mobile menu ── */}
+      {/* Backdrop */}
+      <div
+        onClick={() => setMobileOpen(false)}
+        aria-hidden="true"
+        className={`fixed inset-0 top-14 bg-black/70 backdrop-blur-sm md:hidden z-40 transition-opacity duration-300 ${
+          mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        }`}
+      />
+
+      {/* Panel */}
+      <div
+        ref={menuRef}
+        id="mobile-menu"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Menu de navigation"
+        className={`fixed left-0 right-0 top-14 md:hidden z-50 transition-all duration-200 ease-out origin-top ${
+          mobileOpen
+            ? "opacity-100 scale-y-100 pointer-events-auto"
+            : "opacity-0 scale-y-95 pointer-events-none"
+        }`}
+      >
+        <nav
+          className="bg-zinc-950 border-b border-zinc-800 shadow-2xl pb-4"
+          aria-label="Navigation mobile"
+        >
+          <ul className="px-4 pt-3 space-y-1">
+            {navLinks.map(({ href, label, icon: Icon }) => (
+              <li key={href}>
+                <Link
+                  href={href}
+                  className={`flex items-center gap-3 px-4 py-3.5 rounded-xl text-sm font-medium transition-colors ${
+                    pathname === href
+                      ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                      : "text-zinc-300 hover:text-white hover:bg-zinc-800/60 border border-transparent"
+                  }`}
+                >
+                  <Icon className="w-4 h-4 shrink-0" aria-hidden="true" />
+                  {label}
+                  {pathname === href && (
+                    <span className="ml-auto w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                  )}
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          {/* Newsletter CTA */}
+          <div className="px-4 pt-3">
+            <a
+              href="#newsletter"
+              className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-white text-sm font-semibold transition-all shadow-sm shadow-emerald-500/20"
+            >
+              <Bell className="w-4 h-4" />
+              {t("subscribeNewsletter")}
+            </a>
+          </div>
+
+          {/* Language switcher */}
+          <div className="px-4 pt-4">
+            <p className="text-[10px] text-zinc-600 uppercase tracking-widest mb-2 px-1">
+              Langue
+            </p>
+            <div className="grid grid-cols-2 gap-2">
+              {(["fr", "en"] as const).map((lng) => (
                 <button
-                  onClick={() => setMobileOpen(false)}
-                  className="p-2 rounded-lg hover:bg-zinc-800 text-zinc-400 hover:text-white transition-colors"
-                  aria-label={t("closeMenu")}
+                  key={lng}
+                  onClick={() => { setLanguage(lng); setMobileOpen(false); }}
+                  className={`py-2.5 rounded-xl text-sm font-medium border transition-colors ${
+                    language === lng
+                      ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                      : "bg-zinc-900 text-zinc-400 border-zinc-800 hover:text-white hover:border-zinc-700"
+                  }`}
                 >
-                  <X className="w-5 h-5" aria-hidden="true" />
+                  {lng === "fr" ? "🇫🇷 Français" : "🇬🇧 English"}
                 </button>
-              </div>
-
-              {/* Navigation */}
-              <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-                {navLinks.map(({ href, label }) => (
-                  <Link
-                    key={href}
-                    href={href}
-                    className={`block px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-                      pathname === href
-                        ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-                        : "text-zinc-300 hover:text-white hover:bg-zinc-800/50"
-                    }`}
-                  >
-                    {label}
-                  </Link>
-                ))}
-                
-                {/* Newsletter Button */}
-                <a
-                  href="#newsletter"
-                  className="block mt-4 px-4 py-3 rounded-lg bg-emerald-500 text-white text-sm font-semibold hover:bg-emerald-400 transition-all text-center"
-                >
-                  <div className="flex items-center justify-center gap-2">
-                    <Wallet className="w-4 h-4" />
-                    {t("subscribeNewsletter")}
-                  </div>
-                </a>
-              </nav>
-
-              {/* Language Switcher - Mobile */}
-              <div className="p-4 border-t border-zinc-800">
-                <div className="mb-2 text-xs text-zinc-500 uppercase tracking-wider">
-                  Language
-                </div>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => setLanguage("fr")}
-                    className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      language === "fr"
-                        ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-                        : "bg-zinc-800 text-zinc-300 hover:text-white"
-                    }`}
-                  >
-                    🇫🇷 FR
-                  </button>
-                  <button
-                    onClick={() => setLanguage("en")}
-                    className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      language === "en"
-                        ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-                        : "bg-zinc-800 text-zinc-300 hover:text-white"
-                    }`}
-                  >
-                    🇬🇧 EN
-                  </button>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
-        </>
-      )}
+        </nav>
+      </div>
     </header>
   );
 }
