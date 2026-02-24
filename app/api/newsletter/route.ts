@@ -1,5 +1,10 @@
 import { createSupabaseServerClient } from "@/lib/supabase-server";
 import { NextRequest, NextResponse } from "next/server";
+import { sendEmail } from "@/lib/email";
+import {
+  getWelcomeEmailHtml,
+  getWelcomeEmailText,
+} from "@/lib/emails/welcome-template";
 
 export async function POST(request: NextRequest) {
   try {
@@ -40,7 +45,22 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    return NextResponse.json({ message: "Inscription réussie !" });
+    // Send welcome email (non-blocking — a failure doesn't cancel the subscription)
+    try {
+      await sendEmail({
+        to: email.toLowerCase(),
+        subject: "Bienvenue chez IA & Capital 🚀 (Votre boussole Tech Finance)",
+        html: getWelcomeEmailHtml(email.toLowerCase()),
+        text: getWelcomeEmailText(email.toLowerCase()),
+      });
+    } catch (emailError) {
+      console.error("[Newsletter] Welcome email failed:", emailError);
+      // Subscription is saved — we just log the email error
+    }
+
+    return NextResponse.json({
+      message: "Inscription réussie ! Vérifiez votre boîte mail pour votre email de bienvenue.",
+    });
   } catch {
     return NextResponse.json(
       { error: "Erreur serveur." },
