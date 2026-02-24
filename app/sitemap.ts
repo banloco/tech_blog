@@ -55,14 +55,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const { data: posts, error } = await getSupabase()
       .from("posts")
-      .select("id, slug, updated_at, created_at")
+      .select("id, slug, published_at, updated_at, created_at")
       .eq("status", "published")
-      .order("created_at", { ascending: false });
+      .order("published_at", { ascending: false });
 
     if (!error && posts) {
       postEntries = posts.map((post) => ({
         url: `${baseUrl}/posts/${post.slug || post.id}`,
-        lastModified: new Date(post.updated_at || post.created_at),
+        lastModified: new Date(post.published_at || post.updated_at || post.created_at),
         changeFrequency: "weekly" as const,
         priority: 0.8,
       }));

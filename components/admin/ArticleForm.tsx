@@ -84,6 +84,16 @@ export default function ArticleForm({ article }: ArticleFormProps) {
       .map((t) => t.trim())
       .filter(Boolean);
 
+    // Set published_at only the first time an article is published
+    const isNowPublished = status === "published";
+    const wasAlreadyPublished = article?.status === "published";
+    const existingPublishedAt = article?.published_at;
+    const publishedAt = isNowPublished
+      ? wasAlreadyPublished && existingPublishedAt
+        ? existingPublishedAt
+        : new Date().toISOString()
+      : null;
+
     const postData = {
       title,
       slug,
@@ -95,6 +105,7 @@ export default function ArticleForm({ article }: ArticleFormProps) {
       meta_title: metaTitle || title,
       meta_description: metaDescription || excerpt || content.substring(0, 160),
       updated_at: new Date().toISOString(),
+      published_at: publishedAt,
     };
 
     let result;

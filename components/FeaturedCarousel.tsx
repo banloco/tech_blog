@@ -68,7 +68,7 @@ export default function FeaturedCarousel({ posts }: { posts: Post[] }) {
                   </span>
                   <span className="flex items-center gap-1 text-zinc-200">
                     <Calendar className="w-3 h-3 sm:w-3.5 sm:h-3.5" aria-hidden="true" />
-                    {formatDate(post.created_at)}
+                    {formatDate(post.published_at || post.created_at)}
                   </span>
                   <span className="flex items-center gap-1 text-zinc-200">
                     <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5" aria-hidden="true" />

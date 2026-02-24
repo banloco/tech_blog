@@ -22,12 +22,19 @@ export default function ArticlesTable({ posts }: { posts: Post[] }) {
     setDeleting(null);
   }
 
-  async function toggleStatus(id: string, currentStatus: string) {
-    const newStatus = currentStatus === "published" ? "draft" : "published";
+  async function toggleStatus(post: Post) {
+    const newStatus = post.status === "published" ? "draft" : "published";
     await supabase
       .from("posts")
-      .update({ status: newStatus, updated_at: new Date().toISOString() })
-      .eq("id", id);
+      .update({
+        status: newStatus,
+        updated_at: new Date().toISOString(),
+        // Set published_at only the first time the post goes live
+        ...(newStatus === "published" && !post.published_at
+          ? { published_at: new Date().toISOString() }
+          : {}),
+      })
+      .eq("id", post.id);
     router.refresh();
   }
 
@@ -102,12 +109,14 @@ export default function ArticlesTable({ posts }: { posts: Post[] }) {
                 </div>
               </td>
               <td className="px-4 py-3 text-zinc-400 hidden sm:table-cell whitespace-nowrap">
-                {formatDate(post.created_at)}
+                {post.published_at
+                  ? formatDate(post.published_at)
+                  : formatDate(post.created_at)}
               </td>
               <td className="px-4 py-3">
                 <div className="flex items-center justify-end gap-1">
                   <button
-                    onClick={() => toggleStatus(post.id, post.status)}
+                    onClick={() => toggleStatus(post)}
                     className="p-2 rounded-md hover:bg-zinc-700 text-zinc-400 hover:text-white transition-colors"
                     title={
                       post.status === "published"

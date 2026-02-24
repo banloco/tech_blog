@@ -13,6 +13,7 @@ export interface Post {
   likes_count?: number;
   created_at: string;
   updated_at: string;
+  published_at?: string;
 }
 
 export interface Comment {

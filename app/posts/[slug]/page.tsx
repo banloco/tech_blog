@@ -96,13 +96,14 @@ export default async function PostPage({ params }: Props) {
   const readTime = estimateReadTime(post.content || "");
 
   // JSON-LD structured data for SEO
+  const publishDate = post.published_at || post.created_at;
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     headline: post.title,
     description: post.excerpt || post.content?.substring(0, 160),
-    datePublished: post.created_at,
-    dateModified: post.updated_at || post.created_at,
+    datePublished: publishDate,
+    dateModified: post.updated_at || publishDate,
     image: post.cover_image || undefined,
     author: {
       "@type": "Organization",
@@ -143,7 +144,7 @@ export default async function PostPage({ params }: Props) {
           <div className="flex flex-wrap items-center gap-3 text-xs text-zinc-500 mb-4">
             <span className="flex items-center gap-1">
               <Calendar className="w-3.5 h-3.5" />
-              {formatDate(post.created_at)}
+              {formatDate(post.published_at || post.created_at)}
             </span>
             <span className="w-1 h-1 rounded-full bg-zinc-700" />
             <span className="flex items-center gap-1">

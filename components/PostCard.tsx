@@ -29,7 +29,7 @@ export default function PostCard({ post }: { post: Post }) {
         <div className="flex items-center gap-2 sm:gap-3 text-[10px] sm:text-xs text-zinc-400 mb-3 sm:mb-4 flex-wrap">
           <span className="flex items-center gap-1">
             <Calendar className="w-3 h-3 flex-shrink-0" aria-hidden="true" />
-            <span className="truncate">{new Date(post.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+            <span className="truncate">{new Date(post.published_at || post.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
           </span>
           <span className="w-1 h-1 rounded-full bg-zinc-700 flex-shrink-0" aria-hidden="true"></span>
           <span className="flex items-center gap-1">
