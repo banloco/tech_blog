@@ -12,14 +12,14 @@ export default function PrivacyPage() {
 
   return (
     <main className="container mx-auto px-4 sm:px-6 py-12 sm:py-16 lg:py-24 max-w-3xl">
-      <h1 className="text-3xl font-bold text-white tracking-tight sm:text-4xl mb-4">
+      <h1 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4" style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "#e8e8e8" }}>
         Politique de confidentialité
       </h1>
-      <p className="text-sm text-zinc-500 mb-12">
+      <p className="text-sm mb-12" style={{ color: "#555" }}>
         Dernière mise à jour : {new Date().toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}
       </p>
 
-      <div className="prose prose-invert prose-zinc max-w-none prose-headings:text-white prose-a:text-emerald-400 prose-strong:text-white space-y-8">
+      <div className="prose prose-invert max-w-none prose-headings:text-[#e8e8e8] prose-a:text-[#00E5FF] prose-strong:text-[#e8e8e8] space-y-8">
         <section>
           <h2>1. Introduction</h2>
           <p>

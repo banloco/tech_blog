@@ -1,49 +1,68 @@
 "use client";
 
 import Link from "next/link";
-import { TrendingUp, Clock, MessageCircle, Eye } from "lucide-react";
+import { Eye, Clock } from "lucide-react";
 import { estimateReadTime } from "@/lib/utils";
 import type { Post } from "@/lib/types";
 import { useLanguage } from "@/lib/i18n";
 
 export default function PopularArticles({ posts }: { posts: Post[] }) {
   const { t } = useLanguage();
-  
-  // Sort by views descending
-  const popularPosts = [...posts].sort((a, b) => (b.views_count || 0) - (a.views_count || 0)).slice(0, 4);
+
+  const popularPosts = [...posts]
+    .sort((a, b) => (b.views_count || 0) - (a.views_count || 0))
+    .slice(0, 4);
 
   if (popularPosts.length === 0) return null;
 
   return (
-    <div className="bg-zinc-900/30 rounded-xl sm:rounded-2xl border border-zinc-800 p-4 sm:p-5 lg:p-6">
-      <h3 className="flex items-center gap-2 text-base sm:text-lg font-bold text-white mb-4 sm:mb-6">
-        <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400 flex-shrink-0" />
-        {t('mostRead')}
+    <div className="p-4" style={{ background: "#1a1a1a", border: "1px solid #333" }}>
+      {/* Header */}
+      <h3
+        className="text-[10px] font-semibold uppercase tracking-widest mb-4 pb-3"
+        style={{
+          color: "#888",
+          letterSpacing: "0.14em",
+          borderBottom: "1px solid #2a2a2a",
+        }}
+      >
+        {t("mostRead")}
       </h3>
 
-      <div className="space-y-4 sm:space-y-6">
+      <div className="space-y-4">
         {popularPosts.map((post, index) => (
           <Link
             key={post.id}
             href={`/posts/${post.slug || post.id}`}
-            className="group flex gap-3 sm:gap-4 items-start"
+            className="group flex gap-3 items-start transition-opacity hover:opacity-80"
           >
-            <div className="flex-shrink-0 w-6 sm:w-8 text-xl sm:text-2xl font-bold text-zinc-700 group-hover:text-emerald-500/50 transition-colors">
-              0{index + 1}
-            </div>
-            <div className="space-y-1 flex-1 min-w-0">
-              <h4 className="text-xs sm:text-sm font-medium text-zinc-200 group-hover:text-emerald-400 transition-colors line-clamp-2">
+            {/* Index number */}
+            <span
+              className="flex-shrink-0 text-lg font-bold leading-none mt-0.5"
+              style={{
+                fontFamily: "'Playfair Display', Georgia, serif",
+                color: index === 0 ? "#C19A6B" : "#333",
+              }}
+            >
+              {String(index + 1).padStart(2, "0")}
+            </span>
+
+            <div className="flex-1 min-w-0 space-y-1">
+              <h4
+                className="text-xs font-medium line-clamp-2 leading-snug transition-colors group-hover:text-white"
+                style={{ color: "#aaa" }}
+              >
                 {post.title}
               </h4>
-              <div className="flex items-center gap-2 sm:gap-3 text-[10px] sm:text-xs text-zinc-500 flex-wrap">
+              <div className="flex items-center gap-3 text-[9px]" style={{ color: "#555" }}>
                 <span className="flex items-center gap-1">
-                  <Clock className="w-3 h-3 flex-shrink-0" />
+                  <Clock className="w-2.5 h-2.5" />
                   {estimateReadTime(post.content || "")}
                 </span>
-                {post.views_count !== undefined && (
+                {post.views_count !== undefined && post.views_count > 0 && (
                   <span className="flex items-center gap-1">
-                    <Eye className="w-3 h-3 flex-shrink-0" />
-                    {post.views_count}
+                    <Eye className="w-2.5 h-2.5" />
+                    {post.views_count.toLocaleString()}
                   </span>
                 )}
               </div>
@@ -52,18 +71,28 @@ export default function PopularArticles({ posts }: { posts: Post[] }) {
         ))}
       </div>
 
-      <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-zinc-800">
-        <div className="p-3 sm:p-4 rounded-lg sm:rounded-xl bg-gradient-to-br from-emerald-500/10 to-blue-500/10 border border-emerald-500/20">
-          <h4 className="text-xs sm:text-sm font-semibold text-white mb-1">
-            {t('joinReaders')}
-          </h4>
-          <p className="text-[10px] sm:text-xs text-zinc-400 mb-2 sm:mb-3">
-            {t('receiveAnalyses')}
-          </p>
-          <a href="#newsletter" className="text-[10px] sm:text-xs font-medium text-emerald-400 hover:text-emerald-300">
-            {t('subscribeToNewsletter')} &rarr;
-          </a>
-        </div>
+      {/* Newsletter CTA */}
+      <div
+        className="mt-5 pt-4 p-3"
+        style={{
+          borderTop: "1px solid #2a2a2a",
+          background: "rgba(193,154,107,0.05)",
+          border: "1px solid rgba(193,154,107,0.2)",
+        }}
+      >
+        <h4 className="text-xs font-semibold mb-1" style={{ color: "#e8e8e8" }}>
+          {t("joinReaders")}
+        </h4>
+        <p className="text-[10px] mb-2" style={{ color: "#666" }}>
+          {t("receiveAnalyses")}
+        </p>
+        <a
+          href="#newsletter"
+          className="text-[10px] font-medium uppercase tracking-widest transition-opacity hover:opacity-70"
+          style={{ color: "#C19A6B", letterSpacing: "0.1em" }}
+        >
+          {t("subscribeToNewsletter")} →
+        </a>
       </div>
     </div>
   );

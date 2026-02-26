@@ -19,8 +19,8 @@ export default async function AdminCommentsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white">Commentaires</h1>
-        <p className="text-sm text-zinc-400 mt-1">
+        <h1 className="text-2xl font-bold" style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "#e8e8e8" }}>Commentaires</h1>
+        <p className="text-sm mt-1" style={{ color: "#888" }}>
           Modérer les commentaires des lecteurs
         </p>
       </div>

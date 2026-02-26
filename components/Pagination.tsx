@@ -56,34 +56,36 @@ export default function Pagination({ totalPages }: PaginationProps) {
   const visiblePages = getVisiblePages();
 
   return (
-    <div className="flex items-center justify-center gap-1 sm:gap-2 mt-8 sm:mt-12">
+    <div className="flex items-center justify-center gap-1.5 mt-10 sm:mt-14">
       <button
         onClick={() => router.push(createPageURL(currentPage - 1))}
         disabled={currentPage <= 1}
-        className="p-1.5 sm:p-2 rounded-lg border border-zinc-800 bg-zinc-900 text-zinc-400 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-zinc-800 hover:text-white transition-colors"
+        className="p-2 border transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+        style={{ borderColor: "#333", background: "#1a1a1a", color: "#888" }}
         aria-label="Page précédente"
       >
-        <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+        <ChevronLeft className="w-4 h-4" />
       </button>
 
       {visiblePages.map((page, i) => {
         if (page === '...') {
           return (
-            <span key={`dots-${i}`} className="px-2 text-zinc-600">
-              ...
+            <span key={`dots-${i}`} className="px-2 text-xs" style={{ color: "#444" }}>
+              ···
             </span>
           );
         }
-        
+        const isActive = currentPage === page;
         return (
           <button
             key={page}
             onClick={() => router.push(createPageURL(page))}
-            className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
-              currentPage === page
-                ? "bg-emerald-500 text-white"
-                : "border border-zinc-800 bg-zinc-900 text-zinc-400 hover:bg-zinc-800 hover:text-white"
-            }`}
+            className="w-8 h-8 text-xs font-medium border transition-colors"
+            style={{
+              borderColor: isActive ? "#00E5FF" : "#333",
+              background: isActive ? "rgba(0,229,255,0.08)" : "#1a1a1a",
+              color: isActive ? "#00E5FF" : "#888",
+            }}
           >
             {page}
           </button>
@@ -93,10 +95,11 @@ export default function Pagination({ totalPages }: PaginationProps) {
       <button
         onClick={() => router.push(createPageURL(currentPage + 1))}
         disabled={currentPage >= totalPages}
-        className="p-1.5 sm:p-2 rounded-lg border border-zinc-800 bg-zinc-900 text-zinc-400 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-zinc-800 hover:text-white transition-colors"
+        className="p-2 border transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+        style={{ borderColor: "#333", background: "#1a1a1a", color: "#888" }}
         aria-label="Page suivante"
       >
-        <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
+        <ChevronRight className="w-4 h-4" />
       </button>
     </div>
   );

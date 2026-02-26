@@ -4,6 +4,7 @@ import FeaturedCarousel from "@/components/FeaturedCarousel";
 import PostCard from "@/components/PostCard";
 import Pagination from "@/components/Pagination";
 import PopularArticles from "@/components/PopularArticles";
+import MarketPulse from "@/components/MarketPulse";
 import { Search } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
 import type { Post } from "@/lib/types";
@@ -16,50 +17,94 @@ interface HomeClientProps {
 
 export default function HomeClient({ posts, recentPosts, totalPages }: HomeClientProps) {
   const { t } = useLanguage();
+  const [firstPost, ...remainingPosts] = posts || [];
 
   return (
-    <main className="min-h-screen bg-transparent">
-      {/* Featured Carousel replacing static Hero */}
+    <main className="min-h-screen" style={{ background: "transparent" }}>
+      {/* Featured Carousel Hero */}
       {recentPosts && <FeaturedCarousel posts={recentPosts} />}
-      
-      <div id="articles" className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 lg:py-20 pb-16 sm:pb-24 lg:pb-32 scroll-mt-20">
+
+      <div
+        id="articles"
+        className="mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 lg:py-20 pb-20 scroll-mt-20"
+        style={{ maxWidth: "1280px" }}
+      >
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
-          
-          {/* Main Content Area */}
+
+          {/* ── Main Content ── */}
           <div className="flex-1 min-w-0">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 sm:mb-8 lg:mb-12 gap-4">
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white tracking-tight">
-                {t('latestAnalyses').split(' ')[0]} <span className="text-zinc-500">{t('latestAnalyses').split(' ')[1]}</span>
+            {/* Section Header */}
+            <div
+              className="flex items-baseline justify-between mb-8 pb-3"
+              style={{ borderBottom: "1px solid #2a2a2a" }}
+            >
+              <h2
+                className="text-sm uppercase tracking-widest font-medium"
+                style={{ color: "#888", letterSpacing: "0.16em" }}
+              >
+                Dernières analyses
+                <span
+                  className="ml-3 text-[10px] px-1.5 py-0.5 border"
+                  style={{ color: "#00E5FF", borderColor: "rgba(0,229,255,0.3)", letterSpacing: "0.08em" }}
+                >
+                  {posts?.length ?? 0} articles
+                </span>
               </h2>
+              <span className="text-[10px] uppercase tracking-widest" style={{ color: "#444" }}>
+                {new Date().toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "numeric" })}
+              </span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
-              {posts?.map((post) => (
-                 <PostCard key={post.id} post={post} />
-              )) || (
-                 <div className="col-span-full text-center py-12 sm:py-20 bg-zinc-900/30 rounded-2xl sm:rounded-3xl border border-zinc-800 border-dashed">
-                    <p className="text-sm sm:text-base text-zinc-400">{t('noArticlesAvailable')}</p>
-                 </div>
-              )}
-            </div>
+            {posts && posts.length > 0 ? (
+              <>
+                {/* First post — full-width featured */}
+                {firstPost && (
+                  <div className="mb-6">
+                    <PostCard post={firstPost} featured={true} />
+                  </div>
+                )}
+
+                {/* Remaining — asymmetric 2-col grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+                  {remainingPosts.map((post) => (
+                    <PostCard key={post.id} post={post} />
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div
+                className="text-center py-20 border border-dashed"
+                style={{ borderColor: "#2a2a2a" }}
+              >
+                <p className="text-sm" style={{ color: "#555" }}>
+                  {t("noArticlesAvailable")}
+                </p>
+              </div>
+            )}
 
             <Pagination totalPages={totalPages} />
           </div>
 
-          {/* Sidebar */}
-          <aside className="lg:w-80 xl:w-96 space-y-6 sm:space-y-8">
-            {/* Search Widget Placeholder */}
-            <div className="rounded-xl sm:rounded-2xl border border-zinc-800 bg-zinc-900/50 p-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
-                <input 
-                  type="text" 
-                  placeholder={t('searchArticle')}
-                  className="w-full bg-transparent border-none text-sm text-zinc-300 placeholder-zinc-500 focus:ring-0 pl-9 py-2.5 sm:py-3"
-                />
-              </div>
+          {/* ── Sidebar ── */}
+          <aside className="lg:w-72 xl:w-80 space-y-6">
+            {/* Search */}
+            <div
+              className="flex items-center gap-2 border px-3 py-2"
+              style={{ borderColor: "#333", background: "#1a1a1a" }}
+            >
+              <Search className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "#555" }} />
+              <input
+                type="text"
+                placeholder={t("searchArticle")}
+                className="w-full bg-transparent border-none text-xs focus:ring-0 focus:outline-none"
+                style={{ color: "#888", fontFamily: "'Inter', sans-serif" }}
+              />
             </div>
 
+            {/* Market Pulse Widget */}
+            <MarketPulse />
+
+            {/* Popular Articles */}
             <PopularArticles posts={recentPosts || []} />
           </aside>
         </div>

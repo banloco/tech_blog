@@ -38,8 +38,8 @@ export default function NewsletterForm() {
 
   if (status === "success") {
     return (
-      <div className="flex items-center gap-2 text-emerald-400 text-sm" role="status" aria-live="polite">
-        <CheckCircle className="w-4 h-4" aria-hidden="true" />
+      <div className="flex items-center gap-2 text-xs" role="status" aria-live="polite" style={{ color: "#00E5FF" }}>
+        <CheckCircle className="w-3.5 h-3.5" aria-hidden="true" />
         <span>{message}</span>
       </div>
     );
@@ -61,13 +61,19 @@ export default function NewsletterForm() {
           if (status === "error") setStatus("idle");
         }}
         placeholder="votre@email.com"
-        className="flex-1 min-w-0 rounded-lg border border-zinc-700 bg-zinc-900 px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm text-white placeholder-zinc-500 focus:border-emerald-500 focus:outline-none transition-colors"
+        className="flex-1 min-w-0 px-3 py-2 text-xs border focus:outline-none transition-colors"
+        style={{
+          background: "#121212",
+          borderColor: "#333",
+          color: "#e8e8e8",
+        }}
       />
       <button
         type="submit"
         disabled={status === "loading"}
         aria-busy={status === "loading"}
-        className="flex items-center justify-center gap-2 rounded-lg bg-emerald-500 px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold text-white hover:bg-emerald-400 disabled:opacity-50 transition-all shrink-0"
+        className="flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-semibold uppercase tracking-widest transition-all shrink-0 disabled:opacity-50"
+        style={{ background: "#C19A6B", color: "#121212", letterSpacing: "0.1em" }}
       >
         {status === "loading" ? (
           <>
@@ -84,8 +90,8 @@ export default function NewsletterForm() {
         )}
       </button>
       {status === "error" && (
-        <div role="alert" aria-live="assertive" className="text-xs text-red-400 mt-1 bg-red-400/10 border border-red-400/20 rounded px-2 py-1">
-          <strong>Erreur:</strong> {message}
+        <div role="alert" aria-live="assertive" className="text-[10px] mt-1 px-2 py-1" style={{ color: "#ff5555", background: "rgba(255,85,85,0.08)", border: "1px solid rgba(255,85,85,0.2)" }}>
+          {message}
         </div>
       )}
     </form>

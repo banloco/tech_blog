@@ -40,11 +40,15 @@ export default function ArticlesTable({ posts }: { posts: Post[] }) {
 
   if (posts.length === 0) {
     return (
-      <div className="text-center py-20 bg-zinc-900/30 rounded-2xl border border-zinc-800 border-dashed">
-        <p className="text-zinc-400">Aucun article pour le moment.</p>
+      <div
+        className="text-center py-20 border border-dashed"
+        style={{ background: "#1a1a1a", borderColor: "#333" }}
+      >
+        <p style={{ color: "#888" }}>Aucun article pour le moment.</p>
         <Link
           href="/admin/articles/new"
-          className="inline-block mt-4 text-sm text-emerald-400 hover:text-emerald-300"
+          className="inline-block mt-4 text-sm transition-colors"
+          style={{ color: "#00E5FF" }}
         >
           Créer votre premier article →
         </Link>
@@ -53,45 +57,82 @@ export default function ArticlesTable({ posts }: { posts: Post[] }) {
   }
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-zinc-800 bg-zinc-900/50">
+    <div
+      className="overflow-x-auto"
+      style={{ background: "#1a1a1a", border: "1px solid #2a2a2a" }}
+    >
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-b border-zinc-800 text-left text-zinc-400">
-            <th className="px-4 py-3 font-medium">Titre</th>
-            <th className="px-4 py-3 font-medium hidden md:table-cell">Statut</th>
-            <th className="px-4 py-3 font-medium hidden lg:table-cell">Tags</th>
-            <th className="px-4 py-3 font-medium hidden sm:table-cell">Date</th>
-            <th className="px-4 py-3 font-medium text-right">Actions</th>
+          <tr
+            className="text-left"
+            style={{ borderBottom: "1px solid #2a2a2a" }}
+          >
+            <th
+              className="px-4 py-3 text-[10px] font-semibold uppercase tracking-widest"
+              style={{ color: "#555" }}
+            >
+              Titre
+            </th>
+            <th
+              className="px-4 py-3 text-[10px] font-semibold uppercase tracking-widest hidden md:table-cell"
+              style={{ color: "#555" }}
+            >
+              Statut
+            </th>
+            <th
+              className="px-4 py-3 text-[10px] font-semibold uppercase tracking-widest hidden lg:table-cell"
+              style={{ color: "#555" }}
+            >
+              Tags
+            </th>
+            <th
+              className="px-4 py-3 text-[10px] font-semibold uppercase tracking-widest hidden sm:table-cell"
+              style={{ color: "#555" }}
+            >
+              Date
+            </th>
+            <th
+              className="px-4 py-3 text-[10px] font-semibold uppercase tracking-widest text-right"
+              style={{ color: "#555" }}
+            >
+              Actions
+            </th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-zinc-800/50">
+        <tbody>
           {posts.map((post) => (
             <tr
               key={post.id}
-              className="hover:bg-zinc-800/30 transition-colors"
+              className="transition-colors"
+              style={{ borderBottom: "1px solid #222" }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.02)")}
+              onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
             >
               <td className="px-4 py-3">
                 <Link
                   href={`/admin/articles/${post.id}/edit`}
-                  className="font-medium text-white hover:text-emerald-400 transition-colors line-clamp-1"
+                  className="font-medium transition-colors line-clamp-1"
+                  style={{ color: "#e8e8e8" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#00E5FF")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "#e8e8e8")}
                 >
                   {post.title}
                 </Link>
               </td>
               <td className="px-4 py-3 hidden md:table-cell">
                 <span
-                  className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                  className="inline-flex items-center gap-1.5 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider"
+                  style={
                     post.status === "published"
-                      ? "bg-emerald-500/10 text-emerald-400"
-                      : "bg-amber-500/10 text-amber-400"
-                  }`}
+                      ? { color: "#00E5FF", background: "rgba(0,229,255,0.06)", border: "1px solid rgba(0,229,255,0.2)" }
+                      : { color: "#C19A6B", background: "rgba(193,154,107,0.06)", border: "1px solid rgba(193,154,107,0.2)" }
+                  }
                 >
                   <span
-                    className={`w-1.5 h-1.5 rounded-full ${
-                      post.status === "published"
-                        ? "bg-emerald-400"
-                        : "bg-amber-400"
-                    }`}
+                    className="w-1.5 h-1.5"
+                    style={{
+                      background: post.status === "published" ? "#00E5FF" : "#C19A6B",
+                    }}
                   />
                   {post.status === "published" ? "Publié" : "Brouillon"}
                 </span>
@@ -101,14 +142,15 @@ export default function ArticlesTable({ posts }: { posts: Post[] }) {
                   {(post.tags || []).slice(0, 3).map((tag) => (
                     <span
                       key={tag}
-                      className="text-xs bg-zinc-800 text-zinc-300 px-2 py-0.5 rounded"
+                      className="text-[10px] px-2 py-0.5 uppercase tracking-wider"
+                      style={{ background: "#222", color: "#888", border: "1px solid #333" }}
                     >
                       {tag}
                     </span>
                   ))}
                 </div>
               </td>
-              <td className="px-4 py-3 text-zinc-400 hidden sm:table-cell whitespace-nowrap">
+              <td className="px-4 py-3 hidden sm:table-cell whitespace-nowrap" style={{ color: "#555" }}>
                 {post.published_at
                   ? formatDate(post.published_at)
                   : formatDate(post.created_at)}
@@ -117,12 +159,11 @@ export default function ArticlesTable({ posts }: { posts: Post[] }) {
                 <div className="flex items-center justify-end gap-1">
                   <button
                     onClick={() => toggleStatus(post)}
-                    className="p-2 rounded-md hover:bg-zinc-700 text-zinc-400 hover:text-white transition-colors"
-                    title={
-                      post.status === "published"
-                        ? "Passer en brouillon"
-                        : "Publier"
-                    }
+                    className="p-2 transition-colors"
+                    style={{ color: "#555" }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = "#e8e8e8")}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = "#555")}
+                    title={post.status === "published" ? "Passer en brouillon" : "Publier"}
                   >
                     {post.status === "published" ? (
                       <EyeOff className="w-4 h-4" />
@@ -132,7 +173,10 @@ export default function ArticlesTable({ posts }: { posts: Post[] }) {
                   </button>
                   <Link
                     href={`/admin/articles/${post.id}/edit`}
-                    className="p-2 rounded-md hover:bg-zinc-700 text-zinc-400 hover:text-white transition-colors"
+                    className="p-2 transition-colors"
+                    style={{ color: "#555" }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = "#e8e8e8")}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = "#555")}
                     title="Modifier"
                   >
                     <Pencil className="w-4 h-4" />
@@ -140,7 +184,10 @@ export default function ArticlesTable({ posts }: { posts: Post[] }) {
                   <button
                     onClick={() => handleDelete(post.id)}
                     disabled={deleting === post.id}
-                    className="p-2 rounded-md hover:bg-red-500/10 text-zinc-400 hover:text-red-400 transition-colors disabled:opacity-50"
+                    className="p-2 transition-colors disabled:opacity-50"
+                    style={{ color: "#555" }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = "#ff5555")}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = "#555")}
                     title="Supprimer"
                   >
                     <Trash2 className="w-4 h-4" />

@@ -20,18 +20,11 @@ async function getStats() {
 }
 
 const statCards = [
-  { key: "posts" as const, label: "Articles", icon: FileText, color: "emerald" },
-  { key: "comments" as const, label: "Commentaires", icon: MessageSquare, color: "blue" },
-  { key: "subscribers" as const, label: "Abonnés newsletter", icon: Mail, color: "purple" },
-  { key: "contacts" as const, label: "Messages reçus", icon: Users, color: "amber" },
+  { key: "posts" as const, label: "Articles publiés", icon: FileText, accent: "#00E5FF" },
+  { key: "comments" as const, label: "Commentaires", icon: MessageSquare, accent: "#00E5FF" },
+  { key: "subscribers" as const, label: "Abonnés newsletter", icon: Mail, accent: "#C19A6B" },
+  { key: "contacts" as const, label: "Messages reçus", icon: Users, accent: "#C19A6B" },
 ];
-
-const colorMap: Record<string, { bg: string; text: string; border: string }> = {
-  emerald: { bg: "bg-emerald-500/10", text: "text-emerald-400", border: "border-emerald-500/20" },
-  blue: { bg: "bg-blue-500/10", text: "text-blue-400", border: "border-blue-500/20" },
-  purple: { bg: "bg-purple-500/10", text: "text-purple-400", border: "border-purple-500/20" },
-  amber: { bg: "bg-amber-500/10", text: "text-amber-400", border: "border-amber-500/20" },
-};
 
 export default async function AdminDashboard() {
   const stats = await getStats();
@@ -39,28 +32,38 @@ export default async function AdminDashboard() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-white">Dashboard</h1>
-        <p className="text-sm text-zinc-400 mt-1">
-          Vue d'ensemble de votre blog
+        <h1
+          className="text-2xl font-bold tracking-tight"
+          style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "#e8e8e8" }}
+        >
+          Dashboard
+        </h1>
+        <p className="text-xs uppercase tracking-widest mt-1" style={{ color: "#555" }}>
+          Vue d&apos;ensemble de votre blog
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {statCards.map(({ key, label, icon: Icon, color }) => {
-          const c = colorMap[color];
-          return (
-            <div
-              key={key}
-              className={`rounded-xl border ${c.border} ${c.bg} p-6 transition-all hover:scale-[1.02]`}
-            >
-              <div className="flex items-center justify-between mb-4">
-                <Icon className={`w-5 h-5 ${c.text}`} />
-              </div>
-              <p className="text-3xl font-bold text-white">{stats[key]}</p>
-              <p className="text-sm text-zinc-400 mt-1">{label}</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {statCards.map(({ key, label, icon: Icon, accent }) => (
+          <div
+            key={key}
+            className="p-6 transition-all"
+            style={{ background: "#1a1a1a", border: `1px solid #2a2a2a`, borderTop: `2px solid ${accent}` }}
+          >
+            <div className="flex items-center justify-between mb-4">
+              <Icon className="w-5 h-5" style={{ color: accent }} />
             </div>
-          );
-        })}
+            <p
+              className="text-3xl font-bold"
+              style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "#e8e8e8" }}
+            >
+              {stats[key]}
+            </p>
+            <p className="text-xs uppercase tracking-widest mt-2" style={{ color: "#555" }}>
+              {label}
+            </p>
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -37,9 +37,12 @@ export default function NewsletterManager({
 
   if (subscribers.length === 0) {
     return (
-      <div className="text-center py-20 bg-zinc-900/30 rounded-2xl border border-zinc-800 border-dashed">
-        <Mail className="w-10 h-10 text-zinc-600 mx-auto mb-3" />
-        <p className="text-zinc-400">Aucun abonné pour le moment.</p>
+      <div
+        className="text-center py-20 border border-dashed"
+        style={{ background: "#1a1a1a", borderColor: "#333" }}
+      >
+        <Mail className="w-10 h-10 mx-auto mb-3" style={{ color: "#333" }} />
+        <p style={{ color: "#888" }}>Aucun abonné pour le moment.</p>
       </div>
     );
   }
@@ -48,13 +51,16 @@ export default function NewsletterManager({
     <div className="space-y-4">
       {/* Actions */}
       <div className="flex items-center justify-between">
-        <p className="text-sm text-zinc-400">
-          <span className="text-white font-semibold">{subscribers.length}</span>{" "}
+        <p className="text-sm" style={{ color: "#888" }}>
+          <span className="font-semibold" style={{ color: "#e8e8e8" }}>{subscribers.length}</span>{" "}
           abonné{subscribers.length > 1 ? "s" : ""}
         </p>
         <button
           onClick={handleExportCSV}
-          className="flex items-center gap-2 rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800 hover:text-white transition-colors"
+          className="flex items-center gap-2 px-4 py-2 text-xs uppercase tracking-wider transition-colors"
+          style={{ border: "1px solid #333", background: "#1a1a1a", color: "#888" }}
+          onMouseEnter={(e) => { e.currentTarget.style.color = "#e8e8e8"; e.currentTarget.style.borderColor = "#555"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.color = "#888"; e.currentTarget.style.borderColor = "#333"; }}
         >
           <Download className="w-4 h-4" />
           Exporter CSV
@@ -62,29 +68,41 @@ export default function NewsletterManager({
       </div>
 
       {/* Subscribers Table */}
-      <div className="overflow-x-auto rounded-xl border border-zinc-800 bg-zinc-900/50">
+      <div
+        className="overflow-x-auto"
+        style={{ background: "#1a1a1a", border: "1px solid #2a2a2a" }}
+      >
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-zinc-800 text-left text-zinc-400">
-              <th className="px-4 py-3 font-medium">Email</th>
-              <th className="px-4 py-3 font-medium">Date d&apos;inscription</th>
-              <th className="px-4 py-3 font-medium text-right">Actions</th>
+            <tr
+              className="text-left"
+              style={{ borderBottom: "1px solid #2a2a2a" }}
+            >
+              <th className="px-4 py-3 text-[10px] font-semibold uppercase tracking-widest" style={{ color: "#555" }}>Email</th>
+              <th className="px-4 py-3 text-[10px] font-semibold uppercase tracking-widest" style={{ color: "#555" }}>Date d&apos;inscription</th>
+              <th className="px-4 py-3 text-[10px] font-semibold uppercase tracking-widest text-right" style={{ color: "#555" }}>Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-zinc-800/50">
+          <tbody>
             {subscribers.map((subscriber) => (
               <tr
                 key={subscriber.id}
-                className="hover:bg-zinc-800/30 transition-colors"
+                className="transition-colors"
+                style={{ borderBottom: "1px solid #222" }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.02)")}
+                onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
               >
-                <td className="px-4 py-3 text-white">{subscriber.email}</td>
-                <td className="px-4 py-3 text-zinc-400">
+                <td className="px-4 py-3" style={{ color: "#e8e8e8" }}>{subscriber.email}</td>
+                <td className="px-4 py-3" style={{ color: "#555" }}>
                   {formatDate(subscriber.created_at)}
                 </td>
                 <td className="px-4 py-3 text-right">
                   <button
                     onClick={() => handleDelete(subscriber.id)}
-                    className="p-2 rounded-md hover:bg-red-500/10 text-zinc-400 hover:text-red-400 transition-colors"
+                    className="p-2 transition-colors"
+                    style={{ color: "#555" }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = "#ff5555")}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = "#555")}
                     title="Supprimer"
                   >
                     <Trash2 className="w-4 h-4" />

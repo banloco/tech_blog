@@ -32,9 +32,12 @@ export default function ContactsManager({
 
   if (contacts.length === 0) {
     return (
-      <div className="text-center py-20 bg-zinc-900/30 rounded-2xl border border-zinc-800 border-dashed">
-        <Users className="w-10 h-10 text-zinc-600 mx-auto mb-3" />
-        <p className="text-zinc-400">Aucun message reçu pour le moment.</p>
+      <div
+        className="text-center py-20 border border-dashed"
+        style={{ background: "#1a1a1a", borderColor: "#333" }}
+      >
+        <Users className="w-10 h-10 mx-auto mb-3" style={{ color: "#333" }} />
+        <p style={{ color: "#888" }}>Aucun message reçu pour le moment.</p>
       </div>
     );
   }
@@ -43,11 +46,11 @@ export default function ContactsManager({
 
   return (
     <div className="space-y-4">
-      <p className="text-sm text-zinc-400">
-        <span className="text-white font-semibold">{contacts.length}</span>{" "}
+      <p className="text-sm" style={{ color: "#888" }}>
+        <span className="font-semibold" style={{ color: "#e8e8e8" }}>{contacts.length}</span>{" "}
         message{contacts.length > 1 ? "s" : ""}
         {unreadCount > 0 && (
-          <span className="ml-2 text-amber-400">
+          <span className="ml-2" style={{ color: "#C19A6B" }}>
             ({unreadCount} non lu{unreadCount > 1 ? "s" : ""})
           </span>
         )}
@@ -57,11 +60,11 @@ export default function ContactsManager({
         {contacts.map((contact) => (
           <div
             key={contact.id}
-            className={`rounded-xl border p-4 transition-all cursor-pointer ${
-              contact.is_read
-                ? "border-zinc-800 bg-zinc-900/50"
-                : "border-blue-500/20 bg-blue-500/5"
-            }`}
+            className="p-4 transition-all cursor-pointer"
+            style={{
+              border: contact.is_read ? "1px solid #2a2a2a" : "1px solid rgba(0,229,255,0.2)",
+              background: contact.is_read ? "#1a1a1a" : "rgba(0,229,255,0.02)",
+            }}
           >
             <div
               className="flex items-start justify-between gap-4"
@@ -72,23 +75,23 @@ export default function ContactsManager({
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
                   {!contact.is_read && (
-                    <span className="w-2 h-2 rounded-full bg-blue-400 shrink-0" />
+                    <span className="w-2 h-2 shrink-0" style={{ background: "#00E5FF" }} />
                   )}
-                  <span className="font-medium text-white text-sm">
+                  <span className="font-medium text-sm" style={{ color: "#e8e8e8" }}>
                     {contact.name}
                   </span>
-                  <span className="text-zinc-500 text-xs">
+                  <span className="text-xs" style={{ color: "#555" }}>
                     {contact.email}
                   </span>
-                  <span className="text-zinc-600 text-xs">
+                  <span className="text-xs" style={{ color: "#444" }}>
                     · {formatDate(contact.created_at)}
                   </span>
                 </div>
-                <p className="text-sm font-medium text-zinc-200">
+                <p className="text-sm font-medium" style={{ color: "#e8e8e8" }}>
                   {contact.subject}
                 </p>
                 {expandedId !== contact.id && (
-                  <p className="text-sm text-zinc-400 line-clamp-1 mt-1">
+                  <p className="text-sm line-clamp-1 mt-1" style={{ color: "#888" }}>
                     {contact.message}
                   </p>
                 )}
@@ -100,7 +103,10 @@ export default function ContactsManager({
                     e.stopPropagation();
                     handleMarkRead(contact.id, contact.is_read);
                   }}
-                  className="p-2 rounded-md hover:bg-zinc-700 text-zinc-400 hover:text-white transition-colors"
+                  className="p-2 transition-colors"
+                  style={{ color: "#555" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#e8e8e8")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "#555")}
                   title={
                     contact.is_read
                       ? "Marquer comme non lu"
@@ -118,7 +124,10 @@ export default function ContactsManager({
                     e.stopPropagation();
                     handleDelete(contact.id);
                   }}
-                  className="p-2 rounded-md hover:bg-red-500/10 text-zinc-400 hover:text-red-400 transition-colors"
+                  className="p-2 transition-colors"
+                  style={{ color: "#555" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#ff5555")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "#555")}
                   title="Supprimer"
                 >
                   <Trash2 className="w-4 h-4" />
@@ -127,8 +136,8 @@ export default function ContactsManager({
             </div>
 
             {expandedId === contact.id && (
-              <div className="mt-4 pt-4 border-t border-zinc-800/50">
-                <p className="text-sm text-zinc-300 leading-relaxed whitespace-pre-wrap">
+              <div className="mt-4 pt-4" style={{ borderTop: "1px solid #2a2a2a" }}>
+                <p className="text-sm leading-relaxed whitespace-pre-wrap" style={{ color: "#aaa" }}>
                   {contact.message}
                 </p>
               </div>

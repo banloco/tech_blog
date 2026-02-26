@@ -26,7 +26,7 @@ export default function ShareButtons({ title, url }: ShareButtonsProps) {
 
   return (
     <div className="flex items-center gap-2">
-      <span className="text-xs text-zinc-500 mr-1 hidden sm:inline">
+      <span className="text-xs mr-1 hidden sm:inline" style={{ color: "#555" }}>
         <Share2 className="w-3.5 h-3.5 inline mr-1" />
         Partager
       </span>
@@ -34,7 +34,10 @@ export default function ShareButtons({ title, url }: ShareButtonsProps) {
         href={`https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="p-2 rounded-lg bg-zinc-800/50 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
+        className="p-2 transition-colors"
+        style={{ background: "#1a1a1a", color: "#888", border: "1px solid #333" }}
+        onMouseEnter={(e) => { e.currentTarget.style.color = "#e8e8e8"; e.currentTarget.style.borderColor = "#555"; }}
+        onMouseLeave={(e) => { e.currentTarget.style.color = "#888"; e.currentTarget.style.borderColor = "#333"; }}
         aria-label="Partager sur Twitter"
       >
         <Twitter className="w-4 h-4" />
@@ -43,18 +46,24 @@ export default function ShareButtons({ title, url }: ShareButtonsProps) {
         href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="p-2 rounded-lg bg-zinc-800/50 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
+        className="p-2 transition-colors"
+        style={{ background: "#1a1a1a", color: "#888", border: "1px solid #333" }}
+        onMouseEnter={(e) => { e.currentTarget.style.color = "#e8e8e8"; e.currentTarget.style.borderColor = "#555"; }}
+        onMouseLeave={(e) => { e.currentTarget.style.color = "#888"; e.currentTarget.style.borderColor = "#333"; }}
         aria-label="Partager sur LinkedIn"
       >
         <Linkedin className="w-4 h-4" />
       </a>
       <button
         onClick={copyLink}
-        className="p-2 rounded-lg bg-zinc-800/50 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
+        className="p-2 transition-colors"
+        style={{ background: "#1a1a1a", color: copied ? "#00E5FF" : "#888", border: `1px solid ${copied ? "rgba(0,229,255,0.4)" : "#333"}` }}
+        onMouseEnter={(e) => { if (!copied) { e.currentTarget.style.color = "#e8e8e8"; e.currentTarget.style.borderColor = "#555"; } }}
+        onMouseLeave={(e) => { if (!copied) { e.currentTarget.style.color = "#888"; e.currentTarget.style.borderColor = "#333"; } }}
         aria-label="Copier le lien"
       >
         {copied ? (
-          <Check className="w-4 h-4 text-emerald-400" />
+          <Check className="w-4 h-4" />
         ) : (
           <Link2 className="w-4 h-4" />
         )}

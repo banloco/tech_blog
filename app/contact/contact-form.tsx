@@ -41,9 +41,9 @@ export default function ContactForm() {
   if (status === "success") {
     return (
       <div className="text-center py-16 space-y-4">
-        <CheckCircle className="w-12 h-12 text-emerald-400 mx-auto" />
-        <p className="text-lg font-semibold text-white">{feedback}</p>
-        <p className="text-sm text-zinc-400">
+        <CheckCircle className="w-12 h-12 mx-auto" style={{ color: "#00E5FF" }} />
+        <p className="text-lg font-semibold" style={{ color: "#e8e8e8" }}>{feedback}</p>
+        <p className="text-sm" style={{ color: "#888" }}>
           Nous vous répondrons dans les meilleurs délais.
         </p>
       </div>
@@ -53,11 +53,16 @@ export default function ContactForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-6 rounded-2xl border border-zinc-800 bg-zinc-900/50 p-6 sm:p-8"
+      className="space-y-6 p-6 sm:p-8"
+      style={{ border: "1px solid #333", background: "#1a1a1a" }}
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div>
-          <label htmlFor="contact_name" className="block text-sm font-medium text-zinc-300 mb-1.5">
+          <label
+            htmlFor="contact_name"
+            className="block text-xs font-medium uppercase tracking-widest mb-2"
+            style={{ color: "#888" }}
+          >
             Nom
           </label>
           <input
@@ -66,12 +71,19 @@ export default function ContactForm() {
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 transition-colors"
+            className="w-full px-4 py-2.5 text-sm transition-colors focus:outline-none"
+            style={{ background: "#0e0e0e", border: "1px solid #333", color: "#e8e8e8" }}
+            onFocus={(e) => (e.currentTarget.style.borderColor = "#00E5FF")}
+            onBlur={(e) => (e.currentTarget.style.borderColor = "#333")}
             placeholder="Votre nom"
           />
         </div>
         <div>
-          <label htmlFor="contact_email" className="block text-sm font-medium text-zinc-300 mb-1.5">
+          <label
+            htmlFor="contact_email"
+            className="block text-xs font-medium uppercase tracking-widest mb-2"
+            style={{ color: "#888" }}
+          >
             Email
           </label>
           <input
@@ -80,14 +92,21 @@ export default function ContactForm() {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 transition-colors"
+            className="w-full px-4 py-2.5 text-sm transition-colors focus:outline-none"
+            style={{ background: "#0e0e0e", border: "1px solid #333", color: "#e8e8e8" }}
+            onFocus={(e) => (e.currentTarget.style.borderColor = "#00E5FF")}
+            onBlur={(e) => (e.currentTarget.style.borderColor = "#333")}
             placeholder="votre@email.com"
           />
         </div>
       </div>
 
       <div>
-        <label htmlFor="contact_subject" className="block text-sm font-medium text-zinc-300 mb-1.5">
+        <label
+          htmlFor="contact_subject"
+          className="block text-xs font-medium uppercase tracking-widest mb-2"
+          style={{ color: "#888" }}
+        >
           Sujet
         </label>
         <input
@@ -96,13 +115,20 @@ export default function ContactForm() {
           required
           value={subject}
           onChange={(e) => setSubject(e.target.value)}
-          className="w-full rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 transition-colors"
+          className="w-full px-4 py-2.5 text-sm transition-colors focus:outline-none"
+          style={{ background: "#0e0e0e", border: "1px solid #333", color: "#e8e8e8" }}
+          onFocus={(e) => (e.currentTarget.style.borderColor = "#00E5FF")}
+          onBlur={(e) => (e.currentTarget.style.borderColor = "#333")}
           placeholder="Objet de votre message"
         />
       </div>
 
       <div>
-        <label htmlFor="contact_message" className="block text-sm font-medium text-zinc-300 mb-1.5">
+        <label
+          htmlFor="contact_message"
+          className="block text-xs font-medium uppercase tracking-widest mb-2"
+          style={{ color: "#888" }}
+        >
           Message
         </label>
         <textarea
@@ -111,14 +137,20 @@ export default function ContactForm() {
           required
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          className="w-full rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 transition-colors resize-none"
+          className="w-full px-4 py-2.5 text-sm transition-colors focus:outline-none resize-none"
+          style={{ background: "#0e0e0e", border: "1px solid #333", color: "#e8e8e8" }}
+          onFocus={(e) => (e.currentTarget.style.borderColor = "#00E5FF")}
+          onBlur={(e) => (e.currentTarget.style.borderColor = "#333")}
           placeholder="Votre message..."
           minLength={10}
         />
       </div>
 
       {status === "error" && (
-        <p className="text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-4 py-2">
+        <p
+          className="text-sm px-4 py-2"
+          style={{ color: "#ff5555", background: "rgba(255,85,85,0.05)", border: "1px solid rgba(255,85,85,0.2)" }}
+        >
           {feedback}
         </p>
       )}
@@ -126,7 +158,10 @@ export default function ContactForm() {
       <button
         type="submit"
         disabled={status === "loading"}
-        className="w-full flex items-center justify-center gap-2 rounded-lg bg-emerald-500 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+        className="w-full flex items-center justify-center gap-2 px-5 py-3 text-sm font-semibold uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+        style={{ background: "#C19A6B", color: "#121212" }}
+        onMouseEnter={(e) => status !== "loading" && (e.currentTarget.style.background = "#d4b080")}
+        onMouseLeave={(e) => status !== "loading" && (e.currentTarget.style.background = "#C19A6B")}
       >
         {status === "loading" ? (
           <Loader2 className="w-4 h-4 animate-spin" />

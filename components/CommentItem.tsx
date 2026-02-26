@@ -113,7 +113,11 @@ export default function CommentItem({
 
   return (
     <div
-      className={`group rounded-xl border border-zinc-800 bg-zinc-900/50 hover:bg-zinc-900/70 transition-all duration-300 ${
+      style={{
+        border: "1px solid #2a2a2a",
+        background: "#1a1a1a",
+      }}
+      className={`group transition-all duration-300 ${
         isAnimating ? "animate-in fade-in slide-in-from-left-4 duration-300" : ""
       }`}
     >
@@ -122,7 +126,8 @@ export default function CommentItem({
         <div className="flex items-start gap-3 mb-3">
           {/* Avatar */}
           <div
-            className={`flex-shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br ${avatarColor} flex items-center justify-center text-white text-sm font-bold shadow-lg ring-2 ring-zinc-800 group-hover:ring-emerald-500/30 transition-all`}
+            className="flex-shrink-0 w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-sm font-bold"
+            style={{ background: "#2a2a2a", border: "1px solid #333", color: "#e8e8e8" }}
           >
             {comment.author_name.charAt(0).toUpperCase()}
           </div>
@@ -130,16 +135,16 @@ export default function CommentItem({
           {/* Info auteur et date */}
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap mb-1">
-              <span className="text-sm font-semibold text-white truncate">
+              <span className="text-sm font-semibold truncate" style={{ color: "#e8e8e8" }}>
                 {comment.author_name}
               </span>
-              <span className="text-xs text-zinc-500 flex-shrink-0">
+              <span className="text-xs flex-shrink-0" style={{ color: "#555" }}>
                 {formatDate(comment.created_at)}
               </span>
             </div>
 
             {/* Contenu du commentaire */}
-            <p className="text-sm text-zinc-300 leading-relaxed break-words whitespace-pre-wrap">
+            <p className="text-sm leading-relaxed break-words whitespace-pre-wrap" style={{ color: "#aaa" }}>
               {comment.content}
             </p>
           </div>
@@ -151,11 +156,10 @@ export default function CommentItem({
           <button
             onClick={handleLike}
             disabled={hasLiked}
-            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
-              hasLiked
-                ? "text-emerald-400 bg-emerald-500/10 cursor-not-allowed"
-                : "text-zinc-400 hover:text-emerald-400 hover:bg-emerald-500/5"
-            }`}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium transition-all"
+            style={hasLiked ? { color: "#00E5FF", background: "rgba(0,229,255,0.06)", cursor: "not-allowed" } : { color: "#888" }}
+            onMouseEnter={(e) => !hasLiked && (e.currentTarget.style.color = "#00E5FF")}
+            onMouseLeave={(e) => !hasLiked && (e.currentTarget.style.color = "#888")}
             title={hasLiked ? "Vous avez aimé ce commentaire" : "Aimer ce commentaire"}
             aria-label={hasLiked ? "Commentaire aimé" : "Aimer ce commentaire"}
           >
@@ -167,11 +171,10 @@ export default function CommentItem({
           {onReply && level < maxLevel && (
             <button
               onClick={() => onReply(comment.id)}
-              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                isReplyFormVisible
-                  ? "text-emerald-400 bg-emerald-500/10"
-                  : "text-zinc-400 hover:text-white hover:bg-zinc-800"
-              }`}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium transition-all"
+              style={isReplyFormVisible ? { color: "#00E5FF", background: "rgba(0,229,255,0.06)" } : { color: "#888" }}
+              onMouseEnter={(e) => !isReplyFormVisible && (e.currentTarget.style.color = "#e8e8e8")}
+              onMouseLeave={(e) => !isReplyFormVisible && (e.currentTarget.style.color = "#888")}
               aria-label="Répondre à ce commentaire"
             >
               <MessageCircle className="w-3.5 h-3.5" aria-hidden="true" />
@@ -183,11 +186,10 @@ export default function CommentItem({
           <button
             onClick={handleReport}
             disabled={isReported}
-            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
-              isReported
-                ? "text-red-400 bg-red-500/10 cursor-not-allowed"
-                : "text-zinc-400 hover:text-red-400 hover:bg-red-500/5"
-            }`}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium transition-all"
+            style={isReported ? { color: "#ff5555", background: "rgba(255,85,85,0.08)", cursor: "not-allowed" } : { color: "#888" }}
+            onMouseEnter={(e) => !isReported && (e.currentTarget.style.color = "#ff5555")}
+            onMouseLeave={(e) => !isReported && (e.currentTarget.style.color = "#888")}
             title={isReported ? "Déjà signalé" : "Signaler ce commentaire"}
             aria-label={isReported ? "Commentaire signalé" : "Signaler ce commentaire"}
           >
@@ -199,7 +201,10 @@ export default function CommentItem({
           {hasReplies && (
             <button
               onClick={() => setShowReplies(!showReplies)}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all ml-auto"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium transition-all ml-auto"
+              style={{ color: "#888" }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "#e8e8e8")}
+              onMouseLeave={(e) => (e.currentTarget.style.color = "#888")}
               aria-label={showReplies ? "Masquer les réponses" : "Afficher les réponses"}
             >
               {showReplies ? (
@@ -220,7 +225,10 @@ export default function CommentItem({
 
       {/* Formulaire de réponse */}
       {isReplyFormVisible && postId && (
-        <div className="border-t border-zinc-800 p-4 sm:p-5 bg-zinc-900/50 animate-in fade-in slide-in-from-top-2 duration-200">
+        <div
+          className="p-4 sm:p-5 animate-in fade-in slide-in-from-top-2 duration-200"
+          style={{ borderTop: "1px solid #2a2a2a", background: "#161616" }}
+        >
           <CommentForm
             postId={postId}
             parentId={comment.id}
@@ -234,8 +242,8 @@ export default function CommentItem({
 
       {/* Réponses imbriquées */}
       {hasReplies && showReplies && (
-        <div className="border-t border-zinc-800 bg-zinc-900/30">
-          <div className="ml-4 sm:ml-6 space-y-3 py-3 pr-3 border-l-2 border-emerald-500/20">
+        <div style={{ borderTop: "1px solid #2a2a2a", background: "#161616" }}>
+          <div className="ml-4 sm:ml-6 space-y-3 py-3 pr-3" style={{ borderLeft: "2px solid rgba(0,229,255,0.15)" }}>
             {comment.replies!.map((reply) => (
               <CommentItem
                 key={reply.id}

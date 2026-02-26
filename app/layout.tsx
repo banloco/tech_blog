@@ -14,7 +14,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   userScalable: true,
-  themeColor: '#000000',
+  themeColor: '#121212',
 };
 
 export const metadata: Metadata = {
@@ -40,12 +40,24 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  icons: {
+    icon: "/icon.png",
+    shortcut: "/icon.png",
+    apple: "/icon.png",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr" className="dark scroll-smooth">
       <head>
+        {/* Google Fonts */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap"
+          rel="stylesheet"
+        />
         {/* Google AdSense */}
         {process.env.NEXT_PUBLIC_ADSENSE_ID && (
           <Script
@@ -57,18 +69,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         )}
         <meta name="google-adsense-account" content="ca-pub-6021784377387721"></meta>
       </head>
-      <body className="bg-black text-zinc-50 antialiased relative min-h-screen selection:bg-emerald-500/30 flex flex-col">
+      <body className="antialiased relative min-h-screen flex flex-col" style={{ background: '#121212', color: '#e8e8e8' }}>
         {/* Skip to main content for keyboard navigation */}
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-emerald-500 focus:text-white focus:px-6 focus:py-3 focus:rounded-lg focus:font-semibold focus:shadow-lg"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:text-black focus:px-6 focus:py-3 focus:font-semibold focus:shadow-lg"
+          style={{ background: 'var(--accent-cyan)' } as React.CSSProperties}
         >
           Passer au contenu principal
         </a>
         
-        {/* Modern Background Effects */}
-        <div className="fixed inset-0 z-[-1] h-full w-full bg-zinc-950 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px]"></div>
-        <div className="fixed inset-0 z-[-1] bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(16,185,129,0.15),rgba(255,255,255,0))]"></div>
+        {/* Subtle technical grid background */}
+        <div className="fixed inset-0 z-[-1]" style={{ background: '#121212', backgroundImage: 'linear-gradient(to right, #2a2a2a22 1px, transparent 1px), linear-gradient(to bottom, #2a2a2a22 1px, transparent 1px)', backgroundSize: '32px 32px' }}></div>
 
         <LanguageProvider>
           <Header />

@@ -75,11 +75,14 @@ export default function CommentSection({ postId, initialComments }: CommentSecti
     <section className="space-y-8" id="commentaires">
       {/* En-tête */}
       <div className="flex items-center gap-3">
-        <MessageSquare className="w-6 h-6 text-emerald-400" aria-hidden="true" />
-        <h2 className="text-2xl sm:text-3xl font-bold text-white">
+        <MessageSquare className="w-6 h-6" style={{ color: "#00E5FF" }} aria-hidden="true" />
+        <h2
+          className="text-2xl sm:text-3xl font-bold"
+          style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "#e8e8e8" }}
+        >
           Commentaires
           {totalCount > 0 && (
-            <span className="ml-2 text-lg text-zinc-400">({totalCount})</span>
+            <span className="ml-2 text-lg" style={{ color: "#555" }}>({totalCount})</span>
           )}
         </h2>
       </div>
@@ -87,7 +90,7 @@ export default function CommentSection({ postId, initialComments }: CommentSecti
       {/* Liste des commentaires */}
       {isLoading ? (
         <div className="flex items-center justify-center py-12">
-          <Loader2 className="w-8 h-8 text-emerald-400 animate-spin" aria-hidden="true" />
+          <Loader2 className="w-8 h-8 animate-spin" style={{ color: "#00E5FF" }} aria-hidden="true" />
           <span className="sr-only">Chargement des commentaires...</span>
         </div>
       ) : commentsWithReplies.length > 0 ? (
@@ -105,18 +108,18 @@ export default function CommentSection({ postId, initialComments }: CommentSecti
           ))}
         </div>
       ) : (
-        <div className="text-center py-12 rounded-xl border border-zinc-800 bg-zinc-900/30">
-          <MessageSquare className="w-12 h-12 text-zinc-700 mx-auto mb-3" aria-hidden="true" />
-          <p className="text-zinc-400 text-sm">
+        <div className="text-center py-12" style={{ border: "1px solid #2a2a2a", background: "#161616" }}>
+          <MessageSquare className="w-12 h-12 mx-auto mb-3" style={{ color: "#444" }} aria-hidden="true" />
+          <p className="text-sm" style={{ color: "#555" }}>
             Aucun commentaire pour le moment. Soyez le premier à partager votre avis !
           </p>
         </div>
       )}
 
       {/* Formulaire de nouveau commentaire */}
-      <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-6 space-y-4">
-        <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-          <MessageSquare className="w-5 h-5 text-emerald-400" aria-hidden="true" />
+      <div className="p-6 space-y-4" style={{ border: "1px solid #2a2a2a", background: "#1a1a1a" }}>
+        <h3 className="text-lg font-semibold flex items-center gap-2" style={{ color: "#e8e8e8" }}>
+          <MessageSquare className="w-5 h-5" style={{ color: "#00E5FF" }} aria-hidden="true" />
           Laisser un commentaire
         </h3>
         <CommentForm

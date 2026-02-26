@@ -41,7 +41,10 @@ export default function LanguageSwitcher() {
             setIsOpen(false);
           }
         }}
-        className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-zinc-800 text-zinc-300 hover:text-white transition-colors"
+        className="flex items-center gap-2 px-3 py-2 transition-colors"
+        style={{ color: "#888" }}
+        onMouseEnter={(e) => (e.currentTarget.style.color = "#e8e8e8")}
+        onMouseLeave={(e) => (e.currentTarget.style.color = "#888")}
         aria-label="Changer la langue"
         aria-haspopup="true"
         aria-expanded={isOpen}
@@ -54,7 +57,8 @@ export default function LanguageSwitcher() {
       {isOpen && (
         <div className="absolute right-0 mt-1 w-32 z-50">
           <div
-            className="bg-zinc-900 border border-zinc-800 rounded-lg shadow-lg overflow-hidden"
+            className="overflow-hidden shadow-xl"
+            style={{ background: "#1a1a1a", border: "1px solid #333" }}
             role="menu"
             aria-label="Sélectionner la langue"
           >
@@ -70,8 +74,8 @@ export default function LanguageSwitcher() {
               }}
               className={`w-full px-4 py-2 text-left text-sm transition-colors ${
                 language === "fr"
-                  ? "bg-emerald-500/10 text-emerald-400"
-                  : "text-zinc-300 hover:bg-zinc-800"
+                  ? "text-[#00E5FF] bg-[rgba(0,229,255,0.06)]"
+                  : "text-[#888] hover:text-[#e8e8e8] hover:bg-[#222]"
               }`}
               aria-current={language === "fr" ? "true" : undefined}
             >
@@ -89,8 +93,8 @@ export default function LanguageSwitcher() {
               }}
               className={`w-full px-4 py-2 text-left text-sm transition-colors ${
                 language === "en"
-                  ? "bg-emerald-500/10 text-emerald-400"
-                  : "text-zinc-300 hover:bg-zinc-800"
+                  ? "text-[#00E5FF] bg-[rgba(0,229,255,0.06)]"
+                  : "text-[#888] hover:text-[#e8e8e8] hover:bg-[#222]"
               }`}
               aria-current={language === "en" ? "true" : undefined}
             >
