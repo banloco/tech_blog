@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase-browser";
 import { slugify } from "@/lib/utils";
 import { Save, Loader2, ArrowLeft, Eye, Upload, X, ImageIcon } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import type { Post } from "@/lib/types";
+import type { Post, Category } from "@/lib/types";
 import RichTextEditor from "./RichTextEditor";
 
 interface ArticleFormProps {
@@ -28,6 +28,8 @@ export default function ArticleForm({ article }: ArticleFormProps) {
   const [tagsInput, setTagsInput] = useState(
     (article?.tags || []).join(", ")
   );
+  const [categoryId, setCategoryId] = useState<string>(article?.category_id ?? "");
+  const [categories, setCategories] = useState<Category[]>([]);
   const [status, setStatus] = useState<"draft" | "published">(
     article?.status || "draft"
   );
@@ -38,6 +40,16 @@ export default function ArticleForm({ article }: ArticleFormProps) {
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    supabase
+      .from("categories")
+      .select("*")
+      .order("name")
+      .then(({ data }) => {
+        if (data) setCategories(data as Category[]);
+      });
+  }, []);
 
   function handleTitleChange(value: string) {
     setTitle(value);
@@ -102,6 +114,7 @@ export default function ArticleForm({ article }: ArticleFormProps) {
       cover_image: coverImage || null,
       tags,
       status,
+      category_id: categoryId || null,
       meta_title: metaTitle || title,
       meta_description: metaDescription || excerpt || content.substring(0, 160),
       updated_at: new Date().toISOString(),
@@ -421,6 +434,32 @@ export default function ArticleForm({ article }: ArticleFormProps) {
                   </div>
                 )}
               </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="category"
+                className="block text-xs font-medium uppercase tracking-widest mb-1.5"
+                style={{ color: "#888" }}
+              >
+                Catégorie
+              </label>
+              <select
+                id="category"
+                value={categoryId}
+                onChange={(e) => setCategoryId(e.target.value)}
+                className="w-full px-3 py-2 text-sm transition-colors focus:outline-none"
+                style={{ border: "1px solid #333", background: "#0e0e0e", color: categoryId ? "#e8e8e8" : "#555" }}
+                onFocus={(e) => (e.currentTarget.style.borderColor = "#00E5FF")}
+                onBlur={(e) => (e.currentTarget.style.borderColor = "#333")}
+              >
+                <option value="">— Sans catégorie —</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div>

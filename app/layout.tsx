@@ -47,10 +47,51 @@ export const metadata: Metadata = {
   },
 };
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://ai-and-capital.tech";
+
+const websiteJsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${SITE_URL}/#website`,
+    url: SITE_URL,
+    name: "IA & Capital",
+    description: "Blog francophone sur l'IA appliquée à la finance, la crypto et l'investissement.",
+    inLanguage: "fr-FR",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: { "@type": "EntryPoint", urlTemplate: `${SITE_URL}/?q={search_term_string}` },
+      "query-input": "required name=search_term_string",
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": `${SITE_URL}/#organization`,
+    name: "IA & Capital",
+    url: SITE_URL,
+    logo: {
+      "@type": "ImageObject",
+      url: `${SITE_URL}/icon.png`,
+      width: 512,
+      height: 512,
+    },
+    founder: {
+      "@type": "Person",
+      name: "Christ Banidje",
+    },
+    sameAs: [],
+  },
+];
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr" className="dark scroll-smooth">
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
         {/* Google Fonts */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

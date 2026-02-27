@@ -15,7 +15,7 @@ export default async function AdminArticlesPage() {
   const supabase = await createSupabaseServerClient();
   const { data: posts } = await supabase
     .from("posts")
-    .select("*")
+    .select("*, category:categories(*)")
     .order("created_at", { ascending: false });
 
   return (

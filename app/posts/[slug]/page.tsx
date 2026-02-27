@@ -66,7 +66,7 @@ export default async function PostPage({ params }: Props) {
   // Try to get the post by slug first, then by id if slug doesn't work
   let { data: post } = await supabase
     .from("posts")
-    .select("*")
+    .select("*, category:categories(*)")
     .eq("slug", slug)
     .single();
 
@@ -74,7 +74,7 @@ export default async function PostPage({ params }: Props) {
   if (!post && slug) {
     const { data: postById } = await supabase
       .from("posts")
-      .select("*")
+      .select("*, category:categories(*)")
       .eq("id", slug)
       .single();
     post = postById;
@@ -96,20 +96,61 @@ export default async function PostPage({ params }: Props) {
   const readTime = estimateReadTime(post.content || "");
 
   // JSON-LD structured data for SEO
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ai-and-capital.tech";
+  const postUrl = `${siteUrl}/posts/${post.slug || post.id}`;
   const publishDate = post.published_at || post.created_at;
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    headline: post.title,
-    description: post.excerpt || post.content?.substring(0, 160),
-    datePublished: publishDate,
-    dateModified: post.updated_at || publishDate,
-    image: post.cover_image || undefined,
-    author: {
-      "@type": "Organization",
-      name: "IA & Capital",
+  const wordCount = post.content
+    ? post.content.replace(/<[^>]+>/g, " ").trim().split(/\s+/).length
+    : undefined;
+
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "@id": postUrl,
+      mainEntityOfPage: { "@type": "WebPage", "@id": postUrl },
+      url: postUrl,
+      headline: post.title,
+      description: post.excerpt || post.meta_description || post.content?.replace(/<[^>]+>/g, "").substring(0, 160),
+      datePublished: publishDate,
+      dateModified: post.updated_at || publishDate,
+      inLanguage: "fr-FR",
+      ...(post.cover_image && {
+        image: {
+          "@type": "ImageObject",
+          url: post.cover_image,
+          contentUrl: post.cover_image,
+        },
+      }),
+      author: {
+        "@type": "Person",
+        name: "Christ Banidje",
+        url: `${siteUrl}/about`,
+      },
+      publisher: {
+        "@type": "Organization",
+        name: "IA & Capital",
+        url: siteUrl,
+        logo: {
+          "@type": "ImageObject",
+          url: `${siteUrl}/icon.png`,
+        },
+      },
+      ...(post.tags?.length && { keywords: post.tags.join(", ") }),
+      ...((post as any).category?.name && { articleSection: (post as any).category.name }),
+      ...(wordCount && { wordCount }),
+      ...(allComments.length > 0 && { commentCount: allComments.length }),
     },
-  };
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Accueil", item: siteUrl },
+        { "@type": "ListItem", position: 2, name: "Articles", item: `${siteUrl}/#articles` },
+        { "@type": "ListItem", position: 3, name: post.title, item: postUrl },
+      ],
+    },
+  ];
 
   return (
     <>

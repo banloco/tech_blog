@@ -1,3 +1,13 @@
+export interface Category {
+  id: string;
+  name: string;
+  slug: string;
+  color: string;
+  bg: string;
+  border: string;
+  created_at: string;
+}
+
 export interface Post {
   id: string;
   title: string;
@@ -14,6 +24,8 @@ export interface Post {
   created_at: string;
   updated_at: string;
   published_at?: string;
+  category_id?: string | null;
+  category?: Category | null;
 }
 
 export interface Comment {

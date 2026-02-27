@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Eye, Clock } from "lucide-react";
-import { estimateReadTime } from "@/lib/utils";
+import { estimateReadTime, getTagCategory } from "@/lib/utils";
 import type { Post } from "@/lib/types";
 import { useLanguage } from "@/lib/i18n";
 
@@ -48,6 +48,25 @@ export default function PopularArticles({ posts }: { posts: Post[] }) {
             </span>
 
             <div className="flex-1 min-w-0 space-y-1">
+              {/* Category chip */}
+              {post.category ? (
+                <span
+                  className="inline-block text-[8px] font-bold font-mono px-1 py-0.5 border tracking-widest"
+                  style={{ color: post.category.color, borderColor: post.category.border, background: post.category.bg }}
+                >
+                  {post.category.name}
+                </span>
+              ) : post.tags && post.tags.length > 0 && (() => {
+                const cat = getTagCategory(post.tags[0]);
+                return (
+                  <span
+                    className="inline-block text-[8px] font-bold font-mono px-1 py-0.5 border tracking-widest"
+                    style={{ color: cat.color, borderColor: cat.border, background: cat.bg }}
+                  >
+                    {cat.label}
+                  </span>
+                );
+              })()}
               <h4
                 className="text-xs font-medium line-clamp-2 leading-snug transition-colors group-hover:text-white"
                 style={{ color: "#aaa" }}

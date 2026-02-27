@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Clock, ArrowUpRight } from "lucide-react";
-import { estimateReadTime, formatDate } from "@/lib/utils";
+import { estimateReadTime, formatDate, getTagCategory } from "@/lib/utils";
 import type { Post } from "@/lib/types";
 
 export default function PostCard({ post, featured = false }: { post: Post; featured?: boolean }) {
@@ -63,22 +63,37 @@ export default function PostCard({ post, featured = false }: { post: Post; featu
       )}
 
       <div className="flex flex-1 flex-col p-4 sm:p-5">
-        {/* Entity Tags + Reading Time */}
-        <div className="flex flex-wrap items-center gap-2 mb-3">
-          {tags.slice(0, 2).map((tag) => (
+        {/* Category Badge + Reading Time */}
+        <div className="flex flex-wrap items-center gap-1.5 mb-3">
+          {post.category ? (
             <span
-              key={tag}
-              className="text-[9px] font-semibold px-2 py-0.5 uppercase tracking-widest border"
+              className="text-[9px] font-bold px-1.5 py-0.5 uppercase tracking-widest border font-mono"
               style={{
-                color: "#C19A6B",
-                borderColor: "rgba(193,154,107,0.3)",
-                background: "rgba(193,154,107,0.06)",
-                letterSpacing: "0.1em",
+                color: post.category.color,
+                borderColor: post.category.border,
+                background: post.category.bg,
+                letterSpacing: "0.12em",
               }}
             >
-              {tag}
+              {post.category.name}
             </span>
-          ))}
+          ) : tags.slice(0, 1).map((tag) => {
+            const cat = getTagCategory(tag);
+            return (
+              <span
+                key={tag}
+                className="text-[9px] font-bold px-1.5 py-0.5 uppercase tracking-widest border font-mono"
+                style={{
+                  color: cat.color,
+                  borderColor: cat.border,
+                  background: cat.bg,
+                  letterSpacing: "0.12em",
+                }}
+              >
+                {cat.label}
+              </span>
+            );
+          })}
           <span
             className="flex items-center gap-1 text-[10px] ml-auto"
             style={{ color: "#555" }}

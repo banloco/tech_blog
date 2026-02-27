@@ -17,7 +17,7 @@ export default async function EditArticlePage({
   const supabase = await createSupabaseServerClient();
   const { data: post } = await supabase
     .from("posts")
-    .select("*")
+    .select("*, category:categories(*)")
     .eq("id", id)
     .single();
 

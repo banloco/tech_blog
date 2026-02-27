@@ -5,6 +5,7 @@ import PostCard from "@/components/PostCard";
 import Pagination from "@/components/Pagination";
 import PopularArticles from "@/components/PopularArticles";
 import MarketPulse from "@/components/MarketPulse";
+import NewsletterInline from "@/components/NewsletterInline";
 import { Search } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
 import type { Post } from "@/lib/types";
@@ -59,10 +60,13 @@ export default function HomeClient({ posts, recentPosts, totalPages }: HomeClien
               <>
                 {/* First post — full-width featured */}
                 {firstPost && (
-                  <div className="mb-6">
+                  <div className="mb-3">
                     <PostCard post={firstPost} featured={true} />
                   </div>
                 )}
+
+                {/* Inline newsletter — compact bar between featured and grid */}
+                <NewsletterInline />
 
                 {/* Remaining — asymmetric 2-col grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">

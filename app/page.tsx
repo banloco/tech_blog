@@ -20,13 +20,13 @@ export default async function Home({
   const [postsResult, recentResult] = await Promise.allSettled([
     supabase
       .from("posts")
-      .select("*", { count: "exact" })
+      .select("*, category:categories(*)", { count: "exact" })
       .eq("status", "published")
       .order("created_at", { ascending: false })
       .range(from, to),
     supabase
       .from("posts")
-      .select("*")
+      .select("*, category:categories(*)")
       .eq("status", "published")
       .order("created_at", { ascending: false })
       .limit(5),
