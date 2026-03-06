@@ -1,8 +1,15 @@
+import type { Metadata } from "next";
 import supabase from "@/lib/supabase";
 import HomeClient from "./HomeClient";
 
 // Revalidate every 60s so new articles appear without a full rebuild (ISR)
 export const revalidate = 60;
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "/",
+  },
+};
 
 const POSTS_PER_PAGE = 9;
 

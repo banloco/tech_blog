@@ -22,6 +22,9 @@ export const metadata: Metadata = {
     description:
       "Décrypter la convergence entre l'intelligence artificielle et la finance de demain.",
   },
+  alternates: {
+    canonical: "/about",
+  },
 };
 
 export default function AboutPage() {
