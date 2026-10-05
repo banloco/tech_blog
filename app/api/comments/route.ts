@@ -77,16 +77,16 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Insérer le commentaire (colonnes de base uniquement)
-    const { data, error } = await supabase.from("comments").insert({
+    // Insérer le commentaire. Pas de .select() derrière : un visiteur n'a pas le droit de
+    // relire un commentaire non approuvé (RLS), et la relecture ferait échouer l'envoi.
+    const { error } = await supabase.from("comments").insert({
       post_id,
       parent_id: parent_id || null,
       author_name: author_name.trim(),
       author_email: author_email.toLowerCase().trim(),
       content: content.trim(),
       is_approved: false,
-      // Note: likes_count et is_reported seront ajoutés après la migration
-    }).select().single();
+    });
 
     if (error) {
       console.error("Comment insert error:", error);
@@ -108,7 +108,6 @@ export async function POST(request: NextRequest) {
       message: parent_id
         ? "Réponse envoyée ! Elle sera visible après modération."
         : "Commentaire envoyé ! Il sera visible après modération.",
-      comment: data,
     });
   } catch (err: any) {
     console.error("Unexpected error:", err);

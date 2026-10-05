@@ -19,24 +19,19 @@ export async function POST(request: NextRequest) {
 
     const supabase = await createSupabaseServerClient();
 
-    // Check duplicate
-    const { data: existing } = await supabase
-      .from("newsletter_subscribers")
-      .select("id")
-      .eq("email", email.toLowerCase())
-      .single();
+    // Un visiteur ne peut pas lire la liste des abonnés (RLS) : un doublon se voit à
+    // l'insertion, grâce à la contrainte UNIQUE sur l'email (code Postgres 23505).
+    const { error } = await supabase.from("newsletter_subscribers").insert({
+      email: email.toLowerCase(),
+      created_at: new Date().toISOString(),
+    });
 
-    if (existing) {
+    if (error?.code === "23505") {
       return NextResponse.json(
         { error: "Vous êtes déjà inscrit à la newsletter." },
         { status: 409 }
       );
     }
-
-    const { error } = await supabase.from("newsletter_subscribers").insert({
-      email: email.toLowerCase(),
-      created_at: new Date().toISOString(),
-    });
 
     if (error) {
       return NextResponse.json(
