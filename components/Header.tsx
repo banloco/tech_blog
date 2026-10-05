@@ -7,7 +7,6 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import logo from "../public/ia_&_capital.png";
 import LanguageSwitcher from "./LanguageSwitcher";
-import StockTicker from "./StockTicker";
 import { useLanguage } from "@/lib/i18n";
 
 export default function Header() {
@@ -58,9 +57,6 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full">
-      {/* ── Stock Ticker Banner ── */}
-      <StockTicker />
-
       {/* ── Main Nav Bar ── */}
       <div
         className="w-full border-b"

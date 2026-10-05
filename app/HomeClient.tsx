@@ -4,7 +4,6 @@ import FeaturedCarousel from "@/components/FeaturedCarousel";
 import PostCard from "@/components/PostCard";
 import Pagination from "@/components/Pagination";
 import PopularArticles from "@/components/PopularArticles";
-import MarketPulse from "@/components/MarketPulse";
 import NewsletterInline from "@/components/NewsletterInline";
 import { Search } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
@@ -104,9 +103,6 @@ export default function HomeClient({ posts, recentPosts, totalPages }: HomeClien
                 style={{ color: "#888", fontFamily: "'Inter', sans-serif" }}
               />
             </div>
-
-            {/* Market Pulse Widget */}
-            <MarketPulse />
 
             {/* Popular Articles */}
             <PopularArticles posts={recentPosts || []} />
