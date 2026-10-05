@@ -98,6 +98,18 @@ export default function LegalPage() {
             cookies.
           </p>
         </section>
+
+        <section>
+          <h2>7. Liens affiliés et partenariats</h2>
+          <p>
+            Certains articles peuvent contenir des liens affiliés : si vous achetez
+            ou vous inscrivez via ce lien, le blog peut toucher une commission, sans
+            aucun coût supplémentaire pour vous. Ces liens sont toujours signalés
+            dans l&apos;article. Les outils et services sont recommandés parce
+            qu&apos;ils sont utiles, jamais en fonction de la commission. Les
+            articles ne constituent pas des conseils en investissement.
+          </p>
+        </section>
       </div>
     </div>
   );

@@ -19,6 +19,7 @@ export interface Post {
   status: "draft" | "published";
   meta_title?: string;
   meta_description?: string;
+  focus_keyword?: string | null;
   views_count?: number;
   likes_count?: number;
   created_at: string;

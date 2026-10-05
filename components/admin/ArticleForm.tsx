@@ -4,6 +4,8 @@ import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase-browser";
 import { slugify, stripHtml, truncate } from "@/lib/utils";
+import { TODO_MARKER } from "@/lib/seo";
+import SeoPanel from "./SeoPanel";
 import { Save, Loader2, ArrowLeft, Eye, Upload, X, ImageIcon } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -37,6 +39,7 @@ export default function ArticleForm({ article }: ArticleFormProps) {
   const [metaDescription, setMetaDescription] = useState(
     article?.meta_description || ""
   );
+  const [focusKeyword, setFocusKeyword] = useState(article?.focus_keyword || "");
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
@@ -89,6 +92,18 @@ export default function ArticleForm({ article }: ArticleFormProps) {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
+
+    // An agent's draft must be completed by the author before it goes live
+    const markers = content.match(TODO_MARKER);
+    if (status === "published" && markers) {
+      setError(`Impossible de publier : ${markers.length} repère(s) « [À COMPLÉTER] » sont encore dans le texte. Remplacez-les par votre expérience ou supprimez-les.`);
+      return;
+    }
+    // Changing the address of a live article breaks every link already shared
+    if (isEditing && article?.status === "published" && slug !== article.slug &&
+        !window.confirm("Cet article est déjà en ligne : changer son adresse cassera les liens déjà partagés (WhatsApp, Google…). Continuer ?")) {
+      return;
+    }
     setSaving(true);
 
     const tags = tagsInput
@@ -117,6 +132,7 @@ export default function ArticleForm({ article }: ArticleFormProps) {
       category_id: categoryId || null,
       meta_title: metaTitle || title,
       meta_description: metaDescription || excerpt || truncate(stripHtml(content), 160),
+      focus_keyword: focusKeyword.trim() || null,
       updated_at: new Date().toISOString(),
       published_at: publishedAt,
     };
@@ -282,7 +298,7 @@ export default function ArticleForm({ article }: ArticleFormProps) {
               maxLength={300}
             />
             <p className="text-xs mt-1" style={{ color: "var(--text-dim)" }}>
-              {excerpt.length}/300 caractères — utilisé pour les aperçus et le SEO
+              {excerpt.length}/300 caractères — affiché sur les cartes d'articles et sous le titre
             </p>
           </div>
 
@@ -359,6 +375,40 @@ export default function ArticleForm({ article }: ArticleFormProps) {
                 {(metaDescription || excerpt).length}/160
               </p>
             </div>
+
+            <div>
+              <label
+                htmlFor="focusKeyword"
+                className="block text-xs font-medium uppercase tracking-widest mb-1.5"
+                style={{ color: "var(--text-muted)" }}
+              >
+                Mot-clé principal
+              </label>
+              <input
+                id="focusKeyword"
+                type="text"
+                value={focusKeyword}
+                onChange={(e) => setFocusKeyword(e.target.value)}
+                className="w-full px-3 py-2 text-sm transition-colors focus:outline-none"
+                style={{ border: "1px solid var(--line)", background: "var(--bg)", color: "var(--ink)" }}
+                placeholder="ex. faire un budget"
+              />
+              <p className="text-xs mt-1" style={{ color: "var(--text-dim)" }}>
+                Ce que vos lecteurs tapent dans Google pour trouver cet article.
+              </p>
+            </div>
+
+            <SeoPanel
+              title={title}
+              metaTitle={metaTitle}
+              metaDescription={metaDescription}
+              excerpt={excerpt}
+              slug={slug}
+              content={content}
+              keyword={focusKeyword}
+              categoryId={categoryId}
+              coverImage={coverImage}
+            />
           </div>
 
           <div className="p-5 space-y-5" style={{ border: "1px solid var(--line)", background: "var(--surface)" }}>

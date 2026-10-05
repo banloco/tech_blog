@@ -74,7 +74,7 @@ export default function LanguageSwitcher() {
               }}
               className={`w-full px-4 py-2 text-left text-sm transition-colors ${
                 language === "fr"
-                  ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 6%, transparent)]"
+                  ? "text-[var(--brand)] bg-[color-mix(in_srgb,var(--brand)_6%,transparent)]"
                   : "text-[var(--text-muted)] hover:text-[var(--ink)] hover:bg-[var(--line-soft)]"
               }`}
               aria-current={language === "fr" ? "true" : undefined}
@@ -93,7 +93,7 @@ export default function LanguageSwitcher() {
               }}
               className={`w-full px-4 py-2 text-left text-sm transition-colors ${
                 language === "en"
-                  ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 6%, transparent)]"
+                  ? "text-[var(--brand)] bg-[color-mix(in_srgb,var(--brand)_6%,transparent)]"
                   : "text-[var(--text-muted)] hover:text-[var(--ink)] hover:bg-[var(--line-soft)]"
               }`}
               aria-current={language === "en" ? "true" : undefined}

@@ -56,6 +56,7 @@ CREATE TABLE IF NOT EXISTS posts (
   status           TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'published')),
   meta_title       TEXT,
   meta_description TEXT,
+  focus_keyword    TEXT,
   views_count      INTEGER DEFAULT 0,
   likes_count      INTEGER DEFAULT 0,
   category_id      UUID REFERENCES categories(id) ON DELETE SET NULL,

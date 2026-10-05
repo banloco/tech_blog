@@ -5,6 +5,7 @@ import NewsletterForm from "./NewsletterForm";
 import Logo from "./Logo";
 import { useLanguage } from "@/lib/i18n";
 import { CATEGORIES } from "@/lib/categories";
+import { SITE } from "@/lib/site";
 
 export default function Footer() {
   const { t } = useLanguage();
@@ -47,6 +48,7 @@ export default function Footer() {
             {[{ href: "/", label: t("home") }, { href: "/about", label: t("about") }, { href: "/contact", label: t("contact") }].map(({ href, label }) => (
               <li key={href}><Link href={href} className={linkClass} style={{ color: "var(--text-muted)" }}>{label}</Link></li>
             ))}
+            <li><a href={SITE.authorUrl} target="_blank" rel="noopener" className={linkClass} style={{ color: "var(--text-muted)" }}>Travailler avec moi</a></li>
           </ul>
         </nav>
 

@@ -29,6 +29,7 @@ export const metadata: Metadata = {
     template: `%s | ${SITE.name}`,
   },
   description: SITE.description,
+  alternates: { types: { "application/rss+xml": [{ url: "/feed.xml", title: SITE.name }] } },
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
   openGraph: {
     type: "website",
@@ -80,7 +81,8 @@ const websiteJsonLd = [
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className={`${body.variable} ${heading.variable} scroll-smooth`}>
+    // suppressHydrationWarning: browser extensions add their own attributes to <html> (e.g. "foxified")
+    <html lang="fr" className={`${body.variable} ${heading.variable} scroll-smooth`} suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"

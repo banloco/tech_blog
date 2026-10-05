@@ -18,7 +18,6 @@ import {
   Italic,
   Strikethrough,
   Code,
-  Heading1,
   Heading2,
   Heading3,
   List,
@@ -109,10 +108,11 @@ export default function RichTextEditor({
   };
 
   const addImage = () => {
-    const url = window.prompt("URL de l'image:");
-    if (url) {
-      editor.chain().focus().setImage({ src: url }).run();
-    }
+    const url = window.prompt("URL de l'image :");
+    if (!url) return;
+    // The description (alt) is read by Google and by screen readers
+    const alt = window.prompt("Décrivez l'image en quelques mots (ex. « tableau de budget mensuel ») :") || "";
+    editor.chain().focus().setImage({ src: url, alt }).run();
   };
 
   return (
@@ -125,7 +125,7 @@ export default function RichTextEditor({
             type="button"
             onClick={() => editor.chain().focus().toggleBold().run()}
             className={`p-2 rounded hover:bg-[var(--line-soft)] transition-colors ${
-              editor.isActive("bold") ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 8%, transparent)]" : "text-[var(--text-muted)]"
+              editor.isActive("bold") ? "text-[var(--brand)] bg-[color-mix(in_srgb,var(--brand)_8%,transparent)]" : "text-[var(--text-muted)]"
             }`}
             title="Gras (Ctrl+B)"
           >
@@ -135,7 +135,7 @@ export default function RichTextEditor({
             type="button"
             onClick={() => editor.chain().focus().toggleItalic().run()}
             className={`p-2 rounded hover:bg-[var(--line-soft)] transition-colors ${
-              editor.isActive("italic") ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 8%, transparent)]" : "text-[var(--text-muted)]"
+              editor.isActive("italic") ? "text-[var(--brand)] bg-[color-mix(in_srgb,var(--brand)_8%,transparent)]" : "text-[var(--text-muted)]"
             }`}
             title="Italique (Ctrl+I)"
           >
@@ -145,7 +145,7 @@ export default function RichTextEditor({
             type="button"
             onClick={() => editor.chain().focus().toggleUnderline().run()}
             className={`p-2 rounded hover:bg-[var(--line-soft)] transition-colors ${
-              editor.isActive("underline") ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 8%, transparent)]" : "text-[var(--text-muted)]"
+              editor.isActive("underline") ? "text-[var(--brand)] bg-[color-mix(in_srgb,var(--brand)_8%,transparent)]" : "text-[var(--text-muted)]"
             }`}
             title="Souligné (Ctrl+U)"
           >
@@ -155,7 +155,7 @@ export default function RichTextEditor({
             type="button"
             onClick={() => editor.chain().focus().toggleStrike().run()}
             className={`p-2 rounded hover:bg-[var(--line-soft)] transition-colors ${
-              editor.isActive("strike") ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 8%, transparent)]" : "text-[var(--text-muted)]"
+              editor.isActive("strike") ? "text-[var(--brand)] bg-[color-mix(in_srgb,var(--brand)_8%,transparent)]" : "text-[var(--text-muted)]"
             }`}
             title="Barré"
           >
@@ -165,7 +165,7 @@ export default function RichTextEditor({
             type="button"
             onClick={() => editor.chain().focus().toggleCode().run()}
             className={`p-2 rounded hover:bg-[var(--line-soft)] transition-colors ${
-              editor.isActive("code") ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 8%, transparent)]" : "text-[var(--text-muted)]"
+              editor.isActive("code") ? "text-[var(--brand)] bg-[color-mix(in_srgb,var(--brand)_8%,transparent)]" : "text-[var(--text-muted)]"
             }`}
             title="Code inline"
           >
@@ -175,21 +175,12 @@ export default function RichTextEditor({
 
         {/* Headings */}
         <div className="flex gap-1 border-r border-[var(--line)] pr-2 mr-1">
-          <button
-            type="button"
-            onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-            className={`p-2 rounded hover:bg-[var(--line-soft)] transition-colors ${
-              editor.isActive("heading", { level: 1 }) ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 8%, transparent)]" : "text-[var(--text-muted)]"
-            }`}
-            title="Titre 1"
-          >
-            <Heading1 className="w-4 h-4" />
-          </button>
+          {/* No H1 button: the article title is already the page's H1 (two H1s confuse Google) */}
           <button
             type="button"
             onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
             className={`p-2 rounded hover:bg-[var(--line-soft)] transition-colors ${
-              editor.isActive("heading", { level: 2 }) ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 8%, transparent)]" : "text-[var(--text-muted)]"
+              editor.isActive("heading", { level: 2 }) ? "text-[var(--brand)] bg-[color-mix(in_srgb,var(--brand)_8%,transparent)]" : "text-[var(--text-muted)]"
             }`}
             title="Titre 2"
           >
@@ -199,7 +190,7 @@ export default function RichTextEditor({
             type="button"
             onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
             className={`p-2 rounded hover:bg-[var(--line-soft)] transition-colors ${
-              editor.isActive("heading", { level: 3 }) ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 8%, transparent)]" : "text-[var(--text-muted)]"
+              editor.isActive("heading", { level: 3 }) ? "text-[var(--brand)] bg-[color-mix(in_srgb,var(--brand)_8%,transparent)]" : "text-[var(--text-muted)]"
             }`}
             title="Titre 3"
           >
@@ -213,7 +204,7 @@ export default function RichTextEditor({
             type="button"
             onClick={() => editor.chain().focus().toggleBulletList().run()}
             className={`p-2 rounded hover:bg-[var(--line-soft)] transition-colors ${
-              editor.isActive("bulletList") ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 8%, transparent)]" : "text-[var(--text-muted)]"
+              editor.isActive("bulletList") ? "text-[var(--brand)] bg-[color-mix(in_srgb,var(--brand)_8%,transparent)]" : "text-[var(--text-muted)]"
             }`}
             title="Liste à puces"
           >
@@ -223,7 +214,7 @@ export default function RichTextEditor({
             type="button"
             onClick={() => editor.chain().focus().toggleOrderedList().run()}
             className={`p-2 rounded hover:bg-[var(--line-soft)] transition-colors ${
-              editor.isActive("orderedList") ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 8%, transparent)]" : "text-[var(--text-muted)]"
+              editor.isActive("orderedList") ? "text-[var(--brand)] bg-[color-mix(in_srgb,var(--brand)_8%,transparent)]" : "text-[var(--text-muted)]"
             }`}
             title="Liste numérotée"
           >
@@ -233,7 +224,7 @@ export default function RichTextEditor({
             type="button"
             onClick={() => editor.chain().focus().toggleBlockquote().run()}
             className={`p-2 rounded hover:bg-[var(--line-soft)] transition-colors ${
-              editor.isActive("blockquote") ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 8%, transparent)]" : "text-[var(--text-muted)]"
+              editor.isActive("blockquote") ? "text-[var(--brand)] bg-[color-mix(in_srgb,var(--brand)_8%,transparent)]" : "text-[var(--text-muted)]"
             }`}
             title="Citation"
           >
@@ -247,7 +238,7 @@ export default function RichTextEditor({
             type="button"
             onClick={() => editor.chain().focus().setTextAlign("left").run()}
             className={`p-2 rounded hover:bg-[var(--line-soft)] transition-colors ${
-              editor.isActive({ textAlign: "left" }) ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 8%, transparent)]" : "text-[var(--text-muted)]"
+              editor.isActive({ textAlign: "left" }) ? "text-[var(--brand)] bg-[color-mix(in_srgb,var(--brand)_8%,transparent)]" : "text-[var(--text-muted)]"
             }`}
             title="Aligner à gauche"
           >
@@ -257,7 +248,7 @@ export default function RichTextEditor({
             type="button"
             onClick={() => editor.chain().focus().setTextAlign("center").run()}
             className={`p-2 rounded hover:bg-[var(--line-soft)] transition-colors ${
-              editor.isActive({ textAlign: "center" }) ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 8%, transparent)]" : "text-[var(--text-muted)]"
+              editor.isActive({ textAlign: "center" }) ? "text-[var(--brand)] bg-[color-mix(in_srgb,var(--brand)_8%,transparent)]" : "text-[var(--text-muted)]"
             }`}
             title="Centrer"
           >
@@ -267,7 +258,7 @@ export default function RichTextEditor({
             type="button"
             onClick={() => editor.chain().focus().setTextAlign("right").run()}
             className={`p-2 rounded hover:bg-[var(--line-soft)] transition-colors ${
-              editor.isActive({ textAlign: "right" }) ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 8%, transparent)]" : "text-[var(--text-muted)]"
+              editor.isActive({ textAlign: "right" }) ? "text-[var(--brand)] bg-[color-mix(in_srgb,var(--brand)_8%,transparent)]" : "text-[var(--text-muted)]"
             }`}
             title="Aligner à droite"
           >
@@ -281,7 +272,7 @@ export default function RichTextEditor({
             type="button"
             onClick={addLink}
             className={`p-2 rounded hover:bg-[var(--line-soft)] transition-colors ${
-              editor.isActive("link") ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 8%, transparent)]" : "text-[var(--text-muted)]"
+              editor.isActive("link") ? "text-[var(--brand)] bg-[color-mix(in_srgb,var(--brand)_8%,transparent)]" : "text-[var(--text-muted)]"
             }`}
             title="Insérer un lien"
           >
@@ -299,7 +290,7 @@ export default function RichTextEditor({
             type="button"
             onClick={() => editor.chain().focus().toggleCodeBlock().run()}
             className={`p-2 rounded hover:bg-[var(--line-soft)] transition-colors ${
-              editor.isActive("codeBlock") ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 8%, transparent)]" : "text-[var(--text-muted)]"
+              editor.isActive("codeBlock") ? "text-[var(--brand)] bg-[color-mix(in_srgb,var(--brand)_8%,transparent)]" : "text-[var(--text-muted)]"
             }`}
             title="Bloc de code"
           >
