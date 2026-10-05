@@ -25,8 +25,8 @@ export default function LegalPage() {
         <section>
           <h2>1. Éditeur du site</h2>
           <p>
-            Le site <strong>IA & Capital</strong> est un blog personnel dédié à
-            l'analyse de l'intelligence artificielle appliquée à la finance.
+            Le site <strong>IA & Capital</strong> est un blog personnel consacré
+            à la tech et au business en Afrique.
           </p>
           <ul>
             <li>
@@ -74,10 +74,9 @@ export default function LegalPage() {
           <h2>4. Limitation de responsabilité</h2>
           <p>
             Les informations publiées sur ce blog sont fournies à titre
-            informatif uniquement. Elles ne constituent en aucun cas des
-            conseils en investissement. L'éditeur ne saurait être tenu
-            responsable des décisions financières prises sur la base des
-            contenus publiés.
+            informatif uniquement. Elles ne constituent pas des conseils
+            juridiques, fiscaux ou financiers. L'éditeur ne saurait être tenu
+            responsable des décisions prises sur la base des contenus publiés.
           </p>
         </section>
 

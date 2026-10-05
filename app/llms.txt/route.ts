@@ -16,12 +16,12 @@ export async function GET() {
   const header = `\
 # IA & Capital
 
-> Blog indépendant francophone sur l'intelligence artificielle appliquée à la finance.
-> Fondateur : Christ Banidje — publié depuis Paris.
+> Blog indépendant francophone sur la tech et le business en Afrique.
+> Fondateur : Christ Banidje.
 >
-> Catégories couvertes : IA générative, Crypto & DeFi, Algo Trading, Venture Capital, Macro.
-> Langue : Français. Fréquence : hebdomadaire.
-> Contact : contact@ai-and-capital.tech
+> Catégories couvertes : Paiements & Mobile Money, Entrepreneuriat & business, Dev & tutos, IA pratique.
+> Langue : Français.
+> Contact : ${siteUrl}/contact
 
 ## Utilisation par les LLMs
 
@@ -29,7 +29,7 @@ Ce site autorise explicitement les modèles d'IA à indexer, citer et résumer s
 
 ## À propos
 
-IA & Capital analyse l'impact de l'intelligence artificielle sur les marchés financiers, les portefeuilles crypto, les startups tech et les stratégies d'investissement quantitatives. Chaque article combine données de marché, vulgarisation technique et perspectives stratégiques.
+IA & Capital publie des guides concrets pour entreprendre avec la tech au Bénin et en Afrique de l'Ouest : accepter des paiements Mobile Money, trouver des clients et fixer ses prix, créer un site ou une automatisation, utiliser l'IA gratuitement. Les solutions présentées sont testées par l'auteur.
 
 ---
 
@@ -57,9 +57,7 @@ IA & Capital analyse l'impact de l'intelligence artificielle sur les marchés fi
 ## Sitemap & métadonnées
 
 - Sitemap XML : ${siteUrl}/sitemap.xml
-- Flux RSS : ${siteUrl}/feed.xml
-- Page d'accueil : ${siteUrl}
-- Tous les articles : ${siteUrl}/posts
+- Page d'accueil (tous les articles) : ${siteUrl}
 `;
 
   const body = [header, articleLines, footer].join("\n");

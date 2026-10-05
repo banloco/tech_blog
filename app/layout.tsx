@@ -19,19 +19,19 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: "IA & Capital | Le Blog Tech Finance",
+    default: "IA & Capital | Tech & business en Afrique",
     template: "%s | IA & Capital",
   },
   description:
-    "Décryptez l'impact de l'intelligence artificielle sur vos finances. Analyses, outils IA et actualités bourse & crypto.",
+    "Des guides concrets pour entreprendre avec la tech en Afrique : paiements Mobile Money, business, tutos de dev et IA pratique.",
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
   openGraph: {
     type: "website",
     locale: "fr_FR",
     siteName: "IA & Capital",
-    title: "IA & Capital | Le Blog Tech Finance",
+    title: "IA & Capital | Tech & business en Afrique",
     description:
-      "Décryptez l'impact de l'intelligence artificielle sur vos finances.",
+      "Des guides concrets pour entreprendre avec la tech en Afrique.",
   },
   twitter: {
     card: "summary_large_image",
@@ -56,13 +56,8 @@ const websiteJsonLd = [
     "@id": `${SITE_URL}/#website`,
     url: SITE_URL,
     name: "IA & Capital",
-    description: "Blog francophone sur l'IA appliquée à la finance, la crypto et l'investissement.",
+    description: "Blog francophone sur la tech et le business en Afrique : Mobile Money, entrepreneuriat, dev et IA pratique.",
     inLanguage: "fr-FR",
-    potentialAction: {
-      "@type": "SearchAction",
-      target: { "@type": "EntryPoint", urlTemplate: `${SITE_URL}/?q={search_term_string}` },
-      "query-input": "required name=search_term_string",
-    },
   },
   {
     "@context": "https://schema.org",

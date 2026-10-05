@@ -479,7 +479,7 @@ export default function ArticleForm({ article }: ArticleFormProps) {
                 style={{ border: "1px solid #333", background: "#0e0e0e", color: "#e8e8e8" }}
                 onFocus={(e) => (e.currentTarget.style.borderColor = "#00E5FF")}
                 onBlur={(e) => (e.currentTarget.style.borderColor = "#333")}
-                placeholder="IA, Finance, Crypto"
+                placeholder="Mobile Money, Business, IA"
               />
               <p className="text-xs mt-1" style={{ color: "#555" }}>
                 Séparez les tags par des virgules

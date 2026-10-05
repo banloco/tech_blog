@@ -3,9 +3,10 @@ import {
   Cpu,
   Eye,
   LayoutGrid,
-  Link2,
-  TrendingUp,
-  Globe,
+  Smartphone,
+  Briefcase,
+  Code2,
+  Sparkles,
   Shield,
   BookOpen,
   Microscope,
@@ -16,11 +17,11 @@ import {
 export const metadata: Metadata = {
   title: "À propos",
   description:
-    "Décrypter la convergence entre l'intelligence artificielle et la finance de demain. Découvrez la mission et la vision d'IA & Capital.",
+    "Des guides concrets pour entreprendre avec la tech en Afrique : paiements Mobile Money, outils, tutos de dev et IA pratique. Découvrez la mission d'IA & Capital.",
   openGraph: {
     title: "À Propos d'IA & Capital",
     description:
-      "Décrypter la convergence entre l'intelligence artificielle et la finance de demain.",
+      "Des guides concrets pour entreprendre avec la tech en Afrique.",
   },
   alternates: {
     canonical: "/about",
@@ -46,16 +47,16 @@ export default function AboutPage() {
           className="text-3xl font-bold tracking-tight sm:text-5xl leading-tight"
           style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "#e8e8e8" }}
         >
-          Décrypter la convergence entre{" "}
-          <span style={{ color: "#00E5FF" }}>l&apos;IA et la finance</span>
+          La tech au service de{" "}
+          <span style={{ color: "#00E5FF" }}>ceux qui entreprennent en Afrique</span>
         </h1>
         <p className="mt-6 text-lg leading-relaxed max-w-2xl mx-auto" style={{ color: "#888" }}>
-          Bienvenue sur <strong style={{ color: "#e8e8e8" }}>IA &amp; Capital</strong>, la
-          plateforme de référence dédiée à l&apos;analyse de l&apos;impact des
-          technologies de pointe sur l&apos;écosystème financier. À une époque où
-          les algorithmes redéfinissent les règles du jeu, notre mission est de
-          fournir aux investisseurs — particuliers ou professionnels — les clés
-          pour comprendre et naviguer dans ce nouveau paradigme.
+          Bienvenue sur <strong style={{ color: "#e8e8e8" }}>IA &amp; Capital</strong>. Ici,
+          le capital, c&apos;est ce qui fait avancer une activité : des outils qui
+          marchent, des paiements qui arrivent, des compétences qu&apos;on peut
+          réutiliser. J&apos;y partage des guides concrets, testés sur le terrain,
+          pour lancer et faire grandir un projet avec la tech, au Bénin et en
+          Afrique de l&apos;Ouest.
         </p>
       </header>
 
@@ -70,21 +71,20 @@ export default function AboutPage() {
             style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "#e8e8e8" }}
           >
             <Eye className="w-5 h-5" style={{ color: "#00E5FF" }} />
-            Notre Vision
+            Pourquoi ce blog
           </h2>
           <p className="leading-relaxed" style={{ color: "#888" }}>
-            Le monde de la finance vit sa plus grande mutation depuis
-            l&apos;invention de la bourse électronique. L&apos;intelligence artificielle
-            n&apos;est plus un simple outil d&apos;aide à la décision ; elle est devenue
-            le moteur central des flux de capitaux mondiaux.
+            La plupart des guides tech sont écrits pour l&apos;Europe ou les
+            États-Unis : cartes bancaires partout, connexion rapide, gros
+            budgets. Ici, on encaisse par Mobile Money, on code parfois sur un
+            PC modeste, et les clients ne paient pas toujours comme prévu.
           </p>
           <p className="mt-4 leading-relaxed" style={{ color: "#888" }}>
-            Chez <strong style={{ color: "#e8e8e8" }}>IA &amp; Capital</strong>, nous
-            croyons que la transparence et l&apos;éducation sont les meilleurs
-            remparts contre la volatilité des marchés. Nous explorons les
-            frontières de la{" "}
-            <strong style={{ color: "#00E5FF" }}>Tech Finance</strong> pour
-            transformer des données complexes en opportunités actionnables.
+            <strong style={{ color: "#e8e8e8" }}>IA &amp; Capital</strong> part de
+            cette réalité. Chaque article répond à une question précise, avec des
+            solutions{" "}
+            <strong style={{ color: "#00E5FF" }}>gratuites ou abordables</strong>{" "}
+            que j&apos;ai essayées moi-même.
           </p>
         </section>
 
@@ -98,27 +98,32 @@ export default function AboutPage() {
             style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "#e8e8e8" }}
           >
             <LayoutGrid className="w-5 h-5" style={{ color: "#00E5FF" }} />
-            Ce que nous couvrons
+            Ce que vous trouverez ici
           </h2>
           <p className="mb-6 leading-relaxed" style={{ color: "#888" }}>
-            Notre ligne éditoriale s&apos;articule autour de trois piliers fondamentaux :
+            Quatre thèmes, toujours avec des exemples concrets :
           </p>
           <div className="space-y-4">
             {[
               {
-                icon: Link2,
-                title: "L'On-Chain Intelligence",
-                desc: "Utiliser la puissance de l'IA pour analyser la blockchain, traquer la \"Smart Money\" et anticiper les cycles des actifs numériques.",
+                icon: Smartphone,
+                title: "Paiements & Mobile Money",
+                desc: "Accepter des paiements en ligne avec MTN MoMo, Moov Money et les agrégateurs de paiement, sans se perdre dans les frais et les intégrations.",
               },
               {
-                icon: TrendingUp,
-                title: "La TradFi Augmentée",
-                desc: "Analyser comment l'IA transforme la bourse traditionnelle, des ETFs pilotés par algorithmes aux puces de calcul haute fréquence (HFT).",
+                icon: Briefcase,
+                title: "Entrepreneuriat & business",
+                desc: "Trouver des clients, fixer ses prix, se faire payer : les bases pour transformer une compétence en activité qui rapporte.",
               },
               {
-                icon: Globe,
-                title: "L'Écosystème FinTech",
-                desc: "Suivre les innovations des leaders du marché (NVIDIA, Apple, Mistral AI) et l'évolution des régulations (IA Act) qui façonnent notre avenir financier.",
+                icon: Code2,
+                title: "Dev & tutos",
+                desc: "Créer un site, une application ou une automatisation pas à pas, avec des outils gratuits et du code expliqué.",
+              },
+              {
+                icon: Sparkles,
+                title: "IA pratique",
+                desc: "Utiliser l'intelligence artificielle pour gagner du temps au quotidien, gratuitement et même sans ordinateur puissant.",
               },
             ].map(({ icon: Icon, title, desc }) => (
               <div
@@ -151,17 +156,16 @@ export default function AboutPage() {
             style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "#e8e8e8" }}
           >
             <BookOpen className="w-5 h-5" style={{ color: "#C19A6B" }} />
-            Pourquoi nous lire ?
+            Ma façon de faire
           </h2>
           <p className="mb-6 leading-relaxed" style={{ color: "#888" }}>
-            Dans un océan de &ldquo;bruit&rdquo; numérique et de rumeurs de marché,{" "}
-            <strong style={{ color: "#e8e8e8" }}>IA &amp; Capital</strong> se distingue par :
+            Sur <strong style={{ color: "#e8e8e8" }}>IA &amp; Capital</strong>, chaque article suit trois règles :
           </p>
           <ul className="space-y-4">
             {[
-              { icon: Microscope, title: "Une expertise technique :", desc: "Nous ne nous contentons pas de rapporter l'actualité, nous analysons les infrastructures derrière les chiffres." },
-              { icon: Shield, title: "Une indépendance totale :", desc: "Nos analyses sont guidées par la donnée et l'objectivité." },
-              { icon: BookOpen, title: "Une approche pédagogique :", desc: "Nous rendons les concepts de pointe accessibles sans en sacrifier la profondeur." },
+              { icon: Microscope, title: "Testé avant d'être conseillé :", desc: "je ne recommande que ce que j'ai essayé, et je dis aussi ce qui n'a pas marché." },
+              { icon: Shield, title: "Indépendant :", desc: "aucun article n'est payé par un outil ou un service dont il parle. Si un lien rapporte une commission, c'est indiqué." },
+              { icon: BookOpen, title: "Accessible :", desc: "des explications claires, pour les débutants comme pour les développeurs." },
             ].map(({ icon: Icon, title, desc }) => (
               <li key={title} className="flex items-start gap-4">
                 <div
@@ -191,11 +195,12 @@ export default function AboutPage() {
             Rejoignez la communauté
           </h2>
           <p className="leading-relaxed" style={{ color: "#888" }}>
-            La finance de demain s&apos;écrit aujourd&apos;hui en lignes de code. Que
-            vous soyez un investisseur cherchant à optimiser son portefeuille ou
-            un passionné de technologie curieux des prochaines révolutions
-            bancaires,{" "}
-            <strong style={{ color: "#C19A6B" }}>IA &amp; Capital</strong> est votre boussole.
+            Que vous lanciez votre première activité, que vous soyez
+            développeur ou simplement curieux de ce que la tech peut changer
+            pour vous, inscrivez-vous à la newsletter : vous recevrez les
+            nouveaux guides dès leur publication. Et si un sujet vous manque,
+            écrivez-moi : les meilleures idées d&apos;articles viennent des
+            lecteurs.
           </p>
         </section>
 
@@ -215,8 +220,8 @@ export default function AboutPage() {
             <li className="flex items-center gap-3">
               <span className="w-1.5 h-1.5 shrink-0" style={{ background: "#00E5FF" }} />
               <span>
-                <strong style={{ color: "#e8e8e8" }}>Édition :</strong> Équipe
-                éditoriale IA &amp; Capital
+                <strong style={{ color: "#e8e8e8" }}>Édition :</strong> Christ
+                Banidje, fondateur d&apos;IA &amp; Capital
               </span>
             </li>
             <li className="flex items-center gap-3">

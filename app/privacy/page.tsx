@@ -8,7 +8,6 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   const siteName = "IA & Capital";
-  const contactEmail = "contact@ia-capital.blog";
 
   return (
     <main className="container mx-auto px-4 sm:px-6 py-12 sm:py-16 lg:py-24 max-w-3xl">
@@ -109,8 +108,8 @@ export default function PrivacyPage() {
           <p>
             Conformément au RGPD, vous disposez d'un droit d'accès, de
             rectification, de suppression et de portabilité de vos données. Pour
-            exercer ces droits, contactez-nous à{" "}
-            <a href={`mailto:${contactEmail}`}>{contactEmail}</a>.
+            exercer ces droits, écrivez-nous via le{" "}
+            <a href="/contact">formulaire de contact</a>.
           </p>
         </section>
 
@@ -119,8 +118,7 @@ export default function PrivacyPage() {
           <p>
             Pour toute question relative à cette politique de confidentialité,
             contactez-nous via notre{" "}
-            <a href="/contact">formulaire de contact</a> ou à l'adresse{" "}
-            <a href={`mailto:${contactEmail}`}>{contactEmail}</a>.
+            <a href="/contact">formulaire de contact</a>.
           </p>
         </section>
       </div>

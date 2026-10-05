@@ -48,7 +48,7 @@ export default function NewsletterInline() {
           [NEWSLETTER]
         </span>
         <p className="text-xs mt-0.5 whitespace-nowrap" style={{ color: "#888" }}>
-          Analyses hebdomadaires — gratuit
+          Nouveaux guides — gratuit
         </p>
       </div>
 

@@ -55,62 +55,55 @@ export type TagCategory = {
 };
 
 const DEFAULT_CATEGORY: TagCategory = {
-  label: "ANALYSE",
+  label: "GUIDE",
   color: "#C19A6B",
   bg: "rgba(193,154,107,0.06)",
   border: "rgba(193,154,107,0.25)",
 };
 
-const AI_CAT: TagCategory = {
-  label: "AI",
-  color: "#00E5FF",
-  bg: "rgba(0,229,255,0.06)",
-  border: "rgba(0,229,255,0.25)",
+const MONEY_CAT: TagCategory = {
+  label: "MOBILE MONEY",
+  color: "#34d399",
+  bg: "rgba(52,211,153,0.06)",
+  border: "rgba(52,211,153,0.25)",
 };
-const CRYPTO_CAT: TagCategory = {
-  label: "CRYPTO",
-  color: "#a78bfa",
-  bg: "rgba(167,139,250,0.06)",
-  border: "rgba(167,139,250,0.25)",
-};
-const ALGO_CAT: TagCategory = {
-  label: "ALGO",
+const BUSINESS_CAT: TagCategory = {
+  label: "BUSINESS",
   color: "#C19A6B",
   bg: "rgba(193,154,107,0.06)",
   border: "rgba(193,154,107,0.25)",
 };
-const VC_CAT: TagCategory = {
-  label: "VC",
+const DEV_CAT: TagCategory = {
+  label: "DEV",
   color: "#60a5fa",
   bg: "rgba(96,165,250,0.06)",
   border: "rgba(96,165,250,0.25)",
 };
-const MACRO_CAT: TagCategory = {
-  label: "MACRO",
-  color: "#9ca3af",
-  bg: "rgba(156,163,175,0.06)",
-  border: "rgba(156,163,175,0.2)",
-};
-const DEFI_CAT: TagCategory = {
-  label: "DeFi",
-  color: "#a78bfa",
-  bg: "rgba(167,139,250,0.06)",
-  border: "rgba(167,139,250,0.25)",
+const AI_CAT: TagCategory = {
+  label: "IA",
+  color: "#00E5FF",
+  bg: "rgba(0,229,255,0.06)",
+  border: "rgba(0,229,255,0.25)",
 };
 
+// Checked in this order; keywords are written without accents (tags are normalized the same way).
 const TAG_KEYWORDS: Array<{ keywords: string[]; category: TagCategory }> = [
-  { keywords: ["ai", "ia", "intelligence artificielle", "llm", "gpt", "machine learning", "ml", "deep learning", "neural", "openai", "mistral", "gemini", "claude"], category: AI_CAT },
-  { keywords: ["defi", "décentralisé", "decentralized", "uniswap", "aave", "compound"], category: DEFI_CAT },
-  { keywords: ["crypto", "bitcoin", "btc", "ethereum", "eth", "blockchain", "nft", "altcoin", "solana", "xrp"], category: CRYPTO_CAT },
-  { keywords: ["algo", "algorithme", "algorithmic", "trading", "quant", "quantitatif", "backtest", "stratégie", "hft"], category: ALGO_CAT },
-  { keywords: ["vc", "startup", "levée", "financement", "seed", "series", "venture", "investisseur", "licorne", "unicorn"], category: VC_CAT },
-  { keywords: ["bourse", "finance", "macro", "économie", "economie", "indices", "marché", "marche", "cac", "nasdaq", "s&p", "fed", "bce", "inflation", "taux"], category: MACRO_CAT },
+  { keywords: ["mobile money", "momo", "paiement", "paiements", "payment", "fedapay", "kkiapay", "mtn", "moov", "wave", "orange money", "transfert", "fintech"], category: MONEY_CAT },
+  { keywords: ["ia", "ai", "intelligence artificielle", "llm", "gpt", "chatgpt", "ollama", "mistral", "gemini", "claude", "chatbot", "machine learning"], category: AI_CAT },
+  { keywords: ["dev", "code", "tuto", "tutoriel", "site", "web", "nextjs", "next.js", "react", "javascript", "python", "api", "app", "application", "automatisation", "wordpress"], category: DEV_CAT },
+  { keywords: ["business", "entrepreneur", "entrepreneuriat", "client", "clients", "prix", "tarif", "tarifs", "freelance", "vente", "marketing", "startup", "agence"], category: BUSINESS_CAT },
 ];
 
+const normalize = (text: string) => text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+// Whole words only: a plain "includes" matched "ai" inside "paiement" and "ia" inside "social"
+const hasWord = (text: string, keyword: string) =>
+  new RegExp(`(^|[^a-z0-9])${keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}($|[^a-z0-9])`).test(text);
+
 export function getTagCategory(tag: string): TagCategory {
-  const normalized = tag.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const normalized = normalize(tag);
   for (const { keywords, category } of TAG_KEYWORDS) {
-    if (keywords.some((kw) => normalized.includes(kw))) return category;
+    if (keywords.some((kw) => hasWord(normalized, kw))) return category;
   }
   return DEFAULT_CATEGORY;
 }

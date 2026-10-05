@@ -38,12 +38,10 @@ CREATE TABLE IF NOT EXISTS categories (
 );
 
 INSERT INTO categories (name, slug, color, bg, border) VALUES
-  ('IA',              'ia',              '#00E5FF', 'rgba(0,229,255,0.06)',   'rgba(0,229,255,0.2)'),
-  ('Crypto',          'crypto',          '#a78bfa', 'rgba(167,139,250,0.06)', 'rgba(167,139,250,0.25)'),
-  ('Algo Trading',    'algo-trading',    '#C19A6B', 'rgba(193,154,107,0.08)', 'rgba(193,154,107,0.25)'),
-  ('Venture Capital', 'venture-capital', '#60a5fa', 'rgba(96,165,250,0.06)',  'rgba(96,165,250,0.25)'),
-  ('Macro',           'macro',           '#9ca3af', 'rgba(156,163,175,0.06)', 'rgba(156,163,175,0.2)'),
-  ('DeFi',            'defi',            '#a78bfa', 'rgba(167,139,250,0.06)', 'rgba(167,139,250,0.25)')
+  ('Paiements & Mobile Money',   'paiements-mobile-money',   '#34d399', 'rgba(52,211,153,0.06)',  'rgba(52,211,153,0.25)'),
+  ('Entrepreneuriat & business', 'entrepreneuriat-business', '#C19A6B', 'rgba(193,154,107,0.08)', 'rgba(193,154,107,0.25)'),
+  ('Dev & tutos',                'dev-tutos',                '#60a5fa', 'rgba(96,165,250,0.06)',  'rgba(96,165,250,0.25)'),
+  ('IA pratique',                'ia-pratique',              '#00E5FF', 'rgba(0,229,255,0.06)',   'rgba(0,229,255,0.2)')
 ON CONFLICT DO NOTHING;
 
 -- 3. POSTS (this table was never in the repo: rebuilt from lib/types.ts and ArticleForm.tsx)

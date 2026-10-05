@@ -25,12 +25,12 @@ export const translations = {
     
     // Popular Articles
     mostRead: "Les plus lus",
-    joinReaders: "Rejoignez 2000+ lecteurs",
-    receiveAnalyses: "Recevez nos meilleures analyses chaque semaine.",
+    joinReaders: "Ne ratez aucun guide",
+    receiveAnalyses: "Recevez les nouveaux articles dès leur publication.",
     subscribeToNewsletter: "S'inscrire à la newsletter",
     
     // Footer
-    brandDescription: "Décryptez l'impact de l'intelligence artificielle sur vos finances et vos investissements.",
+    brandDescription: "Des guides concrets pour entreprendre avec la tech en Afrique : Mobile Money, business, dev et IA pratique.",
     navigation: "Navigation",
     information: "Informations",
     privacyPolicy: "Politique de confidentialité",
@@ -82,12 +82,12 @@ export const translations = {
     
     // Popular Articles
     mostRead: "Most Read",
-    joinReaders: "Join 2000+ readers",
-    receiveAnalyses: "Receive our best analyses every week.",
+    joinReaders: "Never miss a guide",
+    receiveAnalyses: "Get new articles as soon as they come out.",
     subscribeToNewsletter: "Subscribe to newsletter",
     
     // Footer
-    brandDescription: "Discover the impact of artificial intelligence on your finances and investments.",
+    brandDescription: "Practical guides to building a business with tech in Africa: Mobile Money, business, dev and practical AI.",
     navigation: "Navigation",
     information: "Information",
     privacyPolicy: "Privacy Policy",

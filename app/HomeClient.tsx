@@ -5,7 +5,6 @@ import PostCard from "@/components/PostCard";
 import Pagination from "@/components/Pagination";
 import PopularArticles from "@/components/PopularArticles";
 import NewsletterInline from "@/components/NewsletterInline";
-import { Search } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
 import type { Post } from "@/lib/types";
 
@@ -90,20 +89,6 @@ export default function HomeClient({ posts, recentPosts, totalPages }: HomeClien
 
           {/* ── Sidebar ── */}
           <aside className="lg:w-72 xl:w-80 space-y-6">
-            {/* Search */}
-            <div
-              className="flex items-center gap-2 border px-3 py-2"
-              style={{ borderColor: "#333", background: "#1a1a1a" }}
-            >
-              <Search className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "#555" }} />
-              <input
-                type="text"
-                placeholder={t("searchArticle")}
-                className="w-full bg-transparent border-none text-xs focus:ring-0 focus:outline-none"
-                style={{ color: "#888", fontFamily: "'Inter', sans-serif" }}
-              />
-            </div>
-
             {/* Popular Articles */}
             <PopularArticles posts={recentPosts || []} />
           </aside>
