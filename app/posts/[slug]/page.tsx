@@ -14,7 +14,7 @@ import CategoryBadge from "@/components/CategoryBadge";
 import NewsletterForm from "@/components/NewsletterForm";
 import PostCard from "@/components/PostCard";
 import type { Post } from "@/lib/types";
-import { SITE } from "@/lib/site";
+import { SITE, absoluteUrl, PUBLIC_COMMENT_COLUMNS } from "@/lib/site";
 
 // ISR: revalidate article pages every 30 seconds for faster comment updates
 export const revalidate = 30;
@@ -58,7 +58,7 @@ export default async function PostPage({ params }: Props) {
   if (!post) notFound();
 
   const [{ data: commentsData }, { data: relatedData }] = await Promise.all([
-    supabase.from("comments").select("*").eq("post_id", post.id).eq("is_approved", true)
+    supabase.from("comments").select(PUBLIC_COMMENT_COLUMNS).eq("post_id", post.id).eq("is_approved", true)
       .order("created_at", { ascending: true }),
     // Related reading: same theme first, otherwise the latest articles
     post.category_id
@@ -90,7 +90,7 @@ export default async function PostPage({ params }: Props) {
       datePublished: publishDate,
       dateModified: post.updated_at || publishDate,
       inLanguage: "fr-FR",
-      ...(post.cover_image && { image: { "@type": "ImageObject", url: post.cover_image, contentUrl: post.cover_image } }),
+      ...(post.cover_image && { image: { "@type": "ImageObject", url: absoluteUrl(post.cover_image), contentUrl: absoluteUrl(post.cover_image) } }),
       author: { "@type": "Person", name: "Christ Banidje", url: `${SITE_URL}/about` },
       publisher: {
         "@type": "Organization",

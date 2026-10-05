@@ -86,6 +86,7 @@ et elle veut savoir **quoi faire concrètement**, dès aujourd'hui.
   "tags": ["budget", "épargne"],
   "meta_title": "… (max 65 caractères)",
   "meta_description": "… (max 160 caractères, avec le mot-clé)",
+  "cover_image": "https://cdn.stocksnap.io/img-thumbs/960w/….jpg",
   "content": "<p>…</p><h2>…</h2>…"
 }
 ```
@@ -93,6 +94,9 @@ et elle veut savoir **quoi faire concrètement**, dès aujourd'hui.
 - `content` en HTML simple. Balises autorisées : `h2 h3 p ul ol li strong em a blockquote code
   pre hr br table thead tbody tr th td`. Pas de `h1` (le titre de la page en est déjà un), pas
   d'image, pas de style, pas de classe.
+- `cover_image` **obligatoire** : une photo libre de droits (licence CC0) qui illustre le sujet.
+  `node scripts/find-cover.mjs "budget calculator"` (mots en anglais) en propose ; choisir une
+  photo concrète (bureau, argent, téléphone…), sans texte incrusté ni logo de marque.
 - Au moins **un lien interne** vers un article déjà publié du blog quand c'est pertinent (`/posts/slug`), pour aider Google et garder le lecteur.
 - Liens externes vers des sources fiables : sites officiels, documentation des outils, médias
   reconnus, organismes publics.
@@ -109,5 +113,5 @@ node scripts/post-draft.mjs --list                 # titres déjà écrits (brou
 
 - [ ] Remplacer ou supprimer chaque `[À COMPLÉTER PAR CHRIST : …]`.
 - [ ] Relire les chiffres et ouvrir 2 ou 3 sources au hasard.
-- [ ] Ajouter une image de couverture (facultatif, mais les articles en ont plus de clics).
+- [ ] Vérifier l'image de couverture (obligatoire pour publier) ; la changer si elle colle mal au sujet.
 - [ ] Choisir la date de publication, puis Publier.

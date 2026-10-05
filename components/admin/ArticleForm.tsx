@@ -99,6 +99,10 @@ export default function ArticleForm({ article }: ArticleFormProps) {
       setError(`Impossible de publier : ${markers.length} repère(s) « [À COMPLÉTER] » sont encore dans le texte. Remplacez-les par votre expérience ou supprimez-les.`);
       return;
     }
+    if (status === "published" && !coverImage) {
+      setError("Impossible de publier sans image de couverture : ajoutez-en une (un article sans image attire beaucoup moins de clics).");
+      return;
+    }
     // Changing the address of a live article breaks every link already shared
     if (isEditing && article?.status === "published" && slug !== article.slug &&
         !window.confirm("Cet article est déjà en ligne : changer son adresse cassera les liens déjà partagés (WhatsApp, Google…). Continuer ?")) {

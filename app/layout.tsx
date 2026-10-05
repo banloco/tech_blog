@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   },
   description: SITE.description,
   alternates: { types: { "application/rss+xml": [{ url: "/feed.xml", title: SITE.name }] } },
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
+  metadataBase: new URL(SITE.url),
   openGraph: {
     type: "website",
     locale: "fr_FR",

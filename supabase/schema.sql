@@ -144,6 +144,10 @@ CREATE POLICY "Anyone can insert comments" ON comments FOR INSERT TO anon, authe
   WITH CHECK (is_approved = false);  -- a visitor can't publish their own comment directly
 DROP POLICY IF EXISTS "Public can read approved comments" ON comments;
 CREATE POLICY "Public can read approved comments" ON comments FOR SELECT USING (is_approved = true);
+-- Visitors never see commenters' emails
+REVOKE SELECT ON comments FROM anon;
+GRANT SELECT (id, post_id, parent_id, author_name, content, likes_count, is_approved, is_reported, created_at)
+  ON comments TO anon;
 DROP POLICY IF EXISTS "Admins manage comments" ON comments;
 CREATE POLICY "Admins manage comments" ON comments FOR ALL USING (is_admin()) WITH CHECK (is_admin());
 

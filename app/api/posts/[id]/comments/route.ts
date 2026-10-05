@@ -1,5 +1,6 @@
 import { createSupabaseServerClient } from "@/lib/supabase-server";
 import { NextRequest, NextResponse } from "next/server";
+import { PUBLIC_COMMENT_COLUMNS } from "@/lib/site";
 
 export async function GET(
   request: NextRequest,
@@ -20,7 +21,7 @@ export async function GET(
     // Récupérer tous les commentaires approuvés pour cet article
     const { data: comments, error } = await supabase
       .from("comments")
-      .select("*")
+      .select(PUBLIC_COMMENT_COLUMNS)
       .eq("post_id", id)
       .eq("is_approved", true)
       .order("created_at", { ascending: true });

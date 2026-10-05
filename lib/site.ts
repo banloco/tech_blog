@@ -10,3 +10,11 @@ export const SITE = {
   // Set NEXT_PUBLIC_SITE_URL in Vercel once the domain is connected
   url: (process.env.NEXT_PUBLIC_SITE_URL || "https://tech-blog-gamma-bice.vercel.app").replace(/\/$/, ""),
 };
+
+/** Full address of a page or image of the site ('/images/x.jpg' → 'https://…/images/x.jpg'). */
+export function absoluteUrl(path: string) {
+  return /^https?:\/\//.test(path) ? path : `${SITE.url}${path.startsWith("/") ? "" : "/"}${path}`;
+}
+
+/** Columns of a comment that visitors may see: never the author's email. */
+export const PUBLIC_COMMENT_COLUMNS = "id, post_id, parent_id, author_name, content, likes_count, is_approved, created_at";

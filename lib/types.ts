@@ -34,7 +34,7 @@ export interface Comment {
   post_id: string;
   parent_id?: string;
   author_name: string;
-  author_email: string;
+  author_email?: string;  // only admins can read it
   content: string;
   likes_count?: number;
   is_approved: boolean;

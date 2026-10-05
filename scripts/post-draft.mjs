@@ -10,7 +10,8 @@
  * environment or from .env.local. The token is created in Supabase (see
  * supabase/2026-10-05_drafts_automation.sql) and can only create drafts.
  *
- * article.json: { title, slug, category, focus_keyword, excerpt, tags, meta_title, meta_description, content }
+ * article.json: { title, slug, category, focus_keyword, excerpt, tags, meta_title, meta_description, cover_image, content }
+ * cover_image is the https address of a free photo (see scripts/find-cover.mjs).
  * where content is HTML using only the tags the blog's editor knows (see ALLOWED_TAGS).
  */
 import { readFileSync, existsSync } from "node:fs";
@@ -55,7 +56,19 @@ function check(a) {
   }
   if (/<h1[\s>]/i.test(a.content || "")) problems.push("no <h1> in the content: the title is already the page's h1");
   if (!/Sources/i.test(a.content || "")) problems.push('a "Sources" section with links is required');
+  if (!/^https:\/\//.test(a.cover_image || "")) problems.push("cover_image missing: an https photo address (node scripts/find-cover.mjs \"words\")");
   return [...new Set(problems)];
+}
+
+/** The cover must really be an image the site can download. */
+async function checkCover(url) {
+  try {
+    const res = await fetch(url);
+    if (!res.ok || !(res.headers.get("content-type") || "").startsWith("image/")) return [`cover_image does not lead to an image (${res.status})`];
+  } catch {
+    return ["cover_image could not be downloaded"];
+  }
+  return [];
 }
 
 const args = process.argv.slice(2);
@@ -69,7 +82,8 @@ try {
     const file = checkOnly ? args[1] : args[0];
     if (!file) throw new Error("Usage: node scripts/post-draft.mjs [--check] article.json | --list");
     const article = JSON.parse(readFileSync(file, "utf8"));
-    const problems = check(article);
+    let problems = check(article);
+    if (!problems.length) problems = await checkCover(article.cover_image);
     if (problems.length) {
       console.error("Article not sent:\n- " + problems.join("\n- "));
       process.exit(2);
@@ -87,6 +101,7 @@ try {
         p_meta_title: article.meta_title || null,
         p_meta_description: article.meta_description,
         p_focus_keyword: article.focus_keyword,
+        p_cover_image: article.cover_image,
       });
       console.log(`Draft created: ${slug} (publish it from /admin/articles after review)`);
     }
