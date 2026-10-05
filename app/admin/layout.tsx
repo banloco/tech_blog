@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import AdminLayoutClient from "./AdminLayoutClient";
 
 export const metadata = {
-  title: "Dashboard Admin | IA & Capital",
+  title: "Dashboard Admin | Le Plan B",
   robots: { index: false, follow: false },
 };
 

@@ -42,9 +42,9 @@ export default function LanguageSwitcher() {
           }
         }}
         className="flex items-center gap-2 px-3 py-2 transition-colors"
-        style={{ color: "#888" }}
-        onMouseEnter={(e) => (e.currentTarget.style.color = "#e8e8e8")}
-        onMouseLeave={(e) => (e.currentTarget.style.color = "#888")}
+        style={{ color: "var(--text-muted)" }}
+        onMouseEnter={(e) => (e.currentTarget.style.color = "var(--ink)")}
+        onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-muted)")}
         aria-label="Changer la langue"
         aria-haspopup="true"
         aria-expanded={isOpen}
@@ -58,7 +58,7 @@ export default function LanguageSwitcher() {
         <div className="absolute right-0 mt-1 w-32 z-50">
           <div
             className="overflow-hidden shadow-xl"
-            style={{ background: "#1a1a1a", border: "1px solid #333" }}
+            style={{ background: "var(--surface)", border: "1px solid var(--line)" }}
             role="menu"
             aria-label="Sélectionner la langue"
           >
@@ -74,8 +74,8 @@ export default function LanguageSwitcher() {
               }}
               className={`w-full px-4 py-2 text-left text-sm transition-colors ${
                 language === "fr"
-                  ? "text-[#00E5FF] bg-[rgba(0,229,255,0.06)]"
-                  : "text-[#888] hover:text-[#e8e8e8] hover:bg-[#222]"
+                  ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 6%, transparent)]"
+                  : "text-[var(--text-muted)] hover:text-[var(--ink)] hover:bg-[var(--line-soft)]"
               }`}
               aria-current={language === "fr" ? "true" : undefined}
             >
@@ -93,8 +93,8 @@ export default function LanguageSwitcher() {
               }}
               className={`w-full px-4 py-2 text-left text-sm transition-colors ${
                 language === "en"
-                  ? "text-[#00E5FF] bg-[rgba(0,229,255,0.06)]"
-                  : "text-[#888] hover:text-[#e8e8e8] hover:bg-[#222]"
+                  ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 6%, transparent)]"
+                  : "text-[var(--text-muted)] hover:text-[var(--ink)] hover:bg-[var(--line-soft)]"
               }`}
               aria-current={language === "en" ? "true" : undefined}
             >

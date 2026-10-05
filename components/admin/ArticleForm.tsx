@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase-browser";
-import { slugify } from "@/lib/utils";
+import { slugify, stripHtml, truncate } from "@/lib/utils";
 import { Save, Loader2, ArrowLeft, Eye, Upload, X, ImageIcon } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -110,13 +110,13 @@ export default function ArticleForm({ article }: ArticleFormProps) {
       title,
       slug,
       content,
-      excerpt: excerpt || content.substring(0, 160),
+      excerpt: excerpt || truncate(stripHtml(content), 160),
       cover_image: coverImage || null,
       tags,
       status,
       category_id: categoryId || null,
       meta_title: metaTitle || title,
-      meta_description: metaDescription || excerpt || content.substring(0, 160),
+      meta_description: metaDescription || excerpt || truncate(stripHtml(content), 160),
       updated_at: new Date().toISOString(),
       published_at: publishedAt,
     };
@@ -153,20 +153,20 @@ export default function ArticleForm({ article }: ArticleFormProps) {
           <Link
             href="/admin/articles"
             className="p-2 flex items-center justify-center transition-colors"
-            style={{ color: "#888", border: "1px solid #333", background: "#1a1a1a" }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "#e8e8e8"; (e.currentTarget as HTMLElement).style.borderColor = "#555"; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "#888"; (e.currentTarget as HTMLElement).style.borderColor = "#333"; }}
+            style={{ color: "var(--text-muted)", border: "1px solid var(--line)", background: "var(--surface)" }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--ink)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--text-dim)"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--text-muted)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--line)"; }}
           >
             <ArrowLeft className="w-5 h-5" />
           </Link>
           <div>
             <h1
               className="text-2xl font-bold"
-              style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "#e8e8e8" }}
+              style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "var(--ink)" }}
             >
               {isEditing ? "Modifier l'article" : "Nouvel article"}
             </h1>
-            <p className="text-sm mt-0.5" style={{ color: "#888" }}>
+            <p className="text-sm mt-0.5" style={{ color: "var(--text-muted)" }}>
               {isEditing
                 ? `Modification de "${article.title}"`
                 : "Rédiger un nouvel article"}
@@ -180,9 +180,9 @@ export default function ArticleForm({ article }: ArticleFormProps) {
               setStatus(e.target.value as "draft" | "published")
             }
             className="px-3 py-2 text-sm transition-colors focus:outline-none"
-            style={{ border: "1px solid #333", background: "#0e0e0e", color: "#e8e8e8" }}
-            onFocus={(e) => (e.currentTarget.style.borderColor = "#00E5FF")}
-            onBlur={(e) => (e.currentTarget.style.borderColor = "#333")}
+            style={{ border: "1px solid var(--line)", background: "var(--bg)", color: "var(--ink)" }}
+            onFocus={(e) => (e.currentTarget.style.borderColor = "var(--brand)")}
+            onBlur={(e) => (e.currentTarget.style.borderColor = "var(--line)")}
           >
             <option value="draft">Brouillon</option>
             <option value="published">Publié</option>
@@ -191,9 +191,9 @@ export default function ArticleForm({ article }: ArticleFormProps) {
             type="submit"
             disabled={saving || !title || !content}
             className="flex items-center gap-2 px-5 py-2.5 text-sm font-semibold uppercase tracking-wider disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-            style={{ background: "#C19A6B", color: "#121212" }}
-            onMouseEnter={(e) => !(saving || !title || !content) && (e.currentTarget.style.background = "#d4b080")}
-            onMouseLeave={(e) => (e.currentTarget.style.background = "#C19A6B")}
+            style={{ background: "var(--accent)", color: "var(--bg)" }}
+            onMouseEnter={(e) => !(saving || !title || !content) && (e.currentTarget.style.background = "var(--accent-hover)")}
+            onMouseLeave={(e) => (e.currentTarget.style.background = "var(--accent)")}
           >
             {saving ? (
               <Loader2 className="w-4 h-4 animate-spin" />
@@ -206,7 +206,7 @@ export default function ArticleForm({ article }: ArticleFormProps) {
       </div>
 
       {error && (
-        <div className="text-sm px-4 py-3" style={{ color: "#ff5555", background: "rgba(255,85,85,0.06)", border: "1px solid rgba(255,85,85,0.2)" }}>
+        <div className="text-sm px-4 py-3" style={{ color: "var(--danger)", background: "color-mix(in srgb, var(--danger) 6%, transparent)", border: "1px solid color-mix(in srgb, var(--danger) 20%, transparent)" }}>
           {error}
         </div>
       )}
@@ -219,9 +219,9 @@ export default function ArticleForm({ article }: ArticleFormProps) {
             <label
               htmlFor="title"
               className="block text-xs font-medium uppercase tracking-widest mb-1.5"
-              style={{ color: "#888" }}
+              style={{ color: "var(--text-muted)" }}
             >
-              Titre <span style={{ color: "#ff5555" }}>*</span>
+              Titre <span style={{ color: "var(--danger)" }}>*</span>
             </label>
             <input
               id="title"
@@ -230,9 +230,9 @@ export default function ArticleForm({ article }: ArticleFormProps) {
               value={title}
               onChange={(e) => handleTitleChange(e.target.value)}
               className="w-full px-4 py-2.5 text-sm transition-colors focus:outline-none"
-              style={{ border: "1px solid #333", background: "#0e0e0e", color: "#e8e8e8" }}
-              onFocus={(e) => (e.currentTarget.style.borderColor = "#00E5FF")}
-              onBlur={(e) => (e.currentTarget.style.borderColor = "#333")}
+              style={{ border: "1px solid var(--line)", background: "var(--bg)", color: "var(--ink)" }}
+              onFocus={(e) => (e.currentTarget.style.borderColor = "var(--brand)")}
+              onBlur={(e) => (e.currentTarget.style.borderColor = "var(--line)")}
               placeholder="Titre de l'article"
             />
           </div>
@@ -241,21 +241,21 @@ export default function ArticleForm({ article }: ArticleFormProps) {
             <label
               htmlFor="slug"
               className="block text-xs font-medium uppercase tracking-widest mb-1.5"
-              style={{ color: "#888" }}
+              style={{ color: "var(--text-muted)" }}
             >
               Slug (URL)
             </label>
             <div className="flex items-center gap-2">
-              <span className="text-sm" style={{ color: "#555" }}>/posts/</span>
+              <span className="text-sm" style={{ color: "var(--text-dim)" }}>/posts/</span>
               <input
                 id="slug"
                 type="text"
                 value={slug}
                 onChange={(e) => setSlug(slugify(e.target.value))}
                 className="flex-1 px-4 py-2.5 font-mono text-sm transition-colors focus:outline-none"
-                style={{ border: "1px solid #333", background: "#0e0e0e", color: "#e8e8e8" }}
-                onFocus={(e) => (e.currentTarget.style.borderColor = "#00E5FF")}
-                onBlur={(e) => (e.currentTarget.style.borderColor = "#333")}
+                style={{ border: "1px solid var(--line)", background: "var(--bg)", color: "var(--ink)" }}
+                onFocus={(e) => (e.currentTarget.style.borderColor = "var(--brand)")}
+                onBlur={(e) => (e.currentTarget.style.borderColor = "var(--line)")}
                 placeholder="mon-article"
               />
             </div>
@@ -265,7 +265,7 @@ export default function ArticleForm({ article }: ArticleFormProps) {
             <label
               htmlFor="excerpt"
               className="block text-xs font-medium uppercase tracking-widest mb-1.5"
-              style={{ color: "#888" }}
+              style={{ color: "var(--text-muted)" }}
             >
               Extrait
             </label>
@@ -275,13 +275,13 @@ export default function ArticleForm({ article }: ArticleFormProps) {
               value={excerpt}
               onChange={(e) => setExcerpt(e.target.value)}
               className="w-full px-4 py-2.5 text-sm transition-colors focus:outline-none resize-none"
-              style={{ border: "1px solid #333", background: "#0e0e0e", color: "#e8e8e8" }}
-              onFocus={(e) => (e.currentTarget.style.borderColor = "#00E5FF")}
-              onBlur={(e) => (e.currentTarget.style.borderColor = "#333")}
+              style={{ border: "1px solid var(--line)", background: "var(--bg)", color: "var(--ink)" }}
+              onFocus={(e) => (e.currentTarget.style.borderColor = "var(--brand)")}
+              onBlur={(e) => (e.currentTarget.style.borderColor = "var(--line)")}
               placeholder="Résumé court de l'article (SEO)"
               maxLength={300}
             />
-            <p className="text-xs mt-1" style={{ color: "#555" }}>
+            <p className="text-xs mt-1" style={{ color: "var(--text-dim)" }}>
               {excerpt.length}/300 caractères — utilisé pour les aperçus et le SEO
             </p>
           </div>
@@ -290,9 +290,9 @@ export default function ArticleForm({ article }: ArticleFormProps) {
             <label
               htmlFor="content"
               className="block text-xs font-medium uppercase tracking-widest mb-1.5"
-              style={{ color: "#888" }}
+              style={{ color: "var(--text-muted)" }}
             >
-              Contenu <span style={{ color: "#ff5555" }}>*</span>
+              Contenu <span style={{ color: "var(--danger)" }}>*</span>
             </label>
             <RichTextEditor
               content={content}
@@ -304,9 +304,9 @@ export default function ArticleForm({ article }: ArticleFormProps) {
 
         {/* Right Column - Settings */}
         <div className="space-y-6">
-          <div className="p-5 space-y-5" style={{ border: "1px solid #333", background: "#1a1a1a" }}>
-            <h3 className="text-sm font-semibold flex items-center gap-2" style={{ color: "#e8e8e8" }}>
-              <Eye className="w-4 h-4" style={{ color: "#00E5FF" }} />
+          <div className="p-5 space-y-5" style={{ border: "1px solid var(--line)", background: "var(--surface)" }}>
+            <h3 className="text-sm font-semibold flex items-center gap-2" style={{ color: "var(--ink)" }}>
+              <Eye className="w-4 h-4" style={{ color: "var(--brand)" }} />
               SEO & Métadonnées
             </h3>
 
@@ -314,7 +314,7 @@ export default function ArticleForm({ article }: ArticleFormProps) {
               <label
                 htmlFor="metaTitle"
                 className="block text-xs font-medium uppercase tracking-widest mb-1.5"
-                style={{ color: "#888" }}
+                style={{ color: "var(--text-muted)" }}
               >
                 Titre SEO
               </label>
@@ -324,13 +324,13 @@ export default function ArticleForm({ article }: ArticleFormProps) {
                 value={metaTitle}
                 onChange={(e) => setMetaTitle(e.target.value)}
                 className="w-full px-3 py-2 text-sm transition-colors focus:outline-none"
-                style={{ border: "1px solid #333", background: "#0e0e0e", color: "#e8e8e8" }}
-                onFocus={(e) => (e.currentTarget.style.borderColor = "#00E5FF")}
-                onBlur={(e) => (e.currentTarget.style.borderColor = "#333")}
+                style={{ border: "1px solid var(--line)", background: "var(--bg)", color: "var(--ink)" }}
+                onFocus={(e) => (e.currentTarget.style.borderColor = "var(--brand)")}
+                onBlur={(e) => (e.currentTarget.style.borderColor = "var(--line)")}
                 placeholder={title || "Titre pour les moteurs de recherche"}
                 maxLength={70}
               />
-              <p className="text-xs mt-1" style={{ color: "#555" }}>
+              <p className="text-xs mt-1" style={{ color: "var(--text-dim)" }}>
                 {(metaTitle || title).length}/70
               </p>
             </div>
@@ -339,7 +339,7 @@ export default function ArticleForm({ article }: ArticleFormProps) {
               <label
                 htmlFor="metaDescription"
                 className="block text-xs font-medium uppercase tracking-widest mb-1.5"
-                style={{ color: "#888" }}
+                style={{ color: "var(--text-muted)" }}
               >
                 Description SEO
               </label>
@@ -349,26 +349,26 @@ export default function ArticleForm({ article }: ArticleFormProps) {
                 value={metaDescription}
                 onChange={(e) => setMetaDescription(e.target.value)}
                 className="w-full px-3 py-2 text-sm transition-colors focus:outline-none resize-none"
-                style={{ border: "1px solid #333", background: "#0e0e0e", color: "#e8e8e8" }}
-                onFocus={(e) => (e.currentTarget.style.borderColor = "#00E5FF")}
-                onBlur={(e) => (e.currentTarget.style.borderColor = "#333")}
+                style={{ border: "1px solid var(--line)", background: "var(--bg)", color: "var(--ink)" }}
+                onFocus={(e) => (e.currentTarget.style.borderColor = "var(--brand)")}
+                onBlur={(e) => (e.currentTarget.style.borderColor = "var(--line)")}
                 placeholder="Description pour les moteurs de recherche"
                 maxLength={160}
               />
-              <p className="text-xs mt-1" style={{ color: "#555" }}>
+              <p className="text-xs mt-1" style={{ color: "var(--text-dim)" }}>
                 {(metaDescription || excerpt).length}/160
               </p>
             </div>
           </div>
 
-          <div className="p-5 space-y-5" style={{ border: "1px solid #333", background: "#1a1a1a" }}>
-            <h3 className="text-sm font-semibold" style={{ color: "#e8e8e8" }}>Paramètres</h3>
+          <div className="p-5 space-y-5" style={{ border: "1px solid var(--line)", background: "var(--surface)" }}>
+            <h3 className="text-sm font-semibold" style={{ color: "var(--ink)" }}>Paramètres</h3>
 
             <div>
               <label
                 htmlFor="coverImage"
                 className="block text-xs font-medium uppercase tracking-widest mb-1.5"
-                style={{ color: "#888" }}
+                style={{ color: "var(--text-muted)" }}
               >
                 Image de couverture
               </label>
@@ -380,9 +380,9 @@ export default function ArticleForm({ article }: ArticleFormProps) {
                   value={coverImage}
                   onChange={(e) => setCoverImage(e.target.value)}
                   className="w-full px-3 py-2 text-sm transition-colors focus:outline-none"
-                  style={{ border: "1px solid #333", background: "#0e0e0e", color: "#e8e8e8" }}
-                  onFocus={(e) => (e.currentTarget.style.borderColor = "#00E5FF")}
-                  onBlur={(e) => (e.currentTarget.style.borderColor = "#333")}
+                  style={{ border: "1px solid var(--line)", background: "var(--bg)", color: "var(--ink)" }}
+                  onFocus={(e) => (e.currentTarget.style.borderColor = "var(--brand)")}
+                  onBlur={(e) => (e.currentTarget.style.borderColor = "var(--line)")}
                   placeholder="URL directe (https://...)"
                 />
 
@@ -402,9 +402,9 @@ export default function ArticleForm({ article }: ArticleFormProps) {
                     className={`flex items-center justify-center gap-2 w-full px-3 py-2 border-dashed text-sm cursor-pointer transition-colors ${
                       uploading ? "opacity-50 cursor-not-allowed" : ""
                     }`}
-                  style={{ border: "1px dashed #444", background: "#161616", color: "#888" }}
-                  onMouseEnter={(e) => !uploading && ((e.currentTarget as HTMLElement).style.color = "#e8e8e8")}
-                  onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "#888")}
+                  style={{ border: "1px dashed var(--line-strong)", background: "var(--surface-2)", color: "var(--text-muted)" }}
+                  onMouseEnter={(e) => !uploading && ((e.currentTarget as HTMLElement).style.color = "var(--ink)")}
+                  onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--text-muted)")}
                   >
                     {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
                     <span>{uploading ? "Upload en cours..." : "Uploader depuis l'ordinateur"}</span>
@@ -412,7 +412,7 @@ export default function ArticleForm({ article }: ArticleFormProps) {
                 </div>
 
                 {coverImage && (
-                  <div className="relative aspect-video w-full overflow-hidden" style={{ background: "#0e0e0e", border: "1px solid #2a2a2a" }}>
+                  <div className="relative aspect-video w-full overflow-hidden" style={{ background: "var(--bg)", border: "1px solid var(--line-soft)" }}>
                     <Image
                       src={coverImage}
                       alt="Aperçu"
@@ -424,8 +424,8 @@ export default function ArticleForm({ article }: ArticleFormProps) {
                       type="button"
                       onClick={() => setCoverImage("")}
                       className="absolute top-2 right-2 p-1.5 transition-colors"
-                      style={{ background: "rgba(0,0,0,0.7)", color: "#e8e8e8" }}
-                      onMouseEnter={(e) => (e.currentTarget.style.background = "#ff5555")}
+                      style={{ background: "rgba(0,0,0,0.7)", color: "var(--ink)" }}
+                      onMouseEnter={(e) => (e.currentTarget.style.background = "var(--danger)")}
                       onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(0,0,0,0.7)")}
                       title="Supprimer"
                     >
@@ -440,7 +440,7 @@ export default function ArticleForm({ article }: ArticleFormProps) {
               <label
                 htmlFor="category"
                 className="block text-xs font-medium uppercase tracking-widest mb-1.5"
-                style={{ color: "#888" }}
+                style={{ color: "var(--text-muted)" }}
               >
                 Catégorie
               </label>
@@ -449,9 +449,9 @@ export default function ArticleForm({ article }: ArticleFormProps) {
                 value={categoryId}
                 onChange={(e) => setCategoryId(e.target.value)}
                 className="w-full px-3 py-2 text-sm transition-colors focus:outline-none"
-                style={{ border: "1px solid #333", background: "#0e0e0e", color: categoryId ? "#e8e8e8" : "#555" }}
-                onFocus={(e) => (e.currentTarget.style.borderColor = "#00E5FF")}
-                onBlur={(e) => (e.currentTarget.style.borderColor = "#333")}
+                style={{ border: "1px solid var(--line)", background: "var(--bg)", color: categoryId ? "var(--ink)" : "var(--text-dim)" }}
+                onFocus={(e) => (e.currentTarget.style.borderColor = "var(--brand)")}
+                onBlur={(e) => (e.currentTarget.style.borderColor = "var(--line)")}
               >
                 <option value="">— Sans catégorie —</option>
                 {categories.map((cat) => (
@@ -466,7 +466,7 @@ export default function ArticleForm({ article }: ArticleFormProps) {
               <label
                 htmlFor="tags"
                 className="block text-xs font-medium uppercase tracking-widest mb-1.5"
-                style={{ color: "#888" }}
+                style={{ color: "var(--text-muted)" }}
               >
                 Tags
               </label>
@@ -476,12 +476,12 @@ export default function ArticleForm({ article }: ArticleFormProps) {
                 value={tagsInput}
                 onChange={(e) => setTagsInput(e.target.value)}
                 className="w-full px-3 py-2 text-sm transition-colors focus:outline-none"
-                style={{ border: "1px solid #333", background: "#0e0e0e", color: "#e8e8e8" }}
-                onFocus={(e) => (e.currentTarget.style.borderColor = "#00E5FF")}
-                onBlur={(e) => (e.currentTarget.style.borderColor = "#333")}
-                placeholder="Mobile Money, Business, IA"
+                style={{ border: "1px solid var(--line)", background: "var(--bg)", color: "var(--ink)" }}
+                onFocus={(e) => (e.currentTarget.style.borderColor = "var(--brand)")}
+                onBlur={(e) => (e.currentTarget.style.borderColor = "var(--line)")}
+                placeholder="Freelance, Budget, IA gratuite"
               />
-              <p className="text-xs mt-1" style={{ color: "#555" }}>
+              <p className="text-xs mt-1" style={{ color: "var(--text-dim)" }}>
                 Séparez les tags par des virgules
               </p>
             </div>

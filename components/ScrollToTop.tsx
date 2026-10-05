@@ -27,9 +27,9 @@ export default function ScrollToTop() {
           ? "opacity-100 translate-y-0 pointer-events-auto"
           : "opacity-0 translate-y-4 pointer-events-none"
       }`}
-      style={{ background: "#1a1a1a", borderColor: "#333", color: "#888" }}
-      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "#00E5FF"; (e.currentTarget as HTMLElement).style.color = "#00E5FF"; }}
-      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "#333"; (e.currentTarget as HTMLElement).style.color = "#888"; }}
+      style={{ background: "var(--surface)", borderColor: "var(--line)", color: "var(--text-muted)" }}
+      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "var(--brand)"; (e.currentTarget as HTMLElement).style.color = "var(--brand)"; }}
+      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "var(--line)"; (e.currentTarget as HTMLElement).style.color = "var(--text-muted)"; }}
     >
       <ArrowUp className="w-4 h-4" />
     </button>

@@ -83,10 +83,10 @@ export default function CommentsManager({
     return (
       <div
         className="text-center py-20 border border-dashed"
-        style={{ background: "#1a1a1a", borderColor: "#333" }}
+        style={{ background: "var(--surface)", borderColor: "var(--line)" }}
       >
-        <MessageSquare className="w-10 h-10 mx-auto mb-3" style={{ color: "#333" }} />
-        <p style={{ color: "#888" }}>Aucun commentaire pour le moment.</p>
+        <MessageSquare className="w-10 h-10 mx-auto mb-3" style={{ color: "var(--line)" }} />
+        <p style={{ color: "var(--text-muted)" }}>Aucun commentaire pour le moment.</p>
       </div>
     );
   }
@@ -115,13 +115,13 @@ export default function CommentsManager({
             onClick={() => setFilter(key)}
             className="text-xs px-3 py-1.5 uppercase tracking-wider font-medium transition-colors"
             style={{
-              color: filter === key ? "#00E5FF" : "#888",
-              borderBottom: filter === key ? "2px solid #00E5FF" : "2px solid transparent",
+              color: filter === key ? "var(--brand)" : "var(--text-muted)",
+              borderBottom: filter === key ? "2px solid var(--brand)" : "2px solid transparent",
               background: "transparent",
             }}
           >
             {label}{" "}
-            <span style={{ color: "#555" }}>({count})</span>
+            <span style={{ color: "var(--text-dim)" }}>({count})</span>
           </button>
         ))}
       </div>
@@ -133,30 +133,30 @@ export default function CommentsManager({
             key={comment.id}
             className="p-4 transition-all"
             style={{
-              border: comment.is_approved ? "1px solid #2a2a2a" : "1px solid rgba(193,154,107,0.2)",
-              background: comment.is_approved ? "#1a1a1a" : "rgba(193,154,107,0.03)",
+              border: comment.is_approved ? "1px solid var(--line-soft)" : "1px solid color-mix(in srgb, var(--accent) 20%, transparent)",
+              background: comment.is_approved ? "var(--surface)" : "color-mix(in srgb, var(--accent) 3%, transparent)",
             }}
           >
             <div className="flex items-start justify-between gap-4">
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="font-medium text-sm" style={{ color: "#e8e8e8" }}>
+                  <span className="font-medium text-sm" style={{ color: "var(--ink)" }}>
                     {comment.author_name}
                   </span>
-                  <span className="text-xs" style={{ color: "#555" }}>
+                  <span className="text-xs" style={{ color: "var(--text-dim)" }}>
                     {comment.author_email}
                   </span>
-                  <span className="text-xs" style={{ color: "#444" }}>
+                  <span className="text-xs" style={{ color: "var(--line-strong)" }}>
                     · {formatDate(comment.created_at)}
                   </span>
                 </div>
                 {comment.post && (
-                  <p className="text-xs mb-2" style={{ color: "#555" }}>
+                  <p className="text-xs mb-2" style={{ color: "var(--text-dim)" }}>
                     Sur:{" "}
-                    <span style={{ color: "#00E5FF" }}>{comment.post.title}</span>
+                    <span style={{ color: "var(--brand)" }}>{comment.post.title}</span>
                   </p>
                 )}
-                <p className="text-sm leading-relaxed" style={{ color: "#aaa" }}>
+                <p className="text-sm leading-relaxed" style={{ color: "var(--text-muted)" }}>
                   {comment.content}
                 </p>
               </div>
@@ -166,9 +166,9 @@ export default function CommentsManager({
                   <button
                     onClick={() => handleApprove(comment.id)}
                     className="p-2 transition-colors"
-                    style={{ color: "#555" }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = "#00E5FF")}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = "#555")}
+                    style={{ color: "var(--text-dim)" }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = "var(--brand)")}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-dim)")}
                     title="Approuver"
                   >
                     <Check className="w-4 h-4" />
@@ -178,9 +178,9 @@ export default function CommentsManager({
                   <button
                     onClick={() => handleReject(comment.id)}
                     className="p-2 transition-colors"
-                    style={{ color: "#555" }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = "#C19A6B")}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = "#555")}
+                    style={{ color: "var(--text-dim)" }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = "var(--accent)")}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-dim)")}
                     title="Désapprouver"
                   >
                     <X className="w-4 h-4" />
@@ -189,9 +189,9 @@ export default function CommentsManager({
                 <button
                   onClick={() => handleDelete(comment.id)}
                   className="p-2 transition-colors"
-                  style={{ color: "#555" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#ff5555")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "#555")}
+                  style={{ color: "var(--text-dim)" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "var(--danger)")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-dim)")}
                   title="Supprimer"
                 >
                   <Trash2 className="w-4 h-4" />

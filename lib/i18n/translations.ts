@@ -6,6 +6,8 @@ export const translations = {
     contact: "Contact",
     newsletter: "Newsletter",
     subscribeNewsletter: "S'abonner à la newsletter",
+    subscribeShort: "S'abonner",
+    themes: "Thèmes",
     openMenu: "Ouvrir le menu",
     closeMenu: "Fermer le menu",
     
@@ -19,7 +21,7 @@ export const translations = {
     // Articles
     latestAnalyses: "Dernières Analyses",
     searchArticle: "Rechercher un article...",
-    noArticlesAvailable: "Aucune analyse disponible pour le moment.",
+    noArticlesAvailable: "Aucun article pour le moment.",
     readMore: "Lire la suite",
     minRead: "min de lecture",
     
@@ -30,13 +32,13 @@ export const translations = {
     subscribeToNewsletter: "S'inscrire à la newsletter",
     
     // Footer
-    brandDescription: "Des guides concrets pour entreprendre avec la tech en Afrique : Mobile Money, business, dev et IA pratique.",
+    brandDescription: "Astuces concrètes pour gagner un revenu en plus, mieux gérer son argent, être plus productif et profiter des meilleurs outils gratuits.",
     navigation: "Navigation",
     information: "Informations",
     privacyPolicy: "Politique de confidentialité",
     legalNotice: "Mentions légales",
-    newsletterFooter: "Newsletter",
-    newsletterDescription: "Recevez nos analyses directement dans votre boîte mail.",
+    newsletterFooter: "Recevez chaque nouveau guide par email",
+    newsletterDescription: "Revenus en plus, argent, productivité, outils gratuits : un email quand un article sort, rien d'autre.",
     allRightsReserved: "Tous droits réservés.",
     privacy: "Confidentialité",
     
@@ -63,6 +65,8 @@ export const translations = {
     contact: "Contact",
     newsletter: "Newsletter",
     subscribeNewsletter: "Subscribe to newsletter",
+    subscribeShort: "Subscribe",
+    themes: "Topics",
     openMenu: "Open menu",
     closeMenu: "Close menu",
     
@@ -76,7 +80,7 @@ export const translations = {
     // Articles
     latestAnalyses: "Latest Analyses",
     searchArticle: "Search for an article...",
-    noArticlesAvailable: "No analysis available at the moment.",
+    noArticlesAvailable: "No articles yet.",
     readMore: "Read more",
     minRead: "min read",
     
@@ -87,13 +91,13 @@ export const translations = {
     subscribeToNewsletter: "Subscribe to newsletter",
     
     // Footer
-    brandDescription: "Practical guides to building a business with tech in Africa: Mobile Money, business, dev and practical AI.",
+    brandDescription: "Practical tips to earn extra income, manage your money, be more productive and make the most of free tools.",
     navigation: "Navigation",
     information: "Information",
     privacyPolicy: "Privacy Policy",
     legalNotice: "Legal Notice",
-    newsletterFooter: "Newsletter",
-    newsletterDescription: "Receive our analyses directly in your inbox.",
+    newsletterFooter: "Get every new guide by email",
+    newsletterDescription: "Extra income, money, productivity, free tools: one email when an article comes out, nothing else.",
     allRightsReserved: "All rights reserved.",
     privacy: "Privacy",
     

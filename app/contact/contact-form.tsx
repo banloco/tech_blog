@@ -41,9 +41,9 @@ export default function ContactForm() {
   if (status === "success") {
     return (
       <div className="text-center py-16 space-y-4">
-        <CheckCircle className="w-12 h-12 mx-auto" style={{ color: "#00E5FF" }} />
-        <p className="text-lg font-semibold" style={{ color: "#e8e8e8" }}>{feedback}</p>
-        <p className="text-sm" style={{ color: "#888" }}>
+        <CheckCircle className="w-12 h-12 mx-auto" style={{ color: "var(--brand)" }} />
+        <p className="text-lg font-semibold" style={{ color: "var(--ink)" }}>{feedback}</p>
+        <p className="text-sm" style={{ color: "var(--text-muted)" }}>
           Nous vous répondrons dans les meilleurs délais.
         </p>
       </div>
@@ -54,14 +54,14 @@ export default function ContactForm() {
     <form
       onSubmit={handleSubmit}
       className="space-y-6 p-6 sm:p-8"
-      style={{ border: "1px solid #333", background: "#1a1a1a" }}
+      style={{ border: "1px solid var(--line)", background: "var(--surface)" }}
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div>
           <label
             htmlFor="contact_name"
             className="block text-xs font-medium uppercase tracking-widest mb-2"
-            style={{ color: "#888" }}
+            style={{ color: "var(--text-muted)" }}
           >
             Nom
           </label>
@@ -72,9 +72,9 @@ export default function ContactForm() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="w-full px-4 py-2.5 text-sm transition-colors focus:outline-none"
-            style={{ background: "#0e0e0e", border: "1px solid #333", color: "#e8e8e8" }}
-            onFocus={(e) => (e.currentTarget.style.borderColor = "#00E5FF")}
-            onBlur={(e) => (e.currentTarget.style.borderColor = "#333")}
+            style={{ background: "var(--bg)", border: "1px solid var(--line)", color: "var(--ink)" }}
+            onFocus={(e) => (e.currentTarget.style.borderColor = "var(--brand)")}
+            onBlur={(e) => (e.currentTarget.style.borderColor = "var(--line)")}
             placeholder="Votre nom"
           />
         </div>
@@ -82,7 +82,7 @@ export default function ContactForm() {
           <label
             htmlFor="contact_email"
             className="block text-xs font-medium uppercase tracking-widest mb-2"
-            style={{ color: "#888" }}
+            style={{ color: "var(--text-muted)" }}
           >
             Email
           </label>
@@ -93,9 +93,9 @@ export default function ContactForm() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="w-full px-4 py-2.5 text-sm transition-colors focus:outline-none"
-            style={{ background: "#0e0e0e", border: "1px solid #333", color: "#e8e8e8" }}
-            onFocus={(e) => (e.currentTarget.style.borderColor = "#00E5FF")}
-            onBlur={(e) => (e.currentTarget.style.borderColor = "#333")}
+            style={{ background: "var(--bg)", border: "1px solid var(--line)", color: "var(--ink)" }}
+            onFocus={(e) => (e.currentTarget.style.borderColor = "var(--brand)")}
+            onBlur={(e) => (e.currentTarget.style.borderColor = "var(--line)")}
             placeholder="votre@email.com"
           />
         </div>
@@ -105,7 +105,7 @@ export default function ContactForm() {
         <label
           htmlFor="contact_subject"
           className="block text-xs font-medium uppercase tracking-widest mb-2"
-          style={{ color: "#888" }}
+          style={{ color: "var(--text-muted)" }}
         >
           Sujet
         </label>
@@ -116,9 +116,9 @@ export default function ContactForm() {
           value={subject}
           onChange={(e) => setSubject(e.target.value)}
           className="w-full px-4 py-2.5 text-sm transition-colors focus:outline-none"
-          style={{ background: "#0e0e0e", border: "1px solid #333", color: "#e8e8e8" }}
-          onFocus={(e) => (e.currentTarget.style.borderColor = "#00E5FF")}
-          onBlur={(e) => (e.currentTarget.style.borderColor = "#333")}
+          style={{ background: "var(--bg)", border: "1px solid var(--line)", color: "var(--ink)" }}
+          onFocus={(e) => (e.currentTarget.style.borderColor = "var(--brand)")}
+          onBlur={(e) => (e.currentTarget.style.borderColor = "var(--line)")}
           placeholder="Objet de votre message"
         />
       </div>
@@ -127,7 +127,7 @@ export default function ContactForm() {
         <label
           htmlFor="contact_message"
           className="block text-xs font-medium uppercase tracking-widest mb-2"
-          style={{ color: "#888" }}
+          style={{ color: "var(--text-muted)" }}
         >
           Message
         </label>
@@ -138,9 +138,9 @@ export default function ContactForm() {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           className="w-full px-4 py-2.5 text-sm transition-colors focus:outline-none resize-none"
-          style={{ background: "#0e0e0e", border: "1px solid #333", color: "#e8e8e8" }}
-          onFocus={(e) => (e.currentTarget.style.borderColor = "#00E5FF")}
-          onBlur={(e) => (e.currentTarget.style.borderColor = "#333")}
+          style={{ background: "var(--bg)", border: "1px solid var(--line)", color: "var(--ink)" }}
+          onFocus={(e) => (e.currentTarget.style.borderColor = "var(--brand)")}
+          onBlur={(e) => (e.currentTarget.style.borderColor = "var(--line)")}
           placeholder="Votre message..."
           minLength={10}
         />
@@ -149,7 +149,7 @@ export default function ContactForm() {
       {status === "error" && (
         <p
           className="text-sm px-4 py-2"
-          style={{ color: "#ff5555", background: "rgba(255,85,85,0.05)", border: "1px solid rgba(255,85,85,0.2)" }}
+          style={{ color: "var(--danger)", background: "color-mix(in srgb, var(--danger) 5%, transparent)", border: "1px solid color-mix(in srgb, var(--danger) 20%, transparent)" }}
         >
           {feedback}
         </p>
@@ -159,9 +159,9 @@ export default function ContactForm() {
         type="submit"
         disabled={status === "loading"}
         className="w-full flex items-center justify-center gap-2 px-5 py-3 text-sm font-semibold uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-        style={{ background: "#C19A6B", color: "#121212" }}
-        onMouseEnter={(e) => status !== "loading" && (e.currentTarget.style.background = "#d4b080")}
-        onMouseLeave={(e) => status !== "loading" && (e.currentTarget.style.background = "#C19A6B")}
+        style={{ background: "var(--brand)", color: "#fff" }}
+        onMouseEnter={(e) => status !== "loading" && (e.currentTarget.style.background = "var(--accent-hover)")}
+        onMouseLeave={(e) => status !== "loading" && (e.currentTarget.style.background = "var(--accent)")}
       >
         {status === "loading" ? (
           <Loader2 className="w-4 h-4 animate-spin" />

@@ -19,23 +19,23 @@ export default function AdminLayoutClient({
       <div
         className="lg:hidden fixed top-14 sm:top-16 left-0 right-0 z-30 px-4 py-3 flex items-center justify-between"
         style={{
-          background: "rgba(14,14,14,0.97)",
+          background: "color-mix(in srgb, var(--bg) 97%, transparent)",
           backdropFilter: "blur(12px)",
-          borderBottom: "1px solid #2a2a2a",
+          borderBottom: "1px solid var(--line-soft)",
         }}
       >
         <h1
           className="text-[10px] font-semibold uppercase tracking-[0.2em]"
-          style={{ color: "#e8e8e8" }}
+          style={{ color: "var(--ink)" }}
         >
           Admin Dashboard
         </h1>
         <button
           onClick={() => setMobileOpen(true)}
           className="p-2 transition-colors"
-          style={{ color: "#888" }}
-          onMouseEnter={(e) => (e.currentTarget.style.color = "#e8e8e8")}
-          onMouseLeave={(e) => (e.currentTarget.style.color = "#888")}
+          style={{ color: "var(--text-muted)" }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = "var(--ink)")}
+          onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-muted)")}
           aria-label="Ouvrir le menu"
         >
           <Menu className="w-5 h-5" />

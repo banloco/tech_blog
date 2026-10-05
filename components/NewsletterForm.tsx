@@ -1,99 +1,84 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { Send, Loader2, CheckCircle } from "lucide-react";
 
-export default function NewsletterForm() {
+/** Newsletter signup. "large" is the big version on the home page and under articles. */
+export default function NewsletterForm({ size = "small" }: { size?: "small" | "large" }) {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
+  const inputId = useId();  // the form can appear twice on a page (home + footer)
+  const large = size === "large";
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setStatus("loading");
-
     try {
       const res = await fetch("/api/newsletter", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
-
       const data = await res.json();
-
       if (!res.ok) {
         setStatus("error");
         setMessage(data.error);
         return;
       }
-
       setStatus("success");
       setMessage(data.message);
       setEmail("");
     } catch {
       setStatus("error");
-      setMessage("Erreur de connexion.");
+      setMessage("Erreur de connexion. Réessayez dans un instant.");
     }
   }
 
   if (status === "success") {
     return (
-      <div className="flex items-center gap-2 text-xs" role="status" aria-live="polite" style={{ color: "#00E5FF" }}>
-        <CheckCircle className="w-3.5 h-3.5" aria-hidden="true" />
+      <div className="flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-medium" role="status" aria-live="polite"
+        style={{ color: "var(--brand)", background: "var(--brand-soft)" }}>
+        <CheckCircle className="h-5 w-5 shrink-0" aria-hidden="true" />
         <span>{message}</span>
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2">
-      <label htmlFor="newsletter-email" className="sr-only">
-        Adresse email pour la newsletter
-      </label>
-      <input
-        id="newsletter-email"
-        type="email"
-        required
-        aria-required="true"
-        value={email}
-        onChange={(e) => {
-          setEmail(e.target.value);
-          if (status === "error") setStatus("idle");
-        }}
-        placeholder="votre@email.com"
-        className="flex-1 min-w-0 px-3 py-2 text-xs border focus:outline-none transition-colors"
-        style={{
-          background: "#121212",
-          borderColor: "#333",
-          color: "#e8e8e8",
-        }}
-      />
-      <button
-        type="submit"
-        disabled={status === "loading"}
-        aria-busy={status === "loading"}
-        className="flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-semibold uppercase tracking-widest transition-all shrink-0 disabled:opacity-50"
-        style={{ background: "#C19A6B", color: "#121212", letterSpacing: "0.1em" }}
-      >
-        {status === "loading" ? (
-          <>
-            <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
-            <span className="hidden sm:inline">Envoi...</span>
-            <span className="sr-only">Envoi en cours</span>
-          </>
-        ) : (
-          <>
-            <Send className="w-4 h-4" aria-hidden="true" />
-            <span className="hidden sm:inline">S'abonner</span>
-            <span className="sr-only sm:hidden">S'abonner à la newsletter</span>
-          </>
-        )}
-      </button>
+    <form onSubmit={handleSubmit} className="w-full">
+      <div className={`flex flex-col gap-2 sm:flex-row ${large ? "sm:rounded-full sm:border sm:bg-[var(--surface)] sm:p-1.5 sm:shadow-[var(--shadow)]" : ""}`}
+        style={large ? { borderColor: "var(--line)" } : undefined}>
+        <label htmlFor={inputId} className="sr-only">Votre adresse email</label>
+        <input
+          id={inputId}
+          type="email"
+          required
+          autoComplete="email"
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            if (status === "error") setStatus("idle");
+          }}
+          placeholder="votre@email.com"
+          className={`min-w-0 flex-1 rounded-full border px-4 text-base focus:outline-none focus:border-[var(--brand)] ${large ? "py-3 sm:border-0 sm:bg-transparent" : "py-2.5"}`}
+          style={{ background: "var(--surface)", borderColor: "var(--line)", color: "var(--ink)" }}
+        />
+        <button type="submit" disabled={status === "loading"} aria-busy={status === "loading"}
+          className={`btn btn-primary shrink-0 disabled:opacity-60 ${large ? "" : "!py-2.5"}`}>
+          {status === "loading" ? (
+            <><Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> Envoi…</>
+          ) : (
+            <><Send className="h-4 w-4" aria-hidden="true" /> Je m&apos;inscris</>
+          )}
+        </button>
+      </div>
       {status === "error" && (
-        <div role="alert" aria-live="assertive" className="text-[10px] mt-1 px-2 py-1" style={{ color: "#ff5555", background: "rgba(255,85,85,0.08)", border: "1px solid rgba(255,85,85,0.2)" }}>
-          {message}
-        </div>
+        <p role="alert" className="mt-2 text-sm" style={{ color: "var(--danger)" }}>{message}</p>
       )}
+      <p className="mt-2 text-xs" style={{ color: "var(--text-dim)" }}>
+        Gratuit, sans spam. Désinscription en un clic.
+      </p>
     </form>
   );
 }

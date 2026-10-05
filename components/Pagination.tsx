@@ -61,7 +61,7 @@ export default function Pagination({ totalPages }: PaginationProps) {
         onClick={() => router.push(createPageURL(currentPage - 1))}
         disabled={currentPage <= 1}
         className="p-2 border transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-        style={{ borderColor: "#333", background: "#1a1a1a", color: "#888" }}
+        style={{ borderColor: "var(--line)", background: "var(--surface)", color: "var(--text-muted)" }}
         aria-label="Page précédente"
       >
         <ChevronLeft className="w-4 h-4" />
@@ -70,7 +70,7 @@ export default function Pagination({ totalPages }: PaginationProps) {
       {visiblePages.map((page, i) => {
         if (page === '...') {
           return (
-            <span key={`dots-${i}`} className="px-2 text-xs" style={{ color: "#444" }}>
+            <span key={`dots-${i}`} className="px-2 text-xs" style={{ color: "var(--line-strong)" }}>
               ···
             </span>
           );
@@ -82,9 +82,9 @@ export default function Pagination({ totalPages }: PaginationProps) {
             onClick={() => router.push(createPageURL(page))}
             className="w-8 h-8 text-xs font-medium border transition-colors"
             style={{
-              borderColor: isActive ? "#00E5FF" : "#333",
-              background: isActive ? "rgba(0,229,255,0.08)" : "#1a1a1a",
-              color: isActive ? "#00E5FF" : "#888",
+              borderColor: isActive ? "var(--brand)" : "var(--line)",
+              background: isActive ? "color-mix(in srgb, var(--brand) 8%, transparent)" : "var(--surface)",
+              color: isActive ? "var(--brand)" : "var(--text-muted)",
             }}
           >
             {page}
@@ -96,7 +96,7 @@ export default function Pagination({ totalPages }: PaginationProps) {
         onClick={() => router.push(createPageURL(currentPage + 1))}
         disabled={currentPage >= totalPages}
         className="p-2 border transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-        style={{ borderColor: "#333", background: "#1a1a1a", color: "#888" }}
+        style={{ borderColor: "var(--line)", background: "var(--surface)", color: "var(--text-muted)" }}
         aria-label="Page suivante"
       >
         <ChevronRight className="w-4 h-4" />

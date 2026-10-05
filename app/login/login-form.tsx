@@ -39,7 +39,7 @@ export default function LoginForm() {
         <label
           htmlFor="email"
           className="block text-xs font-medium uppercase tracking-widest mb-2"
-          style={{ color: "#888" }}
+          style={{ color: "var(--text-muted)" }}
         >
           Email
         </label>
@@ -52,12 +52,12 @@ export default function LoginForm() {
           onChange={(e) => setEmail(e.target.value)}
           className="w-full px-4 py-2.5 text-sm transition-colors focus:outline-none"
           style={{
-            background: "#0e0e0e",
-            border: "1px solid #333",
-            color: "#e8e8e8",
+            background: "var(--bg)",
+            border: "1px solid var(--line)",
+            color: "var(--ink)",
           }}
-          onFocus={(e) => (e.currentTarget.style.borderColor = "#00E5FF")}
-          onBlur={(e) => (e.currentTarget.style.borderColor = "#333")}
+          onFocus={(e) => (e.currentTarget.style.borderColor = "var(--brand)")}
+          onBlur={(e) => (e.currentTarget.style.borderColor = "var(--line)")}
           placeholder="admin@example.com"
         />
       </div>
@@ -66,7 +66,7 @@ export default function LoginForm() {
         <label
           htmlFor="password"
           className="block text-xs font-medium uppercase tracking-widest mb-2"
-          style={{ color: "#888" }}
+          style={{ color: "var(--text-muted)" }}
         >
           Mot de passe
         </label>
@@ -79,12 +79,12 @@ export default function LoginForm() {
           onChange={(e) => setPassword(e.target.value)}
           className="w-full px-4 py-2.5 text-sm transition-colors focus:outline-none"
           style={{
-            background: "#0e0e0e",
-            border: "1px solid #333",
-            color: "#e8e8e8",
+            background: "var(--bg)",
+            border: "1px solid var(--line)",
+            color: "var(--ink)",
           }}
-          onFocus={(e) => (e.currentTarget.style.borderColor = "#00E5FF")}
-          onBlur={(e) => (e.currentTarget.style.borderColor = "#333")}
+          onFocus={(e) => (e.currentTarget.style.borderColor = "var(--brand)")}
+          onBlur={(e) => (e.currentTarget.style.borderColor = "var(--line)")}
           placeholder="••••••••"
         />
       </div>
@@ -93,9 +93,9 @@ export default function LoginForm() {
         <p
           className="text-sm px-4 py-2"
           style={{
-            color: "#ff5555",
-            background: "rgba(255,85,85,0.05)",
-            border: "1px solid rgba(255,85,85,0.2)",
+            color: "var(--danger)",
+            background: "color-mix(in srgb, var(--danger) 5%, transparent)",
+            border: "1px solid color-mix(in srgb, var(--danger) 20%, transparent)",
           }}
         >
           {error}
@@ -106,9 +106,9 @@ export default function LoginForm() {
         type="submit"
         disabled={loading}
         className="w-full flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold uppercase tracking-widest transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-        style={{ background: "#C19A6B", color: "#121212" }}
-        onMouseEnter={(e) => !loading && (e.currentTarget.style.background = "#d4b080")}
-        onMouseLeave={(e) => !loading && (e.currentTarget.style.background = "#C19A6B")}
+        style={{ background: "var(--brand)", color: "#fff" }}
+        onMouseEnter={(e) => !loading && (e.currentTarget.style.background = "var(--accent-hover)")}
+        onMouseLeave={(e) => !loading && (e.currentTarget.style.background = "var(--accent)")}
       >
         {loading ? (
           <Loader2 className="w-4 h-4 animate-spin" />

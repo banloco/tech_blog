@@ -4,7 +4,7 @@ import ArticleForm from "@/components/admin/ArticleForm";
 import type { Post } from "@/lib/types";
 
 export const metadata = {
-  title: "Modifier article | Admin IA & Capital",
+  title: "Modifier article | Admin Le Plan B",
   robots: { index: false, follow: false },
 };
 

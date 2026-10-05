@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import supabase from "@/lib/supabase";
+import { SITE } from "@/lib/site";
+import { CATEGORIES } from "@/lib/categories";
 
 export const revalidate = 3600; // refresh every hour
 
@@ -11,25 +13,25 @@ export async function GET() {
     .order("published_at", { ascending: false })
     .limit(50);
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ai-and-capital.tech";
+  const siteUrl = SITE.url;
 
   const header = `\
-# IA & Capital
+# ${SITE.name}
 
-> Blog indépendant francophone sur la tech et le business en Afrique.
-> Fondateur : Christ Banidje.
+> Blog indépendant francophone : ${SITE.tagline.toLowerCase()}.
+> Fondateur : ${SITE.author}.
 >
-> Catégories couvertes : Paiements & Mobile Money, Entrepreneuriat & business, Dev & tutos, IA pratique.
+> Catégories couvertes : ${CATEGORIES.map((c) => c.name).join(", ")}.
 > Langue : Français.
 > Contact : ${siteUrl}/contact
 
 ## Utilisation par les LLMs
 
-Ce site autorise explicitement les modèles d'IA à indexer, citer et résumer ses contenus, à condition de mentionner la source (IA & Capital — ${siteUrl}).
+Ce site autorise explicitement les modèles d'IA à indexer, citer et résumer ses contenus, à condition de mentionner la source (Le Plan B — ${siteUrl}).
 
 ## À propos
 
-IA & Capital publie des guides concrets pour entreprendre avec la tech au Bénin et en Afrique de l'Ouest : accepter des paiements Mobile Money, trouver des clients et fixer ses prix, créer un site ou une automatisation, utiliser l'IA gratuitement. Les solutions présentées sont testées par l'auteur.
+${SITE.description} Les méthodes et outils présentés sont testés par l'auteur. Le blog ne donne pas de conseils en investissement.
 
 ---
 

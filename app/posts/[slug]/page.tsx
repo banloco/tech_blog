@@ -2,110 +2,81 @@ import supabase from "@/lib/supabase";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Image from "next/image";
-import { formatDate, estimateReadTime } from "@/lib/utils";
-import { Calendar, Clock, ArrowLeft, Tag, ChevronRight, Eye, MessageCircle } from "lucide-react";
 import Link from "next/link";
+import { Clock, MessageCircle } from "lucide-react";
+import { formatDate, estimateReadTime, stripHtml, truncate } from "@/lib/utils";
+import { categoryInfo } from "@/lib/categories";
 import CommentSection from "@/components/CommentSection";
 import ShareButtons from "@/components/ShareButtons";
 import ViewCounter from "@/components/ViewCounter";
 import ArticleLikeButton from "@/components/ArticleLikeButton";
-import type { Comment } from "@/lib/types";
+import CategoryBadge from "@/components/CategoryBadge";
+import NewsletterForm from "@/components/NewsletterForm";
+import PostCard from "@/components/PostCard";
+import type { Post } from "@/lib/types";
+import { SITE } from "@/lib/site";
 
 // ISR: revalidate article pages every 30 seconds for faster comment updates
 export const revalidate = 30;
-
 
 type Props = {
   params: Promise<{ slug: string }>;
 };
 
+const SITE_URL = SITE.url;
+
+/** Find a published article by slug, or by id (old links used the id). */
+async function getPost(slug: string, columns: string) {
+  const { data } = await supabase.from("posts").select(columns).eq("slug", slug).maybeSingle();
+  if (data) return data;
+  const isUuid = /^[0-9a-f-]{36}$/i.test(slug);  // otherwise Postgres rejects the id comparison
+  if (!isUuid) return null;
+  const { data: byId } = await supabase.from("posts").select(columns).eq("id", slug).maybeSingle();
+  return byId;
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  
-  // Try to find by slug first, then by id
-  let { data: post } = await supabase
-    .from("posts")
-    .select("title, excerpt, content, meta_title, meta_description, cover_image, slug")
-    .eq("slug", slug)
-    .single();
-
-  if (!post) {
-    const { data: postById } = await supabase
-      .from("posts")
-      .select("title, excerpt, content, meta_title, meta_description, cover_image, slug")
-      .eq("id", slug)
-      .single();
-    post = postById;
-  }
-
+  const post = (await getPost(slug, "title, excerpt, content, meta_title, meta_description, cover_image, slug")) as Post | null;
   if (!post) return { title: "Article introuvable" };
 
   const title = post.meta_title || post.title;
-  const description = post.meta_description || post.excerpt || post.content?.substring(0, 160);
-
+  const description = post.meta_description || post.excerpt || truncate(stripHtml(post.content || ""), 160);
   return {
     title,
     description,
-    alternates: {
-      canonical: `/posts/${post.slug}`,
-    },
-    openGraph: {
-      title,
-      description,
-      type: "article",
-      images: post.cover_image ? [post.cover_image] : [],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-    },
+    alternates: { canonical: `/posts/${post.slug}` },
+    openGraph: { title, description, type: "article", images: post.cover_image ? [post.cover_image] : [] },
+    twitter: { card: "summary_large_image", title, description },
   };
 }
 
 export default async function PostPage({ params }: Props) {
   const { slug } = await params;
+  const post = (await getPost(slug, "*, category:categories(*)")) as Post | null;
+  if (!post) notFound();
 
-  // Try to get the post by slug first, then by id if slug doesn't work
-  let { data: post } = await supabase
-    .from("posts")
-    .select("*, category:categories(*)")
-    .eq("slug", slug)
-    .single();
-
-  // If not found by slug and the param looks like a number (uuid), try by id
-  if (!post && slug) {
-    const { data: postById } = await supabase
-      .from("posts")
-      .select("*, category:categories(*)")
-      .eq("id", slug)
-      .single();
-    post = postById;
-  }
-
-  if (!post) {
-    notFound();
-  }
-
-  // Then get comments using the post id
-  const { data: commentsData } = await supabase
-    .from("comments")
-    .select("*")
-    .eq("post_id", post.id)
-    .eq("is_approved", true)
-    .order("created_at", { ascending: true });
+  const [{ data: commentsData }, { data: relatedData }] = await Promise.all([
+    supabase.from("comments").select("*").eq("post_id", post.id).eq("is_approved", true)
+      .order("created_at", { ascending: true }),
+    // Related reading: same theme first, otherwise the latest articles
+    post.category_id
+      ? supabase.from("posts").select("*, category:categories(*)").eq("status", "published")
+          .eq("category_id", post.category_id).neq("id", post.id)
+          .order("published_at", { ascending: false, nullsFirst: false }).limit(3)
+      : supabase.from("posts").select("*, category:categories(*)").eq("status", "published")
+          .neq("id", post.id).order("published_at", { ascending: false, nullsFirst: false }).limit(3),
+  ]);
 
   const allComments = commentsData || [];
+  const related: Post[] = relatedData || [];
+  const cat = categoryInfo(post.category);
   const readTime = estimateReadTime(post.content || "");
+  const postUrl = `${SITE_URL}/posts/${post.slug || post.id}`;
+  const publishDate = post.published_at || post.created_at;
+  const plain = stripHtml(post.content || "");
 
   // JSON-LD structured data for SEO
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ai-and-capital.tech";
-  const postUrl = `${siteUrl}/posts/${post.slug || post.id}`;
-  const publishDate = post.published_at || post.created_at;
-  const wordCount = post.content
-    ? post.content.replace(/<[^>]+>/g, " ").trim().split(/\s+/).length
-    : undefined;
-
   const jsonLd = [
     {
       "@context": "https://schema.org",
@@ -114,176 +85,119 @@ export default async function PostPage({ params }: Props) {
       mainEntityOfPage: { "@type": "WebPage", "@id": postUrl },
       url: postUrl,
       headline: post.title,
-      description: post.excerpt || post.meta_description || post.content?.replace(/<[^>]+>/g, "").substring(0, 160),
+      description: post.excerpt || post.meta_description || truncate(plain, 160),
       datePublished: publishDate,
       dateModified: post.updated_at || publishDate,
       inLanguage: "fr-FR",
-      ...(post.cover_image && {
-        image: {
-          "@type": "ImageObject",
-          url: post.cover_image,
-          contentUrl: post.cover_image,
-        },
-      }),
-      author: {
-        "@type": "Person",
-        name: "Christ Banidje",
-        url: `${siteUrl}/about`,
-      },
+      ...(post.cover_image && { image: { "@type": "ImageObject", url: post.cover_image, contentUrl: post.cover_image } }),
+      author: { "@type": "Person", name: "Christ Banidje", url: `${SITE_URL}/about` },
       publisher: {
         "@type": "Organization",
-        name: "IA & Capital",
-        url: siteUrl,
-        logo: {
-          "@type": "ImageObject",
-          url: `${siteUrl}/icon.png`,
-        },
+        name: "Le Plan B",
+        url: SITE_URL,
+        logo: { "@type": "ImageObject", url: `${SITE_URL}/icon.png` },
       },
       ...(post.tags?.length && { keywords: post.tags.join(", ") }),
-      ...((post as any).category?.name && { articleSection: (post as any).category.name }),
-      ...(wordCount && { wordCount }),
+      ...(post.category?.name && { articleSection: post.category.name }),
+      wordCount: plain.split(/\s+/).filter(Boolean).length,
       ...(allComments.length > 0 && { commentCount: allComments.length }),
     },
     {
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
       itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Accueil", item: siteUrl },
-        { "@type": "ListItem", position: 2, name: "Articles", item: `${siteUrl}/#articles` },
-        { "@type": "ListItem", position: 3, name: post.title, item: postUrl },
+        { "@type": "ListItem", position: 1, name: "Accueil", item: SITE_URL },
+        ...(cat ? [{ "@type": "ListItem", position: 2, name: cat.name, item: `${SITE_URL}/categorie/${cat.slug}` }] : []),
+        { "@type": "ListItem", position: cat ? 3 : 2, name: post.title, item: postUrl },
       ],
     },
   ];
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <ViewCounter postId={post.id} />
 
-      <main className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 max-w-3xl">
-        {/* Breadcrumb */}
-        <nav aria-label="Fil d'Ariane" className="mb-6">
-            <ol className="flex items-center gap-1.5 text-xs sm:text-sm flex-wrap" style={{ color: "#555" }}>
-              <li><Link href="/" className="transition-colors hover:text-[#e8e8e8]" style={{ color: "#888" }}>Accueil</Link></li>
-              <li><ChevronRight className="w-3 h-3" /></li>
-              <li><Link href="/#articles" className="transition-colors hover:text-[#e8e8e8]" style={{ color: "#888" }}>Articles</Link></li>
-              <li><ChevronRight className="w-3 h-3" /></li>
-              <li className="truncate max-w-[200px] sm:max-w-none" style={{ color: "#aaa" }}>{post.title}</li>
-          </ol>
-        </nav>
+      <article>
+        <header className="mx-auto max-w-3xl px-4 pt-10 sm:px-6 sm:pt-14">
+          <nav aria-label="Fil d'Ariane" className="mb-6 flex flex-wrap items-center gap-1.5 text-sm" style={{ color: "var(--text-dim)" }}>
+            <Link href="/" className="hover:underline">Accueil</Link>
+            {cat && (<><span aria-hidden="true">/</span><Link href={`/categorie/${cat.slug}`} className="hover:underline">{cat.name}</Link></>)}
+          </nav>
 
-        {/* Back Navigation */}
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 text-sm transition-colors mb-8 hover:text-[#e8e8e8]"
-          style={{ color: "#888" }}
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Retour aux articles
-        </Link>
+          {cat && <CategoryBadge category={cat} />}
+          <h1 className="mt-4 text-3xl font-extrabold leading-[1.12] sm:text-5xl" style={{ color: "var(--ink)" }}>{post.title}</h1>
+          {post.excerpt && (
+            <p className="mt-5 text-xl leading-relaxed" style={{ color: "var(--text-muted)" }}>{post.excerpt}</p>
+          )}
 
-        {/* Article Header */}
-        <header className="mb-10">
-            <div className="flex flex-wrap items-center gap-3 text-xs mb-4" style={{ color: "#555" }}>
-              <span className="flex items-center gap-1">
-                <Calendar className="w-3.5 h-3.5" />
-                {formatDate(post.published_at || post.created_at)}
-              </span>
-              <span className="w-1 h-1" style={{ background: "#444" }} />
-              <span className="flex items-center gap-1">
-                <Clock className="w-3.5 h-3.5" />
-                {readTime} de lecture
-              </span>
-              {post.views_count !== undefined && (
-                <>
-                  <span className="w-1 h-1" style={{ background: "#444" }} />
-                  <span className="flex items-center gap-1">
-                    <Eye className="w-3.5 h-3.5" />
-                    {post.views_count} {post.views_count > 1 ? "vues" : "vue"}
-                  </span>
-                </>
-              )}
-              <span className="w-1 h-1" style={{ background: "#444" }} />
-              <span className="flex items-center gap-1">
-                <MessageCircle className="w-3.5 h-3.5" />
-                {allComments.length} {allComments.length > 1 ? "commentaires" : "commentaire"}
-              </span>
-            </div>
-
-            <ViewCounter postId={post.id} />
-
-            <h1
-              className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl leading-tight"
-              style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "#e8e8e8" }}
-            >
-              {post.title}
-            </h1>
-
-            {post.excerpt && (
-              <p className="mt-4 text-lg leading-relaxed" style={{ color: "#888" }}>
-                {post.excerpt}
-              </p>
+          <div className="mt-7 flex flex-wrap items-center gap-x-4 gap-y-3 border-y py-4 text-sm" style={{ borderColor: "var(--line)", color: "var(--text-dim)" }}>
+            <Link href="/about" className="flex items-center gap-2.5 font-semibold" style={{ color: "var(--ink)" }}>
+              <span className="grid h-9 w-9 place-items-center rounded-full font-display font-extrabold text-white" style={{ background: "var(--brand)" }} aria-hidden="true">C</span>
+              Christ Banidje
+            </Link>
+            <span aria-hidden="true">·</span>
+            <time dateTime={publishDate}>{formatDate(publishDate)}</time>
+            <span aria-hidden="true">·</span>
+            <span className="flex items-center gap-1"><Clock className="h-4 w-4" aria-hidden="true" />{readTime} de lecture</span>
+            {allComments.length > 0 && (
+              <a href="#comments" className="flex items-center gap-1 hover:underline">
+                <MessageCircle className="h-4 w-4" aria-hidden="true" />{allComments.length} commentaire{allComments.length > 1 ? "s" : ""}
+              </a>
             )}
-
-            {post.tags && post.tags.length > 0 && (
-              <div className="flex flex-wrap gap-2 mt-6">
-                {post.tags.map((tag: string) => (
-                  <span
-                    key={tag}
-                    className="flex items-center gap-1 text-xs font-medium uppercase tracking-wider px-2.5 py-1"
-                    style={{ background: "#1a1a1a", color: "#888", border: "1px solid #333" }}
-                  >
-                    <Tag className="w-3 h-3" />
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            )}
-
-            {/* Share Buttons */}
-            <div
-              className="mt-6 pt-4 flex items-center justify-between gap-4 flex-wrap"
-              style={{ borderTop: "1px solid #2a2a2a" }}
-            >
-              <ShareButtons
-                url={`${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/posts/${post.slug || post.id}`}
-                title={post.title}
-              />
-              <ArticleLikeButton postId={post.id} initialLikes={post.likes_count || 0} />
           </div>
         </header>
 
-        {/* Cover Image */}
         {post.cover_image && (
-            <div
-              className="mb-10 overflow-hidden relative aspect-video"
-              style={{ border: "1px solid #2a2a2a" }}
-            >
-            <Image
-              src={post.cover_image}
-              alt={post.title}
-              fill
-              className="object-cover"
-              priority
-              sizes="(max-width: 768px) 100vw, 768px"
-            />
+          <div className="mx-auto mt-8 max-w-4xl px-4 sm:px-6">
+            <div className="relative aspect-video overflow-hidden rounded-[var(--radius)] border" style={{ borderColor: "var(--line)" }}>
+              <Image src={post.cover_image} alt="" fill className="object-cover" priority sizes="(max-width: 896px) 100vw, 896px" />
+            </div>
           </div>
         )}
 
-        {/* Article Content */}
-          <article
-            className="prose prose-invert prose-zinc max-w-none prose-headings:text-white prose-a:text-cyan-400 prose-strong:text-white text-lg leading-relaxed ProseMirror"
-            style={{ color: "#aaa" }}
-            dangerouslySetInnerHTML={{ __html: post.content }}
-          />
+        <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+          <div className="ProseMirror" dangerouslySetInnerHTML={{ __html: post.content }} />
 
-          {/* Divider */}
-          <hr className="my-12" style={{ borderColor: "#2a2a2a" }} />
-        {/* Comments Section */}
+          {post.tags && post.tags.length > 0 && (
+            <ul className="mt-10 flex flex-wrap gap-2" aria-label="Mots-clés">
+              {post.tags.map((tag) => (
+                <li key={tag} className="rounded-full px-3 py-1 text-sm" style={{ background: "var(--surface-2)", color: "var(--text-muted)" }}>#{tag}</li>
+              ))}
+            </ul>
+          )}
+
+          {/* End of article: share, like, then keep the reader */}
+          <div className="mt-10 rounded-[var(--radius)] border p-5 sm:p-6" style={{ borderColor: "var(--line)", background: "var(--surface)" }}>
+            <p className="font-bold" style={{ color: "var(--ink)" }}>Cet article peut aider quelqu&apos;un ? Partagez-le.</p>
+            <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+              <ShareButtons url={postUrl} title={post.title} />
+              <ArticleLikeButton postId={post.id} initialLikes={post.likes_count || 0} />
+            </div>
+          </div>
+
+          <section className="mt-8 rounded-[var(--radius)] p-6 sm:p-8" style={{ background: "var(--brand-soft)" }} aria-labelledby="post-newsletter">
+            <h2 id="post-newsletter" className="text-2xl font-extrabold" style={{ color: "var(--ink)" }}>Ne ratez pas le prochain guide</h2>
+            <p className="mt-1 mb-4" style={{ color: "var(--text-muted)" }}>Un email quand un nouvel article sort. Rien d&apos;autre.</p>
+            <NewsletterForm size="large" />
+          </section>
+        </div>
+      </article>
+
+      {related.length > 0 && (
+        <section className="border-t" style={{ borderColor: "var(--line)", background: "var(--surface-2)" }} aria-labelledby="related-title">
+          <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+            <h2 id="related-title" className="mb-6 text-2xl font-extrabold" style={{ color: "var(--ink)" }}>À lire ensuite</h2>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {related.map((p) => <PostCard key={p.id} post={p} />)}
+            </div>
+          </div>
+        </section>
+      )}
+
+      <div id="comments" className="mx-auto max-w-3xl scroll-mt-24 px-4 py-12 sm:px-6">
         <CommentSection postId={post.id} initialComments={allComments} />
-      </main>
+      </div>
     </>
   );
 }

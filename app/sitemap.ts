@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import type { MetadataRoute } from "next";
+import { CATEGORIES } from "@/lib/categories";
 
 // Use a plain service client — sitemap has no request/cookies context
 function getSupabase() {
@@ -72,5 +73,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Return static pages only — better than an HTML error page
   }
 
-  return [...staticPages, ...postEntries];
+  // Theme pages: the main way to explore the blog
+  const categoryEntries: MetadataRoute.Sitemap = CATEGORIES.map(({ slug }) => ({
+    url: `${baseUrl}/categorie/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.8,
+  }));
+
+  return [...staticPages, ...categoryEntries, ...postEntries];
 }

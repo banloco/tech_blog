@@ -63,7 +63,7 @@ export default function RichTextEditor({
       Link.configure({
         openOnClick: false,
         HTMLAttributes: {
-          class: "text-[#00E5FF] underline",
+          class: "text-[var(--brand)] underline",
         },
       }),
       Image.configure({
@@ -81,7 +81,7 @@ export default function RichTextEditor({
       CodeBlockLowlight.configure({
         lowlight,
         HTMLAttributes: {
-          class: "bg-[#1a1a1a] p-4 my-4 overflow-x-auto border border-[#333]",
+          class: "bg-[var(--surface)] p-4 my-4 overflow-x-auto border border-[var(--line)]",
         },
       }),
     ],
@@ -89,7 +89,7 @@ export default function RichTextEditor({
     editorProps: {
       attributes: {
         class:
-          "prose prose-invert max-w-none focus:outline-none min-h-[500px] px-4 py-3",
+          "prose max-w-none focus:outline-none min-h-[500px] px-4 py-3",
       },
     },
     onUpdate: ({ editor }) => {
@@ -116,16 +116,16 @@ export default function RichTextEditor({
   };
 
   return (
-    <div className="overflow-hidden" style={{ border: "1px solid #333", background: "#0e0e0e" }}>
+    <div className="overflow-hidden" style={{ border: "1px solid var(--line)", background: "var(--bg)" }}>
       {/* Toolbar */}
-      <div className="p-2 flex flex-wrap gap-1" style={{ borderBottom: "1px solid #2a2a2a", background: "#161616" }}>
+      <div className="p-2 flex flex-wrap gap-1" style={{ borderBottom: "1px solid var(--line-soft)", background: "var(--surface-2)" }}>
         {/* Text Formatting */}
-        <div className="flex gap-1 border-r border-[#333] pr-2 mr-1">
+        <div className="flex gap-1 border-r border-[var(--line)] pr-2 mr-1">
           <button
             type="button"
             onClick={() => editor.chain().focus().toggleBold().run()}
-            className={`p-2 rounded hover:bg-[#222] transition-colors ${
-              editor.isActive("bold") ? "text-[#00E5FF] bg-[rgba(0,229,255,0.08)]" : "text-[#888]"
+            className={`p-2 rounded hover:bg-[var(--line-soft)] transition-colors ${
+              editor.isActive("bold") ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 8%, transparent)]" : "text-[var(--text-muted)]"
             }`}
             title="Gras (Ctrl+B)"
           >
@@ -134,8 +134,8 @@ export default function RichTextEditor({
           <button
             type="button"
             onClick={() => editor.chain().focus().toggleItalic().run()}
-            className={`p-2 rounded hover:bg-[#222] transition-colors ${
-              editor.isActive("italic") ? "text-[#00E5FF] bg-[rgba(0,229,255,0.08)]" : "text-[#888]"
+            className={`p-2 rounded hover:bg-[var(--line-soft)] transition-colors ${
+              editor.isActive("italic") ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 8%, transparent)]" : "text-[var(--text-muted)]"
             }`}
             title="Italique (Ctrl+I)"
           >
@@ -144,8 +144,8 @@ export default function RichTextEditor({
           <button
             type="button"
             onClick={() => editor.chain().focus().toggleUnderline().run()}
-            className={`p-2 rounded hover:bg-[#222] transition-colors ${
-              editor.isActive("underline") ? "text-[#00E5FF] bg-[rgba(0,229,255,0.08)]" : "text-[#888]"
+            className={`p-2 rounded hover:bg-[var(--line-soft)] transition-colors ${
+              editor.isActive("underline") ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 8%, transparent)]" : "text-[var(--text-muted)]"
             }`}
             title="Souligné (Ctrl+U)"
           >
@@ -154,8 +154,8 @@ export default function RichTextEditor({
           <button
             type="button"
             onClick={() => editor.chain().focus().toggleStrike().run()}
-            className={`p-2 rounded hover:bg-[#222] transition-colors ${
-              editor.isActive("strike") ? "text-[#00E5FF] bg-[rgba(0,229,255,0.08)]" : "text-[#888]"
+            className={`p-2 rounded hover:bg-[var(--line-soft)] transition-colors ${
+              editor.isActive("strike") ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 8%, transparent)]" : "text-[var(--text-muted)]"
             }`}
             title="Barré"
           >
@@ -164,8 +164,8 @@ export default function RichTextEditor({
           <button
             type="button"
             onClick={() => editor.chain().focus().toggleCode().run()}
-            className={`p-2 rounded hover:bg-[#222] transition-colors ${
-              editor.isActive("code") ? "text-[#00E5FF] bg-[rgba(0,229,255,0.08)]" : "text-[#888]"
+            className={`p-2 rounded hover:bg-[var(--line-soft)] transition-colors ${
+              editor.isActive("code") ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 8%, transparent)]" : "text-[var(--text-muted)]"
             }`}
             title="Code inline"
           >
@@ -174,12 +174,12 @@ export default function RichTextEditor({
         </div>
 
         {/* Headings */}
-        <div className="flex gap-1 border-r border-[#333] pr-2 mr-1">
+        <div className="flex gap-1 border-r border-[var(--line)] pr-2 mr-1">
           <button
             type="button"
             onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-            className={`p-2 rounded hover:bg-[#222] transition-colors ${
-              editor.isActive("heading", { level: 1 }) ? "text-[#00E5FF] bg-[rgba(0,229,255,0.08)]" : "text-[#888]"
+            className={`p-2 rounded hover:bg-[var(--line-soft)] transition-colors ${
+              editor.isActive("heading", { level: 1 }) ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 8%, transparent)]" : "text-[var(--text-muted)]"
             }`}
             title="Titre 1"
           >
@@ -188,8 +188,8 @@ export default function RichTextEditor({
           <button
             type="button"
             onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-            className={`p-2 rounded hover:bg-[#222] transition-colors ${
-              editor.isActive("heading", { level: 2 }) ? "text-[#00E5FF] bg-[rgba(0,229,255,0.08)]" : "text-[#888]"
+            className={`p-2 rounded hover:bg-[var(--line-soft)] transition-colors ${
+              editor.isActive("heading", { level: 2 }) ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 8%, transparent)]" : "text-[var(--text-muted)]"
             }`}
             title="Titre 2"
           >
@@ -198,8 +198,8 @@ export default function RichTextEditor({
           <button
             type="button"
             onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-            className={`p-2 rounded hover:bg-[#222] transition-colors ${
-              editor.isActive("heading", { level: 3 }) ? "text-[#00E5FF] bg-[rgba(0,229,255,0.08)]" : "text-[#888]"
+            className={`p-2 rounded hover:bg-[var(--line-soft)] transition-colors ${
+              editor.isActive("heading", { level: 3 }) ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 8%, transparent)]" : "text-[var(--text-muted)]"
             }`}
             title="Titre 3"
           >
@@ -208,12 +208,12 @@ export default function RichTextEditor({
         </div>
 
         {/* Lists */}
-        <div className="flex gap-1 border-r border-[#333] pr-2 mr-1">
+        <div className="flex gap-1 border-r border-[var(--line)] pr-2 mr-1">
           <button
             type="button"
             onClick={() => editor.chain().focus().toggleBulletList().run()}
-            className={`p-2 rounded hover:bg-[#222] transition-colors ${
-              editor.isActive("bulletList") ? "text-[#00E5FF] bg-[rgba(0,229,255,0.08)]" : "text-[#888]"
+            className={`p-2 rounded hover:bg-[var(--line-soft)] transition-colors ${
+              editor.isActive("bulletList") ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 8%, transparent)]" : "text-[var(--text-muted)]"
             }`}
             title="Liste à puces"
           >
@@ -222,8 +222,8 @@ export default function RichTextEditor({
           <button
             type="button"
             onClick={() => editor.chain().focus().toggleOrderedList().run()}
-            className={`p-2 rounded hover:bg-[#222] transition-colors ${
-              editor.isActive("orderedList") ? "text-[#00E5FF] bg-[rgba(0,229,255,0.08)]" : "text-[#888]"
+            className={`p-2 rounded hover:bg-[var(--line-soft)] transition-colors ${
+              editor.isActive("orderedList") ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 8%, transparent)]" : "text-[var(--text-muted)]"
             }`}
             title="Liste numérotée"
           >
@@ -232,8 +232,8 @@ export default function RichTextEditor({
           <button
             type="button"
             onClick={() => editor.chain().focus().toggleBlockquote().run()}
-            className={`p-2 rounded hover:bg-[#222] transition-colors ${
-              editor.isActive("blockquote") ? "text-[#00E5FF] bg-[rgba(0,229,255,0.08)]" : "text-[#888]"
+            className={`p-2 rounded hover:bg-[var(--line-soft)] transition-colors ${
+              editor.isActive("blockquote") ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 8%, transparent)]" : "text-[var(--text-muted)]"
             }`}
             title="Citation"
           >
@@ -242,12 +242,12 @@ export default function RichTextEditor({
         </div>
 
         {/* Alignment */}
-        <div className="flex gap-1 border-r border-[#333] pr-2 mr-1">
+        <div className="flex gap-1 border-r border-[var(--line)] pr-2 mr-1">
           <button
             type="button"
             onClick={() => editor.chain().focus().setTextAlign("left").run()}
-            className={`p-2 rounded hover:bg-[#222] transition-colors ${
-              editor.isActive({ textAlign: "left" }) ? "text-[#00E5FF] bg-[rgba(0,229,255,0.08)]" : "text-[#888]"
+            className={`p-2 rounded hover:bg-[var(--line-soft)] transition-colors ${
+              editor.isActive({ textAlign: "left" }) ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 8%, transparent)]" : "text-[var(--text-muted)]"
             }`}
             title="Aligner à gauche"
           >
@@ -256,8 +256,8 @@ export default function RichTextEditor({
           <button
             type="button"
             onClick={() => editor.chain().focus().setTextAlign("center").run()}
-            className={`p-2 rounded hover:bg-[#222] transition-colors ${
-              editor.isActive({ textAlign: "center" }) ? "text-[#00E5FF] bg-[rgba(0,229,255,0.08)]" : "text-[#888]"
+            className={`p-2 rounded hover:bg-[var(--line-soft)] transition-colors ${
+              editor.isActive({ textAlign: "center" }) ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 8%, transparent)]" : "text-[var(--text-muted)]"
             }`}
             title="Centrer"
           >
@@ -266,8 +266,8 @@ export default function RichTextEditor({
           <button
             type="button"
             onClick={() => editor.chain().focus().setTextAlign("right").run()}
-            className={`p-2 rounded hover:bg-[#222] transition-colors ${
-              editor.isActive({ textAlign: "right" }) ? "text-[#00E5FF] bg-[rgba(0,229,255,0.08)]" : "text-[#888]"
+            className={`p-2 rounded hover:bg-[var(--line-soft)] transition-colors ${
+              editor.isActive({ textAlign: "right" }) ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 8%, transparent)]" : "text-[var(--text-muted)]"
             }`}
             title="Aligner à droite"
           >
@@ -276,12 +276,12 @@ export default function RichTextEditor({
         </div>
 
         {/* Insert */}
-        <div className="flex gap-1 border-r border-[#333] pr-2 mr-1">
+        <div className="flex gap-1 border-r border-[var(--line)] pr-2 mr-1">
           <button
             type="button"
             onClick={addLink}
-            className={`p-2 rounded hover:bg-[#222] transition-colors ${
-              editor.isActive("link") ? "text-[#00E5FF] bg-[rgba(0,229,255,0.08)]" : "text-[#888]"
+            className={`p-2 rounded hover:bg-[var(--line-soft)] transition-colors ${
+              editor.isActive("link") ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 8%, transparent)]" : "text-[var(--text-muted)]"
             }`}
             title="Insérer un lien"
           >
@@ -290,7 +290,7 @@ export default function RichTextEditor({
           <button
             type="button"
             onClick={addImage}
-            className="p-2 rounded hover:bg-[#222] transition-colors text-[#888]"
+            className="p-2 rounded hover:bg-[var(--line-soft)] transition-colors text-[var(--text-muted)]"
             title="Insérer une image"
           >
             <ImageIcon className="w-4 h-4" />
@@ -298,8 +298,8 @@ export default function RichTextEditor({
           <button
             type="button"
             onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-            className={`p-2 rounded hover:bg-[#222] transition-colors ${
-              editor.isActive("codeBlock") ? "text-[#00E5FF] bg-[rgba(0,229,255,0.08)]" : "text-[#888]"
+            className={`p-2 rounded hover:bg-[var(--line-soft)] transition-colors ${
+              editor.isActive("codeBlock") ? "text-[var(--brand)] bg-[color-mix(in srgb, var(--brand) 8%, transparent)]" : "text-[var(--text-muted)]"
             }`}
             title="Bloc de code"
           >
@@ -308,7 +308,7 @@ export default function RichTextEditor({
           <button
             type="button"
             onClick={() => editor.chain().focus().setHorizontalRule().run()}
-            className="p-2 rounded hover:bg-[#222] transition-colors text-[#888]"
+            className="p-2 rounded hover:bg-[var(--line-soft)] transition-colors text-[var(--text-muted)]"
             title="Séparateur horizontal"
           >
             <Minus className="w-4 h-4" />
@@ -321,7 +321,7 @@ export default function RichTextEditor({
             type="button"
             onClick={() => editor.chain().focus().undo().run()}
             disabled={!editor.can().undo()}
-            className="p-2 rounded hover:bg-[#222] transition-colors text-[#888] disabled:opacity-30 disabled:cursor-not-allowed"
+            className="p-2 rounded hover:bg-[var(--line-soft)] transition-colors text-[var(--text-muted)] disabled:opacity-30 disabled:cursor-not-allowed"
             title="Annuler (Ctrl+Z)"
           >
             <Undo className="w-4 h-4" />
@@ -330,7 +330,7 @@ export default function RichTextEditor({
             type="button"
             onClick={() => editor.chain().focus().redo().run()}
             disabled={!editor.can().redo()}
-            className="p-2 rounded hover:bg-[#222] transition-colors text-[#888] disabled:opacity-30 disabled:cursor-not-allowed"
+            className="p-2 rounded hover:bg-[var(--line-soft)] transition-colors text-[var(--text-muted)] disabled:opacity-30 disabled:cursor-not-allowed"
             title="Rétablir (Ctrl+Y)"
           >
             <Redo className="w-4 h-4" />
@@ -339,7 +339,7 @@ export default function RichTextEditor({
       </div>
 
       {/* Editor */}
-      <div style={{ background: "#0e0e0e" }}>
+      <div style={{ background: "var(--bg)" }}>
         <EditorContent editor={editor} />
       </div>
     </div>

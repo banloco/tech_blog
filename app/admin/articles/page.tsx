@@ -7,7 +7,7 @@ import type { Post } from "@/lib/types";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Articles | Admin IA & Capital",
+  title: "Articles | Admin Le Plan B",
   robots: { index: false, follow: false },
 };
 
@@ -24,18 +24,18 @@ export default async function AdminArticlesPage() {
         <div>
           <h1
             className="text-2xl font-bold tracking-tight"
-            style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "#e8e8e8" }}
+            style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "var(--ink)" }}
           >
             Articles
           </h1>
-          <p className="text-xs uppercase tracking-widest mt-1" style={{ color: "#555" }}>
+          <p className="text-xs uppercase tracking-widest mt-1" style={{ color: "var(--text-dim)" }}>
             Gérer vos publications
           </p>
         </div>
         <Link
           href="/admin/articles/new"
-          className="flex items-center gap-2 px-4 py-2.5 text-xs font-semibold uppercase tracking-widest transition-colors hover:bg-[#d4b080]"
-          style={{ background: "#C19A6B", color: "#121212" }}
+          className="flex items-center gap-2 px-4 py-2.5 text-xs font-semibold uppercase tracking-widest transition-colors hover:bg-[var(--accent-hover)]"
+          style={{ background: "var(--accent)", color: "var(--bg)" }}
         >
           <Plus className="w-4 h-4" />
           Nouvel article

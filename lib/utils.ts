@@ -17,11 +17,27 @@ export function slugify(text: string): string {
 }
 
 /**
+ * Plain text from the editor's HTML (for excerpts, descriptions and word counts).
+ */
+export function stripHtml(html: string): string {
+  return html
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/**
  * Estimate reading time from content.
  */
 export function estimateReadTime(content: string): string {
   const wordsPerMinute = 200;
-  const wordCount = content.split(/\s+/).length;
+  const wordCount = stripHtml(content).split(/\s+/).filter(Boolean).length;
   const minutes = Math.ceil(wordCount / wordsPerMinute);
   return `${minutes} min`;
 }
@@ -61,37 +77,37 @@ const DEFAULT_CATEGORY: TagCategory = {
   border: "rgba(193,154,107,0.25)",
 };
 
-const MONEY_CAT: TagCategory = {
-  label: "MOBILE MONEY",
-  color: "#34d399",
-  bg: "rgba(52,211,153,0.06)",
-  border: "rgba(52,211,153,0.25)",
+const EARN_CAT: TagCategory = {
+  label: "REVENUS",
+  color: "#0E7A4B",
+  bg: "rgba(14,122,75,0.08)",
+  border: "rgba(14,122,75,0.25)",
 };
-const BUSINESS_CAT: TagCategory = {
-  label: "BUSINESS",
-  color: "#C19A6B",
-  bg: "rgba(193,154,107,0.06)",
-  border: "rgba(193,154,107,0.25)",
+const FINANCE_CAT: TagCategory = {
+  label: "FINANCES",
+  color: "#B45309",
+  bg: "rgba(180,83,9,0.08)",
+  border: "rgba(180,83,9,0.25)",
 };
-const DEV_CAT: TagCategory = {
-  label: "DEV",
-  color: "#60a5fa",
-  bg: "rgba(96,165,250,0.06)",
-  border: "rgba(96,165,250,0.25)",
+const PROD_CAT: TagCategory = {
+  label: "PRODUCTIVITÉ",
+  color: "#1D4ED8",
+  bg: "rgba(29,78,216,0.08)",
+  border: "rgba(29,78,216,0.25)",
 };
-const AI_CAT: TagCategory = {
-  label: "IA",
-  color: "#00E5FF",
-  bg: "rgba(0,229,255,0.06)",
-  border: "rgba(0,229,255,0.25)",
+const TOOLS_CAT: TagCategory = {
+  label: "OUTILS & IA",
+  color: "#7C3AED",
+  bg: "rgba(124,58,237,0.08)",
+  border: "rgba(124,58,237,0.25)",
 };
 
 // Checked in this order; keywords are written without accents (tags are normalized the same way).
 const TAG_KEYWORDS: Array<{ keywords: string[]; category: TagCategory }> = [
-  { keywords: ["mobile money", "momo", "paiement", "paiements", "payment", "fedapay", "kkiapay", "mtn", "moov", "wave", "orange money", "transfert", "fintech"], category: MONEY_CAT },
-  { keywords: ["ia", "ai", "intelligence artificielle", "llm", "gpt", "chatgpt", "ollama", "mistral", "gemini", "claude", "chatbot", "machine learning"], category: AI_CAT },
-  { keywords: ["dev", "code", "tuto", "tutoriel", "site", "web", "nextjs", "next.js", "react", "javascript", "python", "api", "app", "application", "automatisation", "wordpress"], category: DEV_CAT },
-  { keywords: ["business", "entrepreneur", "entrepreneuriat", "client", "clients", "prix", "tarif", "tarifs", "freelance", "vente", "marketing", "startup", "agence"], category: BUSINESS_CAT },
+  { keywords: ["budget", "epargne", "epargner", "banque", "banques", "neobanque", "frais", "credit", "dette", "dettes", "arnaque", "arnaques", "impots", "economies", "mobile money", "argent"], category: FINANCE_CAT },
+  { keywords: ["freelance", "revenu", "revenus", "side hustle", "vendre", "vente", "business", "clients", "client", "prix", "tarif", "tarifs", "gagner", "affiliation", "e-commerce"], category: EARN_CAT },
+  { keywords: ["productivite", "organisation", "routine", "habitudes", "concentration", "focus", "temps", "objectifs", "methode", "to-do", "agenda"], category: PROD_CAT },
+  { keywords: ["ia", "ai", "chatgpt", "gpt", "llm", "outil", "outils", "appli", "application", "app", "logiciel", "automatisation", "notion", "canva", "gratuit"], category: TOOLS_CAT },
 ];
 
 const normalize = (text: string) => text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");

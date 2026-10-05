@@ -5,7 +5,7 @@ import type { NewsletterSubscriber } from "@/lib/types";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Newsletter | Admin IA & Capital",
+  title: "Newsletter | Admin Le Plan B",
   robots: { index: false, follow: false },
 };
 
@@ -19,8 +19,8 @@ export default async function AdminNewsletterPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold" style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "#e8e8e8" }}>Newsletter</h1>
-        <p className="text-sm mt-1" style={{ color: "#888" }}>
+        <h1 className="text-2xl font-bold" style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "var(--ink)" }}>Newsletter</h1>
+        <p className="text-sm mt-1" style={{ color: "var(--text-muted)" }}>
           Gérer les abonnés à la newsletter
         </p>
       </div>

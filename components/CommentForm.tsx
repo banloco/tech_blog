@@ -122,7 +122,7 @@ export default function CommentForm({
         role="status"
         aria-live="polite"
         className="flex items-center gap-2 p-4 text-sm animate-in fade-in slide-in-from-top-2 duration-300"
-        style={{ background: "rgba(0,229,255,0.04)", border: "1px solid rgba(0,229,255,0.2)", color: "#00E5FF" }}
+        style={{ background: "color-mix(in srgb, var(--brand) 4%, transparent)", border: "1px solid color-mix(in srgb, var(--brand) 20%, transparent)", color: "var(--brand)" }}
       >
         <CheckCircle className="w-5 h-5 shrink-0" aria-hidden="true" />
         <span>{message}</span>
@@ -135,9 +135,9 @@ export default function CommentForm({
       {/* Message d'info */}
       <div
         className="flex items-start gap-2 text-xs p-3"
-        style={{ background: "rgba(0,229,255,0.03)", border: "1px solid rgba(0,229,255,0.1)", color: "#888" }}
+        style={{ background: "color-mix(in srgb, var(--brand) 3%, transparent)", border: "1px solid color-mix(in srgb, var(--brand) 10%, transparent)", color: "var(--text-muted)" }}
       >
-        <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" style={{ color: "#00E5FF" }} aria-hidden="true" />
+        <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" style={{ color: "var(--brand)" }} aria-hidden="true" />
         <p>
           {parentId
             ? "Votre réponse sera visible après modération."
@@ -151,9 +151,9 @@ export default function CommentForm({
           <label
             htmlFor={`author_name_${parentId || 'main'}`}
             className="block text-xs font-medium uppercase tracking-widest mb-2"
-            style={{ color: "#888" }}
+            style={{ color: "var(--text-muted)" }}
           >
-            Nom <span style={{ color: "#ff5555" }} aria-label="requis">*</span>
+            Nom <span style={{ color: "var(--danger)" }} aria-label="requis">*</span>
           </label>
           <input
             id={`author_name_${parentId || 'main'}`}
@@ -169,17 +169,17 @@ export default function CommentForm({
             }}
             className="w-full px-4 py-2.5 text-sm transition-all focus:outline-none"
             style={{
-              background: "#0e0e0e",
-              border: `1px solid ${errors.name ? "#ff5555" : "#333"}`,
-              color: "#e8e8e8",
+              background: "var(--bg)",
+              border: `1px solid ${errors.name ? "var(--danger)" : "var(--line)"}`,
+              color: "var(--ink)",
             }}
-            onFocus={(e) => (e.currentTarget.style.borderColor = errors.name ? "#ff5555" : "#00E5FF")}
-            onBlur={(e) => { e.currentTarget.style.borderColor = errors.name ? "#ff5555" : "#333"; setErrors({ ...errors, name: validateName(e.target.value) }); }}
+            onFocus={(e) => (e.currentTarget.style.borderColor = errors.name ? "var(--danger)" : "var(--brand)")}
+            onBlur={(e) => { e.currentTarget.style.borderColor = errors.name ? "var(--danger)" : "var(--line)"; setErrors({ ...errors, name: validateName(e.target.value) }); }}
             placeholder="Votre nom"
             autoFocus={autoFocus}
           />
           {errors.name && (
-            <p id={`name_error_${parentId || 'main'}`} className="mt-1 text-xs text-red-400" role="alert">
+            <p id={`name_error_${parentId || 'main'}`} className="mt-1 text-xs text-[var(--danger)]" role="alert">
               {errors.name}
             </p>
           )}
@@ -189,9 +189,9 @@ export default function CommentForm({
           <label
             htmlFor={`author_email_${parentId || 'main'}`}
             className="block text-xs font-medium uppercase tracking-widest mb-2"
-            style={{ color: "#888" }}
+            style={{ color: "var(--text-muted)" }}
           >
-            Email <span style={{ color: "#ff5555" }} aria-label="requis">*</span>
+            Email <span style={{ color: "var(--danger)" }} aria-label="requis">*</span>
           </label>
           <input
             id={`author_email_${parentId || 'main'}`}
@@ -207,17 +207,17 @@ export default function CommentForm({
             }}
             className="w-full px-4 py-2.5 text-sm transition-all focus:outline-none"
             style={{
-              background: "#0e0e0e",
-              border: `1px solid ${errors.email ? "#ff5555" : "#333"}`,
-              color: "#e8e8e8",
+              background: "var(--bg)",
+              border: `1px solid ${errors.email ? "var(--danger)" : "var(--line)"}`,
+              color: "var(--ink)",
             }}
-            onFocus={(e) => (e.currentTarget.style.borderColor = errors.email ? "#ff5555" : "#00E5FF")}
-            onBlur={(e) => { e.currentTarget.style.borderColor = errors.email ? "#ff5555" : "#333"; setErrors({ ...errors, email: validateEmail(e.target.value) }); }}
+            onFocus={(e) => (e.currentTarget.style.borderColor = errors.email ? "var(--danger)" : "var(--brand)")}
+            onBlur={(e) => { e.currentTarget.style.borderColor = errors.email ? "var(--danger)" : "var(--line)"; setErrors({ ...errors, email: validateEmail(e.target.value) }); }}
             placeholder="votre@email.com"
           />
           <p id={`email_hint_${parentId || 'main'}`} className="sr-only">Format attendu: nom@exemple.com</p>
           {errors.email && (
-            <p id={`email_error_${parentId || 'main'}`} className="mt-1 text-xs text-red-400" role="alert">
+            <p id={`email_error_${parentId || 'main'}`} className="mt-1 text-xs text-[var(--danger)]" role="alert">
               {errors.email}
             </p>
           )}
@@ -229,10 +229,10 @@ export default function CommentForm({
         <label
           htmlFor={`comment_content_${parentId || 'main'}`}
           className="block text-xs font-medium uppercase tracking-widest mb-2"
-          style={{ color: "#888" }}
+          style={{ color: "var(--text-muted)" }}
         >
-          Commentaire <span style={{ color: "#ff5555" }} aria-label="requis">*</span>
-          <span className="ml-2 text-xs font-normal" style={{ color: "#555" }}>
+          Commentaire <span style={{ color: "var(--danger)" }} aria-label="requis">*</span>
+          <span className="ml-2 text-xs font-normal" style={{ color: "var(--text-dim)" }}>
             ({content.length}/2000)
           </span>
         </label>
@@ -251,16 +251,16 @@ export default function CommentForm({
           onBlur={(e) => setErrors({ ...errors, content: validateContent(e.target.value) })}
           className="w-full px-4 py-2.5 text-sm transition-all focus:outline-none resize-none"
           style={{
-            background: "#0e0e0e",
-            border: `1px solid ${errors.content ? "#ff5555" : "#333"}`,
-            color: "#e8e8e8",
+            background: "var(--bg)",
+            border: `1px solid ${errors.content ? "var(--danger)" : "var(--line)"}`,
+            color: "var(--ink)",
           }}
-          onFocus={(e) => (e.currentTarget.style.borderColor = errors.content ? "#ff5555" : "#00E5FF")}
+          onFocus={(e) => (e.currentTarget.style.borderColor = errors.content ? "var(--danger)" : "var(--brand)")}
           placeholder={placeholder}
           maxLength={2000}
         />
         {errors.content && (
-          <p id={`content_error_${parentId || 'main'}`} className="mt-1 text-xs text-red-400" role="alert">
+          <p id={`content_error_${parentId || 'main'}`} className="mt-1 text-xs text-[var(--danger)]" role="alert">
             {errors.content}
           </p>
         )}
@@ -271,7 +271,7 @@ export default function CommentForm({
         <div
           role="alert"
           aria-live="assertive"
-          className="flex items-start gap-2 text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-4 py-3 animate-in fade-in slide-in-from-top-2 duration-300"
+          className="flex items-start gap-2 text-sm text-[var(--danger)] bg-[var(--danger)]/10 border border-[var(--danger)]/20 rounded-lg px-4 py-3 animate-in fade-in slide-in-from-top-2 duration-300"
         >
           <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" aria-hidden="true" />
           <span>{message}</span>
@@ -285,9 +285,9 @@ export default function CommentForm({
           disabled={status === "loading"}
           aria-busy={status === "loading"}
           className="flex items-center gap-2 px-5 py-2.5 text-sm font-semibold uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-          style={{ background: "#C19A6B", color: "#121212" }}
-          onMouseEnter={(e) => status !== "loading" && (e.currentTarget.style.background = "#d4b080")}
-          onMouseLeave={(e) => (e.currentTarget.style.background = "#C19A6B")}
+          style={{ background: "var(--brand)", color: "#fff" }}
+          onMouseEnter={(e) => status !== "loading" && (e.currentTarget.style.background = "var(--accent-hover)")}
+          onMouseLeave={(e) => (e.currentTarget.style.background = "var(--accent)")}
         >
           {status === "loading" ? (
             <>
@@ -310,9 +310,9 @@ export default function CommentForm({
             type="button"
             onClick={onCancel}
             className="flex items-center gap-2 px-5 py-2.5 text-sm font-medium uppercase tracking-wider transition-all"
-            style={{ border: "1px solid #333", background: "#1a1a1a", color: "#888" }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = "#e8e8e8"; e.currentTarget.style.borderColor = "#555"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = "#888"; e.currentTarget.style.borderColor = "#333"; }}
+            style={{ border: "1px solid var(--line)", background: "var(--surface)", color: "var(--text-muted)" }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = "var(--ink)"; e.currentTarget.style.borderColor = "var(--text-dim)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = "var(--text-muted)"; e.currentTarget.style.borderColor = "var(--line)"; }}
           >
             <X className="w-4 h-4" aria-hidden="true" />
             <span>Annuler</span>

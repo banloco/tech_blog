@@ -3,16 +3,16 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Mentions légales",
   description:
-    "Mentions légales du blog IA & Capital. Informations sur l'éditeur, l'hébergeur et les conditions d'utilisation.",
+    "Mentions légales du blog Le Plan B. Informations sur l'éditeur, l'hébergeur et les conditions d'utilisation.",
 };
 
 export default function LegalPage() {
   return (
-    <main className="container mx-auto px-4 sm:px-6 py-12 sm:py-16 lg:py-24 max-w-3xl">
-      <h1 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4" style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "#e8e8e8" }}>
+    <div className="container mx-auto px-4 sm:px-6 py-12 sm:py-16 lg:py-24 max-w-3xl">
+      <h1 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4" style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "var(--ink)" }}>
         Mentions légales
       </h1>
-      <p className="text-sm mb-12" style={{ color: "#555" }}>
+      <p className="text-sm mb-12" style={{ color: "var(--text-dim)" }}>
         Dernière mise à jour :{" "}
         {new Date().toLocaleDateString("fr-FR", {
           day: "numeric",
@@ -21,12 +21,12 @@ export default function LegalPage() {
         })}
       </p>
 
-      <div className="prose prose-invert max-w-none prose-headings:text-[#e8e8e8] prose-a:text-[#00E5FF] prose-strong:text-[#e8e8e8] space-y-8">
+      <div className="prose max-w-none prose-headings:text-[var(--ink)] prose-a:text-[var(--brand)] prose-strong:text-[var(--ink)] space-y-8">
         <section>
           <h2>1. Éditeur du site</h2>
           <p>
-            Le site <strong>IA & Capital</strong> est un blog personnel consacré
-            à la tech et au business en Afrique.
+            Le site <strong>Le Plan B</strong> est un blog personnel d&apos;astuces
+            pour gagner un revenu en plus, gérer son argent et être plus productif.
           </p>
           <ul>
             <li>
@@ -99,6 +99,6 @@ export default function LegalPage() {
           </p>
         </section>
       </div>
-    </main>
+    </div>
   );
 }

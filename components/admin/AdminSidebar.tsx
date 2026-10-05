@@ -53,17 +53,17 @@ export default function AdminSidebar({ userEmail, mobileOpen, setMobileOpen }: {
       className={`hidden lg:flex ${
         collapsed ? "w-16" : "w-60"
       } flex-col transition-all duration-300 shrink-0`}
-      style={{ background: "#0e0e0e", borderRight: "1px solid #2a2a2a" }}
+      style={{ background: "var(--bg)", borderRight: "1px solid var(--line-soft)" }}
     >
       {/* Toggle */}
       <div
         className="flex items-center justify-between p-4 h-16"
-        style={{ borderBottom: "1px solid #2a2a2a" }}
+        style={{ borderBottom: "1px solid var(--line-soft)" }}
       >
         {!collapsed && (
           <span
             className="text-[10px] font-semibold uppercase tracking-[0.2em] truncate"
-            style={{ color: "#C19A6B" }}
+            style={{ color: "var(--accent)" }}
           >
             Admin Panel
           </span>
@@ -71,9 +71,9 @@ export default function AdminSidebar({ userEmail, mobileOpen, setMobileOpen }: {
         <button
           onClick={() => setCollapsed(!collapsed)}
           className="p-1.5 transition-colors"
-          style={{ color: "#555" }}
-          onMouseEnter={(e) => (e.currentTarget.style.color = "#e8e8e8")}
-          onMouseLeave={(e) => (e.currentTarget.style.color = "#555")}
+          style={{ color: "var(--text-dim)" }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = "var(--ink)")}
+          onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-dim)")}
           aria-label={collapsed ? "Étendre le menu" : "Réduire le menu"}
         >
           {collapsed ? (
@@ -99,20 +99,20 @@ export default function AdminSidebar({ userEmail, mobileOpen, setMobileOpen }: {
               style={
                 isActive
                   ? {
-                      color: "#00E5FF",
-                      background: "rgba(0,229,255,0.04)",
-                      borderLeft: "2px solid #00E5FF",
+                      color: "var(--brand)",
+                      background: "color-mix(in srgb, var(--brand) 4%, transparent)",
+                      borderLeft: "2px solid var(--brand)",
                     }
                   : {
-                      color: "#888",
+                      color: "var(--text-muted)",
                       borderLeft: "2px solid transparent",
                     }
               }
               onMouseEnter={(e) => {
-                if (!isActive) e.currentTarget.style.color = "#e8e8e8";
+                if (!isActive) e.currentTarget.style.color = "var(--ink)";
               }}
               onMouseLeave={(e) => {
-                if (!isActive) e.currentTarget.style.color = "#888";
+                if (!isActive) e.currentTarget.style.color = "var(--text-muted)";
               }}
               title={collapsed ? label : undefined}
             >
@@ -124,19 +124,19 @@ export default function AdminSidebar({ userEmail, mobileOpen, setMobileOpen }: {
       </nav>
 
       {/* User & Logout */}
-      <div className="p-4 space-y-3" style={{ borderTop: "1px solid #2a2a2a" }}>
+      <div className="p-4 space-y-3" style={{ borderTop: "1px solid var(--line-soft)" }}>
         {!collapsed && (
-          <p className="text-[10px] truncate" style={{ color: "#555" }} title={userEmail}>
+          <p className="text-[10px] truncate" style={{ color: "var(--text-dim)" }} title={userEmail}>
             {userEmail}
           </p>
         )}
         <button
           onClick={handleLogout}
           className="flex items-center gap-2 w-full px-3 py-2 text-xs uppercase tracking-wider transition-all"
-          style={{ color: "#ff5555", borderLeft: "2px solid transparent" }}
+          style={{ color: "var(--danger)", borderLeft: "2px solid transparent" }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.background = "rgba(255,85,85,0.06)";
-            e.currentTarget.style.borderLeftColor = "#ff5555";
+            e.currentTarget.style.background = "color-mix(in srgb, var(--danger) 6%, transparent)";
+            e.currentTarget.style.borderLeftColor = "var(--danger)";
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.background = "transparent";
@@ -165,26 +165,26 @@ export default function AdminSidebar({ userEmail, mobileOpen, setMobileOpen }: {
           {/* Sidebar */}
           <div
             className="fixed left-0 top-0 bottom-0 w-72 lg:hidden z-50 shadow-2xl"
-            style={{ background: "#0e0e0e", borderRight: "1px solid #2a2a2a" }}
+            style={{ background: "var(--bg)", borderRight: "1px solid var(--line-soft)" }}
           >
             <div className="flex flex-col h-full">
               {/* Header */}
               <div
                 className="flex items-center justify-between p-4 h-16"
-                style={{ borderBottom: "1px solid #2a2a2a" }}
+                style={{ borderBottom: "1px solid var(--line-soft)" }}
               >
                 <span
                   className="text-[10px] font-semibold uppercase tracking-[0.2em]"
-                  style={{ color: "#C19A6B" }}
+                  style={{ color: "var(--accent)" }}
                 >
                   Admin Panel
                 </span>
                 <button
                   onClick={() => setMobileOpen && setMobileOpen(false)}
                   className="p-2 transition-colors"
-                  style={{ color: "#888" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#e8e8e8")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "#888")}
+                  style={{ color: "var(--text-muted)" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "var(--ink)")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-muted)")}
                   aria-label="Fermer le menu"
                 >
                   <X className="w-5 h-5" />
@@ -206,12 +206,12 @@ export default function AdminSidebar({ userEmail, mobileOpen, setMobileOpen }: {
                       style={
                         isActive
                           ? {
-                              color: "#00E5FF",
-                              background: "rgba(0,229,255,0.04)",
-                              borderLeft: "2px solid #00E5FF",
+                              color: "var(--brand)",
+                              background: "color-mix(in srgb, var(--brand) 4%, transparent)",
+                              borderLeft: "2px solid var(--brand)",
                             }
                           : {
-                              color: "#888",
+                              color: "var(--text-muted)",
                               borderLeft: "2px solid transparent",
                             }
                       }
@@ -224,10 +224,10 @@ export default function AdminSidebar({ userEmail, mobileOpen, setMobileOpen }: {
               </nav>
 
               {/* User & Logout */}
-              <div className="p-4 space-y-3" style={{ borderTop: "1px solid #2a2a2a" }}>
+              <div className="p-4 space-y-3" style={{ borderTop: "1px solid var(--line-soft)" }}>
                 <p
                   className="text-[10px] truncate"
-                  style={{ color: "#555" }}
+                  style={{ color: "var(--text-dim)" }}
                   title={userEmail}
                 >
                   {userEmail}
@@ -235,7 +235,7 @@ export default function AdminSidebar({ userEmail, mobileOpen, setMobileOpen }: {
                 <button
                   onClick={handleLogout}
                   className="flex items-center gap-2 w-full px-3 py-2 text-xs uppercase tracking-wider transition-all"
-                  style={{ color: "#ff5555" }}
+                  style={{ color: "var(--danger)" }}
                 >
                   <LogOut className="w-4 h-4 shrink-0" />
                   <span>Déconnexion</span>

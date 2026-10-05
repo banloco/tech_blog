@@ -75,14 +75,14 @@ export default function CommentSection({ postId, initialComments }: CommentSecti
     <section className="space-y-8" id="commentaires">
       {/* En-tête */}
       <div className="flex items-center gap-3">
-        <MessageSquare className="w-6 h-6" style={{ color: "#00E5FF" }} aria-hidden="true" />
+        <MessageSquare className="w-6 h-6" style={{ color: "var(--brand)" }} aria-hidden="true" />
         <h2
           className="text-2xl sm:text-3xl font-bold"
-          style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "#e8e8e8" }}
+          style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "var(--ink)" }}
         >
           Commentaires
           {totalCount > 0 && (
-            <span className="ml-2 text-lg" style={{ color: "#555" }}>({totalCount})</span>
+            <span className="ml-2 text-lg" style={{ color: "var(--text-dim)" }}>({totalCount})</span>
           )}
         </h2>
       </div>
@@ -90,7 +90,7 @@ export default function CommentSection({ postId, initialComments }: CommentSecti
       {/* Liste des commentaires */}
       {isLoading ? (
         <div className="flex items-center justify-center py-12">
-          <Loader2 className="w-8 h-8 animate-spin" style={{ color: "#00E5FF" }} aria-hidden="true" />
+          <Loader2 className="w-8 h-8 animate-spin" style={{ color: "var(--brand)" }} aria-hidden="true" />
           <span className="sr-only">Chargement des commentaires...</span>
         </div>
       ) : commentsWithReplies.length > 0 ? (
@@ -108,18 +108,18 @@ export default function CommentSection({ postId, initialComments }: CommentSecti
           ))}
         </div>
       ) : (
-        <div className="text-center py-12" style={{ border: "1px solid #2a2a2a", background: "#161616" }}>
-          <MessageSquare className="w-12 h-12 mx-auto mb-3" style={{ color: "#444" }} aria-hidden="true" />
-          <p className="text-sm" style={{ color: "#555" }}>
+        <div className="text-center py-12" style={{ border: "1px solid var(--line-soft)", background: "var(--surface-2)" }}>
+          <MessageSquare className="w-12 h-12 mx-auto mb-3" style={{ color: "var(--line-strong)" }} aria-hidden="true" />
+          <p className="text-sm" style={{ color: "var(--text-dim)" }}>
             Aucun commentaire pour le moment. Soyez le premier à partager votre avis !
           </p>
         </div>
       )}
 
       {/* Formulaire de nouveau commentaire */}
-      <div className="p-6 space-y-4" style={{ border: "1px solid #2a2a2a", background: "#1a1a1a" }}>
-        <h3 className="text-lg font-semibold flex items-center gap-2" style={{ color: "#e8e8e8" }}>
-          <MessageSquare className="w-5 h-5" style={{ color: "#00E5FF" }} aria-hidden="true" />
+      <div className="p-6 space-y-4" style={{ border: "1px solid var(--line-soft)", background: "var(--surface)" }}>
+        <h3 className="text-lg font-semibold flex items-center gap-2" style={{ color: "var(--ink)" }}>
+          <MessageSquare className="w-5 h-5" style={{ color: "var(--brand)" }} aria-hidden="true" />
           Laisser un commentaire
         </h3>
         <CommentForm

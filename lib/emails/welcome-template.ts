@@ -1,4 +1,6 @@
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.ai-and-capital.tech";
+import { SITE } from "../site";
+
+const SITE_URL = SITE.url;
 const SITE_HOST = SITE_URL.replace(/^https?:\/\//, "").replace(/\/$/, "");
 
 // One line of the "what you'll receive" list
@@ -22,10 +24,10 @@ function topicRow(color: string, title: string, desc: string, last = false): str
 }
 
 const TOPICS: Array<[string, string, string]> = [
-  ["#34d399", "Paiements & Mobile Money", "Encaisser en ligne avec MTN MoMo, Moov Money et les agrégateurs de paiement."],
-  ["#C19A6B", "Entrepreneuriat & business", "Trouver des clients, fixer ses prix, se faire payer."],
-  ["#60a5fa", "Dev & tutos", "Créer un site, une application ou une automatisation pas à pas."],
-  ["#00E5FF", "IA pratique", "Gagner du temps avec l'IA, gratuitement, même sans ordinateur puissant."],
+  ["#10b981", "Gagner de l'argent", "Freelance, vente en ligne, revenus complémentaires qui marchent vraiment."],
+  ["#f59e0b", "Finances perso", "Budget, épargne, banques et arnaques à éviter."],
+  ["#60a5fa", "Productivité", "S'organiser, aller plus vite, tenir ses objectifs."],
+  ["#a78bfa", "Outils & IA gratuits", "Les applis et IA gratuites qui font gagner du temps."],
 ];
 
 export function getWelcomeEmailHtml(email: string): string {
@@ -37,7 +39,7 @@ export function getWelcomeEmailHtml(email: string): string {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bienvenue sur IA & Capital 🚀</title>
+  <title>Bienvenue sur Le Plan B 🚀</title>
 </head>
 <body style="margin:0;padding:0;background-color:#09090b;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#09090b;">
@@ -50,10 +52,10 @@ export function getWelcomeEmailHtml(email: string): string {
             <td align="center" style="padding-bottom:32px;">
               <a href="${SITE_URL}" style="text-decoration:none;">
                 <span style="display:inline-block;background:linear-gradient(135deg,#10b981,#06b6d4);-webkit-background-clip:text;color:transparent;font-size:26px;font-weight:800;letter-spacing:-0.5px;">
-                  IA & Capital
+                  Le Plan B
                 </span>
                 <span style="display:block;color:#52525b;font-size:12px;margin-top:4px;letter-spacing:1px;text-transform:uppercase;">
-                  Tech & business en Afrique
+                  ${SITE.tagline}
                 </span>
               </a>
             </td>
@@ -71,13 +73,13 @@ export function getWelcomeEmailHtml(email: string): string {
               </h1>
 
               <p style="margin:0 0 16px;font-size:15px;color:#a1a1aa;line-height:1.7;">
-                Sur IA & Capital, je partage des guides concrets pour lancer et faire grandir
-                une activité avec la tech, au Bénin et en Afrique de l'Ouest.
+                Sur Le Plan B, je partage des astuces concrètes pour gagner un revenu en plus,
+                mieux gérer votre argent et travailler plus malin.
               </p>
 
               <p style="margin:0 0 24px;font-size:15px;color:#a1a1aa;line-height:1.7;">
-                Pas de théorie déconnectée : des solutions <strong style="color:#f4f4f5;">gratuites ou abordables</strong>,
-                que j'ai testées moi-même, adaptées à notre réalité (Mobile Money, connexion, budget).
+                Pas de promesse miracle : des méthodes et des outils <strong style="color:#f4f4f5;">gratuits ou abordables</strong>,
+                que j'ai testés moi-même, avec des chiffres honnêtes.
               </p>
 
               <h2 style="margin:0 0 16px;font-size:17px;font-weight:700;color:#f4f4f5;">
@@ -101,7 +103,7 @@ export function getWelcomeEmailHtml(email: string): string {
                 À bientôt,
               </p>
               <p style="margin:0;font-size:16px;font-weight:700;color:#f4f4f5;">
-                Christ, IA & Capital
+                Christ, Le Plan B
               </p>
 
             </td>
@@ -118,7 +120,7 @@ export function getWelcomeEmailHtml(email: string): string {
                 <a href="${unsubscribeUrl}" style="color:#52525b;text-decoration:none;">Se désinscrire</a>
               </p>
               <p style="margin:0;font-size:11px;color:#3f3f46;">
-                © ${currentYear} IA & Capital – Tous droits réservés.
+                © ${currentYear} Le Plan B – Tous droits réservés.
               </p>
             </td>
           </tr>
@@ -132,11 +134,11 @@ export function getWelcomeEmailHtml(email: string): string {
 }
 
 export function getWelcomeEmailText(email: string): string {
-  return `Bienvenue sur IA & Capital 🚀
+  return `Bienvenue sur Le Plan B 🚀
 
 Merci pour votre inscription !
 
-Sur IA & Capital, je partage des guides concrets pour lancer et faire grandir une activité avec la tech, au Bénin et en Afrique de l'Ouest. Des solutions gratuites ou abordables, que j'ai testées moi-même.
+Sur Le Plan B, je partage des astuces concrètes pour gagner un revenu en plus, mieux gérer votre argent et travailler plus malin. Des méthodes et des outils gratuits ou abordables, testés par moi-même.
 
 CE QUE VOUS ALLEZ RECEVOIR :
 
@@ -145,7 +147,7 @@ ${TOPICS.map(([, title, desc]) => `• ${title} : ${desc}`).join("\n")}
 Un sujet qui vous intéresse ? Répondez simplement à cet e-mail pour me le dire.
 
 À bientôt,
-Christ, IA & Capital
+Christ, Le Plan B
 ${SITE_URL}
 
 ---

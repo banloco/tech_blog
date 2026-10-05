@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
     try {
       await sendEmail({
         to: email.toLowerCase(),
-        subject: "Bienvenue sur IA & Capital 🚀",
+        subject: "Bienvenue sur Le Plan B 🚀",
         html: getWelcomeEmailHtml(email.toLowerCase()),
         text: getWelcomeEmailText(email.toLowerCase()),
       });

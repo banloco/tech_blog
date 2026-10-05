@@ -19,7 +19,7 @@ export interface SendEmailOptions {
 
 export async function sendEmail({ to, subject, html, text }: SendEmailOptions) {
   const from =
-    process.env.SMTP_FROM || `IA & Capital <${process.env.SMTP_USER}>`;
+    process.env.SMTP_FROM || `Le Plan B <${process.env.SMTP_USER}>`;
 
   await transporter.sendMail({
     from,

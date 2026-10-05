@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
     return new NextResponse(
       buildPage(
         "Désinscription confirmée",
-        `L'adresse <strong>${email}</strong> a bien été retirée de notre liste. Vous ne recevrez plus d'emails d'IA & Capital.`,
+        `L'adresse <strong>${email}</strong> a bien été retirée de notre liste. Vous ne recevrez plus d'emails du Plan B.`,
         true
       ),
       { headers: { "Content-Type": "text/html; charset=utf-8" } }
@@ -52,7 +52,7 @@ function buildPage(title: string, body: string, success: boolean): string {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${title} – IA & Capital</title>
+  <title>${title} – Le Plan B</title>
 </head>
 <body style="margin:0;padding:0;background:#09090b;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;">
   <div style="max-width:480px;margin:auto;padding:40px 24px;text-align:center;">
@@ -60,7 +60,7 @@ function buildPage(title: string, body: string, success: boolean): string {
     <h1 style="color:${color};font-size:22px;margin:16px 0 8px;">${title}</h1>
     <p style="color:#a1a1aa;font-size:15px;line-height:1.6;">${body}</p>
     <a href="${siteUrl}" style="display:inline-block;margin-top:24px;padding:10px 24px;background:#10b981;color:#fff;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600;">
-      Retour sur IA & Capital
+      Retour sur Le Plan B
     </a>
   </div>
 </body>

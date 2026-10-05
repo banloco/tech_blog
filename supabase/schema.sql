@@ -38,10 +38,10 @@ CREATE TABLE IF NOT EXISTS categories (
 );
 
 INSERT INTO categories (name, slug, color, bg, border) VALUES
-  ('Paiements & Mobile Money',   'paiements-mobile-money',   '#34d399', 'rgba(52,211,153,0.06)',  'rgba(52,211,153,0.25)'),
-  ('Entrepreneuriat & business', 'entrepreneuriat-business', '#C19A6B', 'rgba(193,154,107,0.08)', 'rgba(193,154,107,0.25)'),
-  ('Dev & tutos',                'dev-tutos',                '#60a5fa', 'rgba(96,165,250,0.06)',  'rgba(96,165,250,0.25)'),
-  ('IA pratique',                'ia-pratique',              '#00E5FF', 'rgba(0,229,255,0.06)',   'rgba(0,229,255,0.2)')
+  ('Gagner de l''argent',  'gagner-de-l-argent', '#0E7A4B', 'rgba(14,122,75,0.08)',  'rgba(14,122,75,0.25)'),
+  ('Finances perso',       'finances-perso',     '#B45309', 'rgba(180,83,9,0.08)',   'rgba(180,83,9,0.25)'),
+  ('Productivité',         'productivite',       '#1D4ED8', 'rgba(29,78,216,0.08)',  'rgba(29,78,216,0.25)'),
+  ('Outils & IA gratuits', 'outils-ia',          '#7C3AED', 'rgba(124,58,237,0.08)', 'rgba(124,58,237,0.25)')
 ON CONFLICT DO NOTHING;
 
 -- 3. POSTS (this table was never in the repo: rebuilt from lib/types.ts and ArticleForm.tsx)

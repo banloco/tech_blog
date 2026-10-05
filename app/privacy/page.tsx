@@ -3,22 +3,22 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Politique de confidentialité",
   description:
-    "Politique de confidentialité du blog IA & Capital. Découvrez comment nous protégeons vos données personnelles.",
+    "Politique de confidentialité du blog Le Plan B. Découvrez comment nous protégeons vos données personnelles.",
 };
 
 export default function PrivacyPage() {
-  const siteName = "IA & Capital";
+  const siteName = "Le Plan B";
 
   return (
-    <main className="container mx-auto px-4 sm:px-6 py-12 sm:py-16 lg:py-24 max-w-3xl">
-      <h1 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4" style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "#e8e8e8" }}>
+    <div className="container mx-auto px-4 sm:px-6 py-12 sm:py-16 lg:py-24 max-w-3xl">
+      <h1 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4" style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "var(--ink)" }}>
         Politique de confidentialité
       </h1>
-      <p className="text-sm mb-12" style={{ color: "#555" }}>
+      <p className="text-sm mb-12" style={{ color: "var(--text-dim)" }}>
         Dernière mise à jour : {new Date().toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}
       </p>
 
-      <div className="prose prose-invert max-w-none prose-headings:text-[#e8e8e8] prose-a:text-[#00E5FF] prose-strong:text-[#e8e8e8] space-y-8">
+      <div className="prose max-w-none prose-headings:text-[var(--ink)] prose-a:text-[var(--brand)] prose-strong:text-[var(--ink)] space-y-8">
         <section>
           <h2>1. Introduction</h2>
           <p>
@@ -122,6 +122,6 @@ export default function PrivacyPage() {
           </p>
         </section>
       </div>
-    </main>
+    </div>
   );
 }

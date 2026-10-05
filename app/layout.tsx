@@ -1,37 +1,41 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
+import { Inter, Bricolage_Grotesque } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 import { LanguageProvider } from "@/lib/i18n";
+import { SITE } from "@/lib/site";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
 import "./globals.css";
 import "./tiptap.css";
 
+// Self-hosted by Next.js (no request to Google at runtime), only the latin subset
+const body = Inter({ subsets: ["latin"], variable: "--font-body", display: "swap" });
+const heading = Bricolage_Grotesque({ subsets: ["latin"], variable: "--font-heading", display: "swap" });
+
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
   userScalable: true,
-  themeColor: '#121212',
+  themeColor: '#FAF7F2',
 };
 
 export const metadata: Metadata = {
   title: {
-    default: "IA & Capital | Tech & business en Afrique",
-    template: "%s | IA & Capital",
+    default: `${SITE.name} | ${SITE.tagline}`,
+    template: `%s | ${SITE.name}`,
   },
-  description:
-    "Des guides concrets pour entreprendre avec la tech en Afrique : paiements Mobile Money, business, tutos de dev et IA pratique.",
+  description: SITE.description,
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
   openGraph: {
     type: "website",
     locale: "fr_FR",
-    siteName: "IA & Capital",
-    title: "IA & Capital | Tech & business en Afrique",
-    description:
-      "Des guides concrets pour entreprendre avec la tech en Afrique.",
+    siteName: SITE.name,
+    title: `${SITE.name} | ${SITE.tagline}`,
+    description: SITE.description,
   },
   twitter: {
     card: "summary_large_image",
@@ -40,14 +44,9 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
-  icons: {
-    icon: "/icon.png",
-    shortcut: "/icon.png",
-    apple: "/icon.png",
-  },
 };
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://ai-and-capital.tech";
+const SITE_URL = SITE.url;
 
 const websiteJsonLd = [
   {
@@ -55,15 +54,15 @@ const websiteJsonLd = [
     "@type": "WebSite",
     "@id": `${SITE_URL}/#website`,
     url: SITE_URL,
-    name: "IA & Capital",
-    description: "Blog francophone sur la tech et le business en Afrique : Mobile Money, entrepreneuriat, dev et IA pratique.",
+    name: "Le Plan B",
+    description: SITE.description,
     inLanguage: "fr-FR",
   },
   {
     "@context": "https://schema.org",
     "@type": "Organization",
     "@id": `${SITE_URL}/#organization`,
-    name: "IA & Capital",
+    name: "Le Plan B",
     url: SITE_URL,
     logo: {
       "@type": "ImageObject",
@@ -81,18 +80,11 @@ const websiteJsonLd = [
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className="dark scroll-smooth">
+    <html lang="fr" className={`${body.variable} ${heading.variable} scroll-smooth`}>
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
-        />
-        {/* Google Fonts */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap"
-          rel="stylesheet"
         />
         {/* Google AdSense */}
         {process.env.NEXT_PUBLIC_ADSENSE_ID && (
@@ -105,19 +97,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         )}
         <meta name="google-adsense-account" content="ca-pub-6021784377387721"></meta>
       </head>
-      <body className="antialiased relative min-h-screen flex flex-col" style={{ background: '#121212', color: '#e8e8e8' }}>
+      <body className="antialiased relative min-h-screen flex flex-col" style={{ background: 'var(--bg)', color: 'var(--ink)' }}>
         {/* Skip to main content for keyboard navigation */}
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:text-black focus:px-6 focus:py-3 focus:font-semibold focus:shadow-lg"
-          style={{ background: 'var(--accent-cyan)' } as React.CSSProperties}
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-6 focus:py-3 focus:font-semibold focus:shadow-lg"
+          style={{ background: 'var(--brand)', color: '#fff' }}
         >
           Passer au contenu principal
         </a>
         
-        {/* Subtle technical grid background */}
-        <div className="fixed inset-0 z-[-1]" style={{ background: '#121212', backgroundImage: 'linear-gradient(to right, #2a2a2a22 1px, transparent 1px), linear-gradient(to bottom, #2a2a2a22 1px, transparent 1px)', backgroundSize: '32px 32px' }}></div>
-
         <LanguageProvider>
           <Header />
           <main id="main-content" className="flex-1" tabIndex={-1}>

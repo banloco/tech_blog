@@ -20,10 +20,10 @@ async function getStats() {
 }
 
 const statCards = [
-  { key: "posts" as const, label: "Articles publiés", icon: FileText, accent: "#00E5FF" },
-  { key: "comments" as const, label: "Commentaires", icon: MessageSquare, accent: "#00E5FF" },
-  { key: "subscribers" as const, label: "Abonnés newsletter", icon: Mail, accent: "#C19A6B" },
-  { key: "contacts" as const, label: "Messages reçus", icon: Users, accent: "#C19A6B" },
+  { key: "posts" as const, label: "Articles publiés", icon: FileText, accent: "var(--brand)" },
+  { key: "comments" as const, label: "Commentaires", icon: MessageSquare, accent: "var(--brand)" },
+  { key: "subscribers" as const, label: "Abonnés newsletter", icon: Mail, accent: "var(--accent)" },
+  { key: "contacts" as const, label: "Messages reçus", icon: Users, accent: "var(--accent)" },
 ];
 
 export default async function AdminDashboard() {
@@ -34,11 +34,11 @@ export default async function AdminDashboard() {
       <div>
         <h1
           className="text-2xl font-bold tracking-tight"
-          style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "#e8e8e8" }}
+          style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "var(--ink)" }}
         >
           Dashboard
         </h1>
-        <p className="text-xs uppercase tracking-widest mt-1" style={{ color: "#555" }}>
+        <p className="text-xs uppercase tracking-widest mt-1" style={{ color: "var(--text-dim)" }}>
           Vue d&apos;ensemble de votre blog
         </p>
       </div>
@@ -48,18 +48,18 @@ export default async function AdminDashboard() {
           <div
             key={key}
             className="p-6 transition-all"
-            style={{ background: "#1a1a1a", border: `1px solid #2a2a2a`, borderTop: `2px solid ${accent}` }}
+            style={{ background: "var(--surface)", border: `1px solid var(--line-soft)`, borderTop: `2px solid ${accent}` }}
           >
             <div className="flex items-center justify-between mb-4">
               <Icon className="w-5 h-5" style={{ color: accent }} />
             </div>
             <p
               className="text-3xl font-bold"
-              style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "#e8e8e8" }}
+              style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "var(--ink)" }}
             >
               {stats[key]}
             </p>
-            <p className="text-xs uppercase tracking-widest mt-2" style={{ color: "#555" }}>
+            <p className="text-xs uppercase tracking-widest mt-2" style={{ color: "var(--text-dim)" }}>
               {label}
             </p>
           </div>
