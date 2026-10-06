@@ -1,6 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import type { MetadataRoute } from "next";
 import { CATEGORIES } from "@/lib/categories";
+import { SITE } from "@/lib/site";
 
 // Use a plain service client — sitemap has no request/cookies context
 function getSupabase() {
@@ -14,9 +15,7 @@ export const dynamic = "force-dynamic";
 export const revalidate = 3600; // re-generate at most every hour
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = (
-    process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
-  ).replace(/\/$/, ""); // strip trailing slash
+  const baseUrl = SITE.url;
 
   const staticPages: MetadataRoute.Sitemap = [
     {

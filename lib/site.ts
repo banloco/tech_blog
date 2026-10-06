@@ -7,8 +7,8 @@ export const SITE = {
   author: "Christ Banidje",
   authorUrl: "https://www.christbanidje.me",        // portfolio
   contactUrl: "https://www.christbanidje.me/#contact",
-  // Set NEXT_PUBLIC_SITE_URL in Vercel once the domain is connected
-  url: (process.env.NEXT_PUBLIC_SITE_URL || "https://tech-blog-gamma-bice.vercel.app").replace(/\/$/, ""),
+  // NEXT_PUBLIC_SITE_URL can override it (e.g. http://localhost:3000)
+  url: (process.env.NEXT_PUBLIC_SITE_URL || "https://planb.danxolabs.com").replace(/\/$/, ""),
 };
 
 /** Full address of a page or image of the site ('/images/x.jpg' → 'https://…/images/x.jpg'). */

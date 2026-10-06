@@ -1,5 +1,6 @@
 import { createSupabaseServerClient } from "@/lib/supabase-server";
 import { NextRequest, NextResponse } from "next/server";
+import { SITE } from "@/lib/site";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -44,7 +45,7 @@ export async function GET(request: NextRequest) {
 }
 
 function buildPage(title: string, body: string, success: boolean): string {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "/";
+  const siteUrl = SITE.url;
   const color = success ? "#10b981" : "#ef4444";
 
   return `<!DOCTYPE html>
