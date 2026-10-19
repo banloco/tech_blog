@@ -9,6 +9,8 @@ export const SITE = {
   contactUrl: "https://www.christbanidje.me/#contact",
   // NEXT_PUBLIC_SITE_URL can override it (e.g. http://localhost:3000)
   url: (process.env.NEXT_PUBLIC_SITE_URL || "https://planb.danxolabs.com").replace(/\/$/, ""),
+  // Google AdSense publisher id (public; must match public/ads.txt)
+  adsenseClient: process.env.NEXT_PUBLIC_ADSENSE_ID || "ca-pub-6021784377387721",
 };
 
 /** Full address of a page or image of the site ('/images/x.jpg' → 'https://…/images/x.jpg'). */

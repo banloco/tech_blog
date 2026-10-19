@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { SITE } from "@/lib/site";
 
 interface AdSlotProps {
   adSlot?: string;
@@ -11,7 +12,7 @@ interface AdSlotProps {
 /**
  * Google AdSense ad unit component.
  * Place this between content sections in articles.
- * Requires NEXT_PUBLIC_ADSENSE_ID env var to be set.
+ * Uses the publisher id from SITE.adsenseClient.
  */
 export default function AdSlot({
   adSlot,
@@ -29,7 +30,7 @@ export default function AdSlot({
     }
   }, []);
 
-  const clientId = process.env.NEXT_PUBLIC_ADSENSE_ID;
+  const clientId = SITE.adsenseClient;
 
   if (!clientId || !adSlot) return null;
 

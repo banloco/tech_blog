@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import Script from "next/script";
 import { Inter, Bricolage_Grotesque } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
@@ -44,6 +43,8 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+    // Large images and full snippets: required to appear in Google Discover
+    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 },
   },
 };
 
@@ -88,16 +89,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
-        {/* Google AdSense */}
-        {process.env.NEXT_PUBLIC_ADSENSE_ID && (
-          <Script
-            async
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_ID}`}
-            crossOrigin="anonymous"
-            strategy="afterInteractive"
-          />
-        )}
-        <meta name="google-adsense-account" content="ca-pub-6021784377387721"></meta>
+        {/* Google AdSense: a plain tag in <head>, as Google asks, so its crawler sees it in the HTML */}
+        <script
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${SITE.adsenseClient}`}
+          crossOrigin="anonymous"
+        />
+        <meta name="google-adsense-account" content={SITE.adsenseClient}></meta>
       </head>
       <body className="antialiased relative min-h-screen flex flex-col" style={{ background: 'var(--bg)', color: 'var(--ink)' }}>
         {/* Skip to main content for keyboard navigation */}
