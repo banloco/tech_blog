@@ -116,6 +116,19 @@
   display: block;
 }
 
+/* YouTube videos: full width, 16:9, whatever width/height the embed carries */
+.ProseMirror div[data-youtube-video] {
+  margin: 1.5em 0;
+}
+.ProseMirror div[data-youtube-video] iframe {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border: 0;
+  border-radius: 12px;
+}
+
 .ProseMirror [style*="text-align: left"] { text-align: left; }
 .ProseMirror [style*="text-align: center"] { text-align: center; }
 .ProseMirror [style*="text-align: right"] { text-align: right; }

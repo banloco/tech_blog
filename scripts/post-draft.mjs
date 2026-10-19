@@ -18,6 +18,8 @@ import { readFileSync, existsSync } from "node:fs";
 
 const CATEGORIES = ["gagner-de-l-argent", "finances-perso", "productivite", "outils-ia"];
 const ALLOWED_TAGS = new Set(["h2", "h3", "p", "ul", "ol", "li", "strong", "em", "a", "blockquote", "code", "pre", "hr", "br", "table", "thead", "tbody", "tr", "th", "td"]);
+// The only embed allowed: a YouTube video, in the editor's own format (no tracking cookies)
+const YOUTUBE_EMBED = /<div data-youtube-video="">\s*<iframe [^>]*src="https:\/\/www\.youtube-nocookie\.com\/embed\/[A-Za-z0-9_-]{11}(\?[^"<>]*)?"[^>]*><\/iframe>\s*<\/div>/g;
 
 // Environment: real variables first, then .env.local
 if (existsSync(".env.local")) {
@@ -51,7 +53,8 @@ function check(a) {
   if (a.meta_title && a.meta_title.length > 65) problems.push("meta_title longer than 65 characters");
   if (!a.meta_description || a.meta_description.length > 160) problems.push("meta_description missing or longer than 160 characters");
   if (words < 900) problems.push(`content too short (${words} words, at least 900)`);
-  for (const [, tag] of (a.content || "").matchAll(/<\/?([a-zA-Z0-9]+)[\s>]/g)) {
+  if (/\[À COMPLÉTER/i.test(a.content || "")) problems.push('no "[À COMPLÉTER]" marker: the draft must be ready to publish as it is');
+  for (const [, tag] of (a.content || "").replace(YOUTUBE_EMBED, "").matchAll(/<\/?([a-zA-Z0-9]+)[\s>]/g)) {
     if (!ALLOWED_TAGS.has(tag.toLowerCase())) problems.push(`HTML tag <${tag}> is not supported by the editor`);
   }
   if (/<h1[\s>]/i.test(a.content || "")) problems.push("no <h1> in the content: the title is already the page's h1");

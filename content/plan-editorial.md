@@ -9,6 +9,20 @@ Format : `- [thème] Titre de travail — angle ou mot-clé principal`
 
 ## Prochains sujets
 
+Rythme : **2 articles le lundi, 2 le jeudi**. Chaque paire = 1 sujet d'actualité (section
+ci-dessous) + 1 sujet de fond, écrits dans le nouveau style (voir « Le piment » et « Les articles
+d'actualité » dans le guide). Quand aucun sujet d'actualité non écrit n'est listé ici, l'agent en
+cherche un lui-même (événement de moins d'un mois qui touche l'un des 4 thèmes).
+
+### Actualité (octobre 2026)
+
+- [finances-perso] Gazole +44 % en un an : ce que la crise d'Ormuz coûte à votre budget — prix du carburant
+- [outils-ia] L'IA va-t-elle prendre votre travail ? Ce que disent vraiment les chiffres — IA et emploi
+- [finances-perso] Inflation à 3,1 % : pourquoi votre Livret A vous fait perdre de l'argent — Livret A inflation
+- [finances-perso] Budget 2027 : ce qui change pour votre porte-monnaie — budget 2027
+
+### Sujets de fond
+
 - [gagner-de-l-argent] Gagner ses 100 premiers euros en freelance : le plan étape par étape — freelance débutant
 - [finances-perso] Faire un budget qui tient vraiment : la méthode simple en 4 étapes — faire un budget
 - [outils-ia] Les meilleures IA gratuites pour gagner une heure par jour — IA gratuite

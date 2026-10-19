@@ -1,7 +1,7 @@
 # Guide de rédaction — Le Plan B
 
 Ce guide s'applique à tous les articles, qu'ils soient écrits par Christ ou préparés par les agents
-de rédaction. Un agent ne publie jamais : il dépose un **brouillon** que Christ relit, complète
+de rédaction. Un agent ne publie jamais : il dépose un **brouillon** complet, prêt à publier, que Christ relit
 et publie depuis `/admin/articles`.
 
 ## Le blog en une phrase
@@ -32,12 +32,46 @@ et elle veut savoir **quoi faire concrètement**, dès aujourd'hui.
 - Concret avant tout : étapes numérotées, exemples chiffrés, outils nommés, captures d'idées.
 - Honnête : on dit aussi les limites, le temps que ça prend, ce qui peut rater.
 
+## Le piment : donner envie de lire (sans mentir)
+
+Un article utile mais fade ne sera pas lu. Chaque article doit éveiller la curiosité :
+
+- **Un titre qui intrigue** : un chiffre frappant (« Gazole +44 % en un an »), une question que le
+  lecteur se pose (« L'IA va-t-elle prendre votre travail ? »), ou une idée contre-intuitive
+  (« Votre Livret A vous fait perdre de l'argent »). Le titre tient toujours sa promesse : pas de
+  piège à clics.
+- **Une accroche qui démarre fort** : la première phrase est un fait d'actualité, un chiffre
+  surprenant ou une scène concrète du quotidien (« Vous faites le plein et le ticket affiche 15 €
+  de plus qu'il y a un an. »). Jamais « Dans cet article, nous allons voir… » en ouverture.
+- **Des intertitres qui donnent envie** de continuer à lire, pas de simples étiquettes
+  (« Le piège que personne ne voit » plutôt que « Inconvénients »).
+- **Relier au monde réel** : ce qui se passe en ce moment (conflits, prix de l'énergie, budget de
+  l'État, IA, fuites de données…) et ce que ça change concrètement pour le portefeuille, le travail
+  ou le temps du lecteur. Une section « Ce que ça change pour vous » quand c'est pertinent.
+- **Garder le concret** : le piment sert à attirer ; le lecteur doit repartir avec des actions.
+
+### Les articles d'actualité
+
+Rythme : **deux articles le lundi et deux le jeudi**. Dans chaque paire, **un article** part de
+l'actualité récente (moins d'un mois) : un événement
+mondial ou national et ses répercussions sur l'argent, le travail, la productivité ou les outils
+du lecteur. Règles en plus :
+
+- Sources de presse ou officielles **datées de moins d'un mois** pour les faits d'actualité.
+- Écrire « au [jour mois année] » pour tout chiffre qui bouge (prix, inflation, taux).
+- Rester factuel sur les causes (conflit, décision politique) : on explique les conséquences pour
+  le lecteur, on ne prend pas parti.
+- Distinguer clairement ce qui est **décidé** de ce qui est **annoncé ou en débat** (ex. un projet
+  de loi de finances n'est pas encore voté).
+
 ## Les règles d'honnêteté (non négociables)
 
-1. **Aucune expérience personnelle inventée.** Un agent n'écrit jamais « j'ai testé », « j'ai gagné »,
-   « mon client ». À l'endroit où un vécu rendrait l'article plus fort, il laisse un repère :
-   `<p><strong>[À COMPLÉTER PAR CHRIST : ton expérience avec … — 2 ou 3 phrases]</strong></p>`.
-   Entre 1 et 3 repères par article. Christ les remplace (ou les supprime) avant de publier.
+1. **Aucune expérience personnelle inventée, et aucun repère à compléter.** L'article doit être
+   publiable tel quel : jamais de « [À COMPLÉTER] » ni de passage laissé en blanc. Un agent n'écrit
+   jamais « j'ai testé », « j'ai gagné », « mon client ». À la place du vécu, il donne un exemple
+   présenté comme tel (« Exemple : une personne qui… »), un calcul chiffré à partir de sources, ou
+   un conseil concret. Le « je » sert à guider le lecteur (« je vous conseille de… »), pas à
+   raconter une histoire qui n'a pas eu lieu.
 2. **Chaque chiffre a une source** : tarifs, frais, salaires, statistiques, limites d'une offre
    gratuite. La source est datée et listée dans la section « Sources ». Pas de source, pas de chiffre.
 3. **Vérifier que l'information est à jour** (année en cours) : les offres gratuites, prix et
@@ -94,6 +128,10 @@ et elle veut savoir **quoi faire concrètement**, dès aujourd'hui.
 - `content` en HTML simple. Balises autorisées : `h2 h3 p ul ol li strong em a blockquote code
   pre hr br table thead tbody tr th td`. Pas de `h1` (le titre de la page en est déjà un), pas
   d'image, pas de style, pas de classe.
+- **Vidéo YouTube** (seule intégration permise, utile pour l'actualité : démonstration, annonce
+  officielle) : de préférence la chaîne officielle de la marque ou de l'organisme, dans ce format
+  exact, suivi d'une légende en `<p><em>` qui cite la chaîne :
+  `<div data-youtube-video=""><iframe width="640" height="360" allowfullscreen="true" src="https://www.youtube-nocookie.com/embed/ID_DE_LA_VIDEO?modestbranding=1"></iframe></div>`
 - `cover_image` **obligatoire** : une photo libre de droits (licence CC0) qui illustre le sujet.
   `node scripts/find-cover.mjs "budget calculator"` (mots en anglais) en propose ; choisir une
   photo concrète (bureau, argent, téléphone…), sans texte incrusté ni logo de marque.
@@ -111,7 +149,7 @@ node scripts/post-draft.mjs --list                 # titres déjà écrits (brou
 
 ## Avant de publier (Christ)
 
-- [ ] Remplacer ou supprimer chaque `[À COMPLÉTER PAR CHRIST : …]`.
+- [ ] Ajouter, si l'envie vient, une expérience personnelle vraie (facultatif).
 - [ ] Relire les chiffres et ouvrir 2 ou 3 sources au hasard.
 - [ ] Vérifier l'image de couverture (obligatoire pour publier) ; la changer si elle colle mal au sujet.
 - [ ] Choisir la date de publication, puis Publier.

@@ -8,6 +8,7 @@ import TextAlign from "@tiptap/extension-text-align";
 import Underline from "@tiptap/extension-underline";
 import Placeholder from "@tiptap/extension-placeholder";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import Youtube from "@tiptap/extension-youtube";
 import { createLowlight } from "lowlight";
 import javascript from "highlight.js/lib/languages/javascript";
 import typescript from "highlight.js/lib/languages/typescript";
@@ -33,6 +34,7 @@ import {
   UnderlineIcon,
   Minus,
   CodeIcon,
+  Video,
 } from "lucide-react";
 
 // Create lowlight instance and register languages for syntax highlighting
@@ -83,6 +85,11 @@ export default function RichTextEditor({
           class: "bg-[var(--surface)] p-4 my-4 overflow-x-auto border border-[var(--line)]",
         },
       }),
+      // YouTube videos, embedded without tracking cookies until the reader presses play
+      Youtube.configure({
+        nocookie: true,
+        modestBranding: true,
+      }),
     ],
     content,
     editorProps: {
@@ -113,6 +120,14 @@ export default function RichTextEditor({
     // The description (alt) is read by Google and by screen readers
     const alt = window.prompt("Décrivez l'image en quelques mots (ex. « tableau de budget mensuel ») :") || "";
     editor.chain().focus().setImage({ src: url, alt }).run();
+  };
+
+  const addVideo = () => {
+    const url = window.prompt("Lien de la vidéo YouTube :");
+    if (!url) return;
+    if (!editor.chain().focus().setYoutubeVideo({ src: url }).run()) {
+      window.alert("Ce lien n'est pas une vidéo YouTube valide.");
+    }
   };
 
   return (
@@ -285,6 +300,14 @@ export default function RichTextEditor({
             title="Insérer une image"
           >
             <ImageIcon className="w-4 h-4" />
+          </button>
+          <button
+            type="button"
+            onClick={addVideo}
+            className="p-2 rounded hover:bg-[var(--line-soft)] transition-colors text-[var(--text-muted)]"
+            title="Insérer une vidéo YouTube"
+          >
+            <Video className="w-4 h-4" />
           </button>
           <button
             type="button"
